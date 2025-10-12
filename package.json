@@ -2,7 +2,7 @@
   "name": "blockchange-nuxthub",
   "version": "0.1.0",
   "scripts": {
-    "dev": "nuxi dev",
+    "dev": "NUXT_HUB_REMOTE=true nuxi dev --remote",
     "build": "nuxi build",
     "start": "nuxi start",
     "generate": "nuxi generate"
