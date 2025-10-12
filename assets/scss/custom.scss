@@ -2,8 +2,8 @@ $py-red: #D52B1E;
 $py-blue: #0038A8;
 $py-white: #ffffff;
 
-$custom: $py-red !default;
-$primary: $custom;
-$link: $custom;
+$primary: $py-blue;
+$link: $py-blue;
+$red: $py-red !default;
 $grey: grey;
 
