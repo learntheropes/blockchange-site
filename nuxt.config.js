@@ -69,12 +69,7 @@ export default defineNuxtConfig({
   nitro: {
     external: process.env.NUXT_HUB_REMOTE === 'false' ? [] : undefined,
   },
-
-  // calcom: {
-  //   defaultLink: 'learntheropes/60',
-  //   ui: { theme: 'light' }
-  // },
-
+  
   umami: {
     enabled: isDeployed,
     id: process.env.NUXT_PUBLIC_UMAMI_ID,
@@ -105,5 +100,11 @@ export default defineNuxtConfig({
       anchorLinks: false
   },
 
-  // delayHydration: { mode: 'init', debug: !isDeployed }
+  delayHydration: { mode: 'init', debug: !isDeployed },
+
+  hooks: {
+    'builder:watch': (event, path) => {
+      if (path.includes('manifest-route-rule')) return false
+    }
+  }
 })

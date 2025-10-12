@@ -3,7 +3,8 @@ const { locale } = useI18n()
 const localePath = useLocalePath()
 const route = useRoute()
 const key = computed(() => `${route.path}-${locale.value}`)
-const { data, pending, error } = await useAsyncData( key, () => queryCollection('content').path(route.path).first(), { watch: [locale, () => route.path] })
+const { data } = await useAsyncData( key + 'expertise', () => queryCollection('content').path(`/${locale.value}/expertise`).first(), { watch: [locale, () => route.path] })
+const { data: contactData } = await useAsyncData( key + 'contact', () => queryCollection('content').path(`/${locale.value}/contact`).first(), { watch: [locale, () => `/${locale.value}/contact`] })
 
 const taxAnchor = computed(() =>
   data.value?.meta?.taxTitle
@@ -67,12 +68,12 @@ useHead({
       <h1 class="title has-text-primary">{{ data.title }}</h1>
       <h1 class="subtitle">{{ data.description }}</h1>
       <div class="block">
-        <h2 class="title is-5">{{  data.meta.keyAdvantages }}</h2>
+        <h2 class="title is-5" id="advantages">{{  data.meta.keyAdvantages }}</h2>
         <div class="columns is-align-items-stretch">
           <div class="column is-flex is-flex-direction-column">
             <div class="card is-flex is-flex-direction-column is-flex-grow-1">
               <header class="card-header">
-                <p class="card-header-title">{{ data.meta.taxTitle }}</p>
+                <h3 class="card-header-title">{{ data.meta.taxTitle }}</h3>
               </header>
               <div class="card-content is-flex-grow-1">
                 <div class="content">{{ data.meta.taxContent }}</div>
@@ -85,7 +86,7 @@ useHead({
           <div class="column is-flex is-flex-direction-column">
             <div class="card is-flex is-flex-direction-column is-flex-grow-1">
               <header class="card-header">
-                <p class="card-header-title">{{ data.meta.complianceTitle }}</p>
+                <h3 class="card-header-title">{{ data.meta.complianceTitle }}</h3>
               </header>
               <div class="card-content is-flex-grow-1">
                 <div class="content">{{ data.meta.complianceContent }}</div>
@@ -98,7 +99,7 @@ useHead({
           <div class="column is-flex is-flex-direction-column">
             <div class="card is-flex is-flex-direction-column is-flex-grow-1">
               <header class="card-header">
-                <p class="card-header-title">{{ data.meta.energyTitle }}</p>
+                <h3 class="card-header-title">{{ data.meta.energyTitle }}</h3>
               </header>
               <div class="card-content is-flex-grow-1">
                 <div class="content">{{ data.meta.energyContent }}</div>
@@ -111,10 +112,45 @@ useHead({
         </div>
       </div>
       <div class="block">
+        <h2 class="title is-5" id="expertise">{{  data.meta.expertise }}</h2>
         <ContentRenderer :value="data" class="content" />
+        <div class="columns is-align-items-stretch">
+          <div class="column is-flex is-flex-direction-column">
+            <div class="card is-flex is-flex-direction-column is-flex-grow-1">
+              <header class="card-header">
+                <h3 class="card-header-title">{{ data.meta.bitcoinTitle }}</h3>
+              </header>
+              <div class="card-content is-flex-grow-1">
+                <div class="content">{{ data.meta.bitcoinContent }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="column is-flex is-flex-direction-column">
+            <div class="card is-flex is-flex-direction-column is-flex-grow-1">
+              <header class="card-header">
+                <h3 class="card-header-title">{{ data.meta.industryTitle }}</h3>
+              </header>
+              <div class="card-content is-flex-grow-1">
+                <div class="content">{{ data.meta.industryContent }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="column is-flex is-flex-direction-column">
+            <div class="card is-flex is-flex-direction-column is-flex-grow-1">
+              <header class="card-header">
+                <h3 class="card-header-title">{{ data.meta.paraguayTitle }}</h3>
+              </header>
+              <div class="card-content is-flex-grow-1">
+                <div class="content">{{ data.meta.paraguayContent }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="block">
-        <CalInlineWidget cal-link="blockchange/meeting" :ui="{ theme: 'light' }" />
+        <h2 class="title is-5" id="contact">{{  data.meta.contact }}</h2>
+        <ContentRenderer :value="contactData" class="content" />
+        <CalInlineWidget :cal-link="'blockchange/' + locale" :ui="{ theme: 'light' }" />
       </div>
     </div>
   </NuxtLayout>
