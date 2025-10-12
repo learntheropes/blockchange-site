@@ -45,6 +45,9 @@ We can also help you to accept **bitcoin** and **USDT** payments with a **self c
 All the **legal, administrative an fiscal** matter of your company are handled by **us**.  
 In case you want to hire somebody locally, you have access to **qualified workforce from Europe and North America** that relocated here. For lower positions you have access to many **cheap locals**.  
 
+## Energy 
+Thanks to his rivers and dams, Paraguay offer one of the cheapest aboundant and clean energy in the world which is a huge benefit form intensive consuming businesses such as crypto mininig and AI. 
+
 ## Fundrising
 One of the way to obtain Paraguayan citizenship after 3 years of permanent residency, is to be a shareholder of a company registered in the country.  
 I have some **expats willing to invest in companies to become shareholders not for a profit but for the passport** only.  
