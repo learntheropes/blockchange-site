@@ -99,9 +99,11 @@ export default defineNuxtConfig({
     }
   },
 
-  content: { locales: localeCodes, defaultLocale },
-
-  plugins: ['~/plugins/scroll.js'],
+  content: { 
+    locales: localeCodes, 
+    defaultLocale,
+      anchorLinks: false
+  },
 
   // delayHydration: { mode: 'init', debug: !isDeployed }
 })

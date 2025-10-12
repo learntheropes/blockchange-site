@@ -1,5 +1,4 @@
 <script setup>
-
 const { locale } = useI18n()
 const localePath = useLocalePath()
 const route = useRoute()
@@ -19,13 +18,13 @@ const complianceAnchor = computed(() =>
 )
 
 const taxTo = computed(() => ({
-  path: localePath('/advantages'),
+  path: localePath('/advantages/'),
   hash: taxAnchor.value
 }))
 
 const complianceTo = computed(() => ({
   path: localePath('/advantages'),
-  hash: complianceAnchor.value
+  hash: complianceAnchor.value,
 }))
 
 
@@ -67,7 +66,7 @@ useHead({
               <div class="content">{{ data.meta.taxContent }}</div>
             </div>
             <footer class="card-footer">
-              <NuxtLink :to="taxtTo" class="card-footer-item">{{ data.meta.taxButton }}</NuxtLink>
+              <NuxtLink :to="taxTo" class="card-footer-item">{{ data.meta.taxButton }}</NuxtLink>
             </footer>
           </div>
         </div>

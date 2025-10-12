@@ -6,5 +6,5 @@ taxContent: One of the best tax system in the world for a not blackisted country
 taxButton: Read more
 complianceTitle: Compliance
 complianceContent: No KYC up to 50.000 USD depending on the company business model
-complianceButton: read more
+complianceButton: Read more
 ---
