@@ -59,6 +59,7 @@ asyncText: >
   Share your business model, target markets, and current payment stack.
   We’ll reply with a concrete next step and an initial architecture direction.
 
+learnMore: Learn more →
 emailLabel: Email
 emailAddress: hello@blockchainge.com.py
 emailUs: Email us →

@@ -94,16 +94,16 @@
             :key="i"
             class="column is-4"
           >
-            <div class="box shadow-soft h-full">
+            <div class="box shadow-soft h-full pillar-card">
               <h3 class="title is-5 mb-2">{{ p.title }}</h3>
               <p class="has-text-grey mb-4">{{ p.text }}</p>
-
               <o-button
-                variant="light"
+                class="mt-auto"
+                variant="primary"
                 tag="a"
                 :href="p.href"
               >
-                Learn more →
+              {{ home.meta.learnMore }}
               </o-button>
             </div>
           </div>
@@ -176,12 +176,54 @@
               <p class="is-size-7 has-text-grey mb-4" v-if="home.meta.bookingNote">
                 {{ home.meta.bookingNote }}
               </p>
-
               <!-- Your existing Cal.com / BTCPay widget -->
               <IndexContacts />
             </div>
-
           </div>
+          <!-- BLOG PREVIEW -->
+          <section class="section">
+            <div class="container">
+              <h2 class="title is-4 mb-4">Latest insights</h2>
+
+              <div class="columns is-multiline is-centered is-variable is-6">
+                <div
+                  v-for="post in posts"
+                  :key="post.path"
+                  class="column is-4"
+                >
+                  <div class="box shadow-soft blog-card">
+                    <h3 class="title is-5 mb-2">
+                      {{ post.title }}
+                    </h3>
+
+                    <p class="has-text-grey blog-excerpt">
+                      {{ post.description }}
+                    </p>
+
+                    <o-button
+                      class="mt-4"
+                      variant="light"
+                      size="small"
+                      tag="a"
+                      :href="post.path"
+                    >
+                      Read →
+                    </o-button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="has-text-centered mt-5">
+                <o-button
+                  variant="primary"
+                  tag="a"
+                  :href="`/${locale}/blog`"
+                >
+                  View all articles
+                </o-button>
+              </div>
+            </div>
+          </section>
         </div>
       </div>
     </section>
@@ -205,6 +247,18 @@ const { data: home } = await useAsyncData(
     watch: [locale, () => route.path]
   }
 )
+
+const { data: posts } = await useAsyncData(
+  () => `blog-preview-${locale.value}`,
+  async () => {
+    const all = await queryCollection('content').limit(200).all()
+
+    return all
+      .filter(p => p.stem?.startsWith(`${locale.value}/blog/`))
+      .slice(0, 3)
+  },
+  { watch: [locale] }
+)
 </script>
 
 <style scoped>
@@ -221,5 +275,25 @@ const { data: home } = await useAsyncData(
 /* if you don't already have it globally */
 .h-full {
   height: 100%;
+}
+.pillar-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.mt-auto {
+  margin-top: auto;
+}
+.blog-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.blog-excerpt {
+  flex: 1;
+  font-size: 1rem;
+  line-height: 1.6;
 }
 </style>
