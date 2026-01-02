@@ -9,6 +9,7 @@ heroBullets:
   - Accept payments reliably across borders and risk profiles
   - Design robust payout and settlement strategies
   - Avoid dependency on a single processor or bank
+  - Reduce chargeback risk through final settlement in bitcoin or digital dollars
 
 paymentsTitle: Payments accepted today
 paymentsItems:
