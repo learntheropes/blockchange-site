@@ -16,7 +16,7 @@ const { data: home } = await useAsyncData(key + 'contacts', () => queryCollectio
       {{ home.meta.asyncText }}
     </p>
 
-    <div class="content">
+    <div class="content" id="mail">
       <p class="mb-2">
         <strong>{{ home.meta.emailLabel }}: </strong>
         <a :href="`mailto:${home.meta.emailAddress}`">
@@ -31,7 +31,7 @@ const { data: home } = await useAsyncData(key + 'contacts', () => queryCollectio
         </a>
       </p>
     </div>
-    <div class="block">
+    <div class="block" id="book">
       <h3 class="title is-5 mb-2">
         {{ home.meta.syncTitle }}
       </h3>

@@ -6,7 +6,6 @@
           <div class="column is-7">
             <h1 class="title is-2">{{ home.meta.heroHeadline }}</h1>
             <p class="subtitle is-4 has-text-grey-dark">{{ home.meta.heroSubheadline }}</p>
-
             <div class="content mb-5">
               <ul>
                 <li v-for="(b, i) in home.meta.heroBullets" :key="i">
@@ -14,7 +13,6 @@
                 </li>
               </ul>
             </div>
-
             <BookPaid />
           </div>
         </div>

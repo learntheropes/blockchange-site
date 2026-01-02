@@ -7,7 +7,7 @@
         </o-button>
       </div>
       <div class="column is-narrow">
-        <o-button variant="primary" size="large" tag="a" href="/#book">
+        <o-button variant="primary" size="large" tag="a" href="/#mail">
           {{ $t('home.book.bookFree') }}
         </o-button>
       </div>

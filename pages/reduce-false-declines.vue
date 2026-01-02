@@ -26,22 +26,6 @@
             {{ page.meta.heroSubheadline }}
           </p>
 
-          <div class="cta-wrapper mt-5">
-            <o-button variant="primary" size="large" tag="a" href="/#book">
-              Book a paid strategy call
-            </o-button>
-            <o-button variant="primary" size="large" tag="a" href="/#book">
-              Get a free email consultation
-            </o-button>
-            <o-button
-              variant="light"
-              size="large"
-              tag="a"
-              href="/in-ramp-architecture"
-            >
-              View in-ramp architecture →
-            </o-button>
-          </div>
         </div>
       </div>
     </section>
@@ -49,11 +33,7 @@
     <!-- CONTENT -->
     <section class="section">
       <div class="container content-width">
-        <div
-          v-for="(s, i) in page.meta.sections"
-          :key="i"
-          class="box shadow-soft section-card"
-        >
+        <div v-for="(s, i) in page.meta.sections" :key="i" class="box shadow-soft section-card">
           <h2 class="title is-4 mb-3">{{ s.title }}</h2>
           <p class="content has-text-grey-dark mb-0">
             {{ s.text }}
@@ -111,7 +91,7 @@ const { data: page } = await useAsyncData(
 }
 
 .page-hero {
-  border-bottom: 1px solid rgba(0,0,0,0.06);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .cta-wrapper {
@@ -121,7 +101,7 @@ const { data: page } = await useAsyncData(
 }
 
 .shadow-soft {
-  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
 }
 
 .section-card {
@@ -129,6 +109,6 @@ const { data: page } = await useAsyncData(
 }
 
 .cta-box {
-  border: 1px solid rgba(0,0,0,0.06);
+  border: 1px solid rgba(0, 0, 0, 0.06);
 }
 </style>
