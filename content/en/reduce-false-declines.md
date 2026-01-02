@@ -84,6 +84,9 @@ sections:
       
       A complete solution considers how money exits the system as carefully as
       how it enters.
+  - title: Why crypto settlement eliminates chargebacks
+    text: >
+      Traditional payment rails allow customers to reverse payments weeks or months later. By settling funds directly in crypto, payments become final and irreversible — removing chargeback risk entirely.
 
 bookingTitle: Reduce false declines with a proper architecture
 bookingText: >
