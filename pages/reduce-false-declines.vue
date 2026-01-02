@@ -28,9 +28,11 @@
 
           <div class="cta-wrapper mt-5">
             <o-button variant="primary" size="large" tag="a" href="/#book">
-              Book a paid strategy call — $100/hour
+              Book a paid strategy call
             </o-button>
-
+            <o-button variant="primary" size="large" tag="a" href="/#book">
+              Get a free email consultation
+            </o-button>
             <o-button
               variant="light"
               size="large"

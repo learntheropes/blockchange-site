@@ -26,20 +26,7 @@
             {{ page.meta.heroSubheadline }}
           </p>
 
-          <div class="cta-wrapper mt-5">
-            <o-button variant="primary" size="large" tag="a" href="/#book">
-              Book a paid strategy call — $100/hour
-            </o-button>
-
-            <o-button
-              variant="light"
-              size="large"
-              tag="a"
-              href="/off-ramp-and-payout-architecture"
-            >
-              View off-ramp architecture →
-            </o-button>
-          </div>
+          <BookPaid />
         </div>
       </div>
     </section>

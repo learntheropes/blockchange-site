@@ -1,7 +1,12 @@
 {
   "home": {
+    "book": {
+      "bookPaid": "Book a paid strategy call",
+      "bookFree": "Get a free email consultation",
+      "learnMore": "Learn more"
+    },
     "cta": {
-      "primary": "Book a paid strategy call — $100/hour",
+      "primary": "Book a paid strategy call — $100/hour or get a free email consultation",
       "secondary": "View how it works"
     },
     "payments": {

@@ -73,7 +73,7 @@ syncText: >
   $100/hour. Leave the call with a concrete in- & off-ramp architecture plan
   and clear implementation steps.
 
-bookingTitle: Book a paid strategy call
+bookingTitle: Book a paid strategy call or get a free email consultation
 bookingText: >
   $100/hour. Leave with a clear blueprint covering payment acceptance,
   payouts, settlement targets, and operational constraints.
