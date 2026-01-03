@@ -31,7 +31,7 @@ const { data: home } = await useAsyncData(key + 'contacts', () => queryCollectio
         </a>
       </p>
     </div>
-    <div class="block" id="book">
+    <div class="block" id="call">
       <h3 class="title is-5 mb-2">
         {{ home.meta.syncTitle }}
       </h3>

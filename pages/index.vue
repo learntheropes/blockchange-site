@@ -39,7 +39,7 @@
     </section>
 
     <!-- CONTACT / BOOKING -->
-    <section class="section">
+    <section class="section" id="book">
       <div class="container">
         <div class="box shadow-soft">
           <h2 class="title is-4">
