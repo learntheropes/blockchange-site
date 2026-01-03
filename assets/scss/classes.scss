@@ -12,17 +12,21 @@
   code {
     color: $primary
   }
+
   h2 {
     font-size: 1.75em;
-    a { 
+
+    a {
       span {
         display: none;
       }
     }
   }
+
   h3 {
     font-size: 1em;
-    a { 
+
+    a {
       span {
         display: none;
       }
@@ -35,22 +39,32 @@
 .is-1 {
   font-size: 3rem;
 }
+
 .is-2 {
   font-size: 2.5rem;
 }
+
 .is-3 {
   font-size: 2rem;
 }
+
 .is-4 {
   font-size: 1.5rem;
 }
+
 .is-5 {
   font-size: 1.25rem;
 }
+
 .is-6 {
   font-size: 1rem;
 }
+
 // This is a custom class
 .is-7 {
   font-size: 0.75rem;
+}
+
+html {
+  scroll-behavior: smooth;
 }

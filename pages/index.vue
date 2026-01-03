@@ -105,8 +105,9 @@ const { data: home } = await useAsyncData(
   }
 )
 
+
 const { data: posts } = await useAsyncData(
-  () => `blog-preview-${locale.value}`,
+  () => `blog-index-${locale.value}`,
   async () => {
     const all = await queryCollection('content').limit(200).all()
 
@@ -116,12 +117,20 @@ const { data: posts } = await useAsyncData(
         path: x.path,
         title: x.title,
         description: x.description,
-        stem: x.stem
+        stem: x.stem,
+        date: x.date // expecting ISO: YYYY-MM-DD
       }))
 
-    items.sort((a, b) => (a.stem < b.stem ? 1 : -1))
+    const toTs = (d) => {
+      if (!d) return -Infinity
+      const ts = Date.parse(d)
+      return Number.isFinite(ts) ? ts : -Infinity
+    }
 
-    return items.slice(0, 3)
+    // Newest first
+    items.sort((a, b) => toTs(b.date) - toTs(a.date))
+
+    return items
   },
   {
     watch: [locale]

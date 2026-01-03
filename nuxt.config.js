@@ -47,7 +47,7 @@ export default defineNuxtConfig({
         { id: 'twitter:image', name: 'twitter:image', content: `${deploymentDomain}/favicon/favicon.png` },
       ],
       link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon/favicon.ico' }]
-    },
+    }
   },
 
   css: ['~/assets/scss/main.scss'],
@@ -55,6 +55,7 @@ export default defineNuxtConfig({
 
   nitro: {
     preset: 'cloudflare_module',
+    external: process.env.NUXT_HUB_REMOTE === 'false' ? [] : undefined,
   },
 
   modules: ['@nuxtjs/i18n', '@nuxt/content', 'nuxt-delay-hydration', 'nuxt-umami', 'nuxt-calcom', '@nuxthub/core'],
@@ -66,10 +67,7 @@ export default defineNuxtConfig({
     kv: false,
     remote: process.env.NUXT_HUB_REMOTE === 'true',
   },
-  nitro: {
-    external: process.env.NUXT_HUB_REMOTE === 'false' ? [] : undefined,
-  },
-  
+
   umami: {
     enabled: isDeployed,
     id: process.env.NUXT_PUBLIC_UMAMI_ID,
@@ -94,10 +92,10 @@ export default defineNuxtConfig({
     }
   },
 
-  content: { 
-    locales: localeCodes, 
+  content: {
+    locales: localeCodes,
     defaultLocale,
-      anchorLinks: false
+    anchorLinks: false
   },
 
   delayHydration: { mode: 'init', debug: !isDeployed },
