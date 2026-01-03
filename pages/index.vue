@@ -30,7 +30,7 @@
               <p class="has-text-grey mb-4">{{ p.text }}</p>
 
               <o-button variant="light" tag="a" :href="p.href" class="mt-auto">
-                Learn more →
+                {{ home.meta.learnMore }}
               </o-button>
             </div>
           </div>
@@ -59,7 +59,7 @@
     <section class="section">
       <div class="container">
         <h2 class="title is-4 mb-4">
-          Latest insights
+          {{ home.meta.latestInsightsTitle }}
         </h2>
 
         <div class="columns is-multiline is-centered is-variable is-6">
@@ -74,7 +74,7 @@
               </p>
 
               <o-button class="mt-4" variant="light" size="small" tag="a" :href="post.path">
-                Read →
+                {{ home.meta.readMore }}
               </o-button>
             </div>
           </div>
@@ -82,7 +82,7 @@
 
         <div class="has-text-centered mt-5">
           <o-button variant="primary" tag="a" :href="`/${locale}/blog`">
-            View all articles
+            {{ home.meta.viewAllArticles }}
           </o-button>
         </div>
       </div>

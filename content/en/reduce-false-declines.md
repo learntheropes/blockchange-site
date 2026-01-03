@@ -6,6 +6,11 @@ heroSubheadline: >
   We design architectures that reduce unnecessary declines by using the right
   rails, in the right markets, for the right transactions.
 
+# NEW: breadcrumb
+breadcrumbHomeLabel: Home
+breadcrumbHomeHref: /
+breadcrumbCurrentLabel: Reduce false declines
+
 sections:
   - title: What are false declines
     text: >
@@ -13,7 +18,7 @@ sections:
       or risk system. This is not a rare edge case: industry data consistently
       shows that a significant share of card declines are false positives
       triggered by automated fraud controls.
-      
+
       For businesses operating across borders, the problem is amplified.
       Geography, issuing banks, card networks, and local regulations all
       increase uncertainty for centralized fraud engines.
@@ -24,7 +29,7 @@ sections:
       payment processors. A card issued in Europe, used online with a merchant
       acquiring in Latin America or Southeast Asia, immediately scores higher
       risk — regardless of the customer’s intent.
-      
+
       This is why many legitimate users experience repeated declines even
       though their cards are valid and funded.
 
@@ -33,7 +38,7 @@ sections:
       Most businesses rely on a single card processor or PSP. When that
       processor’s fraud system flags a transaction, there is no fallback.
       The payment simply fails.
-      
+
       Adding more rules or tuning fraud thresholds often trades fraud losses
       for higher decline rates — without solving the root problem.
 
@@ -41,7 +46,7 @@ sections:
     text: >
       Reducing false declines is not primarily a fraud problem — it is an
       architecture problem.
-      
+
       A multi-rail in-ramp system routes transactions across different rails
       depending on geography, amount, risk profile, and customer context.
       Cards are only one rail among many, not the default for every payment.
@@ -50,10 +55,10 @@ sections:
     text: >
       In Latin America, domestic rails like Pix (Brazil) or local bank transfers
       outperform cards for acceptance and cost.
-      
+
       In Southeast Asia, wallet-based and bank-driven systems are often more
       reliable than international card networks.
-      
+
       In Europe, SEPA transfers and localized acquiring reduce issuer friction.
       Using the wrong rail in the wrong region guarantees unnecessary declines.
 
@@ -62,7 +67,7 @@ sections:
       For certain markets and use cases, peer-to-peer rails — including
       bank-based P2P systems and Bitcoin-based flows — offer higher completion
       rates than traditional card payments.
-      
+
       These rails are particularly relevant where card penetration is low,
       trust in local banks is higher, or sanctions and restrictions limit
       traditional acquiring options.
@@ -72,7 +77,7 @@ sections:
       In sanctioned or partially restricted markets, such as Russia and other
       regions affected by international controls, card payments may be
       technically possible but operationally unreliable.
-      
+
       Designing payment flows that account for these constraints upfront
       avoids repeated declines, blocked funds, and customer frustration.
 
@@ -81,16 +86,31 @@ sections:
       Declines don’t only happen at payment time. Settlement freezes, delayed
       payouts, and sudden account restrictions are the off-ramp equivalent of
       false declines.
-      
+
       A complete solution considers how money exits the system as carefully as
       how it enters.
-  - title: Why crypto settlement eliminates chargebacks
+
+  - title: Why bitcoin / digital-dollar settlement eliminates chargebacks
     text: >
-      Traditional payment rails allow customers to reverse payments weeks or months later. By settling funds directly in crypto, payments become final and irreversible — removing chargeback risk entirely.
+      Traditional payment rails allow customers to reverse payments weeks or months later.
+      By settling value finally in bitcoin or digital dollars, payments become economically final —
+      removing chargeback exposure from your settlement layer.
 
 bookingTitle: Reduce false declines with a proper architecture
 bookingText: >
   Book a paid strategy call to analyze your decline patterns, markets,
   and payment rails. Leave with a concrete in- & off-ramp architecture
   designed to reduce unnecessary declines.
+
+# NEW: CTA button
+bookingCtaLabel: Book now
+bookingCtaHref: /#book
+
+# NEW: related topics
+relatedTopicsLabel: "Related topics:"
+relatedTopics:
+  - label: in-ramp architecture
+    href: /in-ramp-architecture
+  - label: off-ramp & payouts
+    href: /off-ramp-and-payout-architecture
 ---

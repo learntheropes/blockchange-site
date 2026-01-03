@@ -10,10 +10,12 @@
           <nav class="breadcrumb is-small mb-4" aria-label="breadcrumbs">
             <ul>
               <li>
-                <NuxtLink to="/">Home</NuxtLink>
+                <NuxtLink :to="page.meta.breadcrumbHomeHref">
+                  {{ page.meta.breadcrumbHomeLabel }}
+                </NuxtLink>
               </li>
               <li class="is-active">
-                <a aria-current="page">Reduce false declines</a>
+                <a aria-current="page">{{ page.meta.breadcrumbCurrentLabel }}</a>
               </li>
             </ul>
           </nav>
@@ -52,17 +54,17 @@
               <p class="has-text-grey mb-0">{{ page.meta.bookingText }}</p>
             </div>
             <div class="column is-4 has-text-right">
-              <o-button variant="primary" size="large" tag="a" href="/#book">
-                Book now
+              <o-button variant="primary" size="large" tag="a" :href="page.meta.bookingCtaHref">
+                {{ page.meta.bookingCtaLabel }}
               </o-button>
             </div>
           </div>
         </div>
 
         <p class="has-text-grey is-size-7 mt-4">
-          Related topics:
-          <NuxtLink to="/in-ramp-architecture">in-ramp architecture</NuxtLink>,
-          <NuxtLink to="/off-ramp-and-payout-architecture">off-ramp & payouts</NuxtLink>.
+          {{ page.meta.relatedTopicsLabel }}
+          <NuxtLink :to="page.meta.relatedTopics[0].href">{{ page.meta.relatedTopics[0].label }}</NuxtLink>,
+          <NuxtLink :to="page.meta.relatedTopics[1].href">{{ page.meta.relatedTopics[1].label }}</NuxtLink>.
         </p>
       </div>
     </section>

@@ -49,6 +49,11 @@ pillars:
       dramatically improve acceptance rates in cross-border markets.
     href: /reduce-false-declines
 
+# NEW: blog preview strings (were inline in index.vue)
+latestInsightsTitle: Latest insights
+readMore: Read →
+viewAllArticles: View all articles
+
 # NEW: async vs sync contact copy
 contactTitle: Get a tailored quote
 contactIntro: >
