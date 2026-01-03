@@ -105,12 +105,4 @@ bookingText: >
 # NEW: CTA button
 bookingCtaLabel: Book now
 bookingCtaHref: /#book
-
-# NEW: related topics
-relatedTopicsLabel: "Related topics:"
-relatedTopics:
-  - label: in-ramp architecture
-    href: /in-ramp-architecture
-  - label: off-ramp & payouts
-    href: /off-ramp-and-payout-architecture
 ---

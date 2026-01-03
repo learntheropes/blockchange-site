@@ -94,9 +94,6 @@
 const { locale } = useI18n()
 const route = useRoute()
 
-/**
- * HOME CONTENT (ONE SINGLE QUERY — NO COLLISIONS)
- */
 const { data: home } = await useAsyncData(
   () => `home-${locale.value}`,
   () =>
@@ -108,9 +105,6 @@ const { data: home } = await useAsyncData(
   }
 )
 
-/**
- * BLOG PREVIEW
- */
 const { data: posts } = await useAsyncData(
   () => `blog-preview-${locale.value}`,
   async () => {
@@ -125,7 +119,6 @@ const { data: posts } = await useAsyncData(
         stem: x.stem
       }))
 
-    // simple ordering (later we’ll switch to date)
     items.sort((a, b) => (a.stem < b.stem ? 1 : -1))
 
     return items.slice(0, 3)

@@ -1,4 +1,3 @@
-
 <script setup>
 const i18nHead = useLocaleHead({})
 useHead({
@@ -22,6 +21,6 @@ const head = useLocaleHead({
     <main class="is-tall-container">
       <slot />
     </main>
-    <LayoutFooter />
+    <!-- <LayoutFooter /> -->
   </div>
 </template>
