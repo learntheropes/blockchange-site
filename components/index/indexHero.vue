@@ -1,5 +1,5 @@
 <template>
-  <section class="hero is-large is-light">
+  <section class="hero is-fullheight is-light">
     <div class="hero-body">
       <div class="container">
         <div class="columns is-vcentered is-variable is-8">
