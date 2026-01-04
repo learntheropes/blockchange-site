@@ -41,7 +41,7 @@ export default defineNuxtConfig({
         { id: 'googlebot', name: 'googlebot', content: 'notranslate' },
         { id: 'og:type', name: 'og:type', content: 'website' },
         { id: 'og:url', name: 'og:url', content: deploymentDomain },
-        { id: 'og:site_name', name: 'og:site_name', content: 'Giovanni Learntheropes' },
+        { id: 'og:site_name', name: 'og:site_name', content: 'Blockchange' },
         { id: 'og:image', name: 'og:image', content: `${deploymentDomain}/favicon/favicon.png` },
         { id: 'twitter:card', name: 'twitter:card', content: 'summary' },
         { id: 'twitter:image', name: 'twitter:image', content: `${deploymentDomain}/favicon/favicon.png` },
