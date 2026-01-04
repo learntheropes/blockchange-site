@@ -22,7 +22,7 @@
             </ul>
           </nav>
 
-          <h1 class="title is-2 mb-3">
+          <h1 class="title has-text-primary is-2 mb-3">
             {{ architecture.meta.heroHeadline }}
           </h1>
 
@@ -37,7 +37,7 @@
     <section class="section">
       <div class="container content-width">
         <div v-for="(s, i) in architecture.meta.sections" :key="i" class="box shadow-soft section-card">
-          <h2 class="title is-4 mb-3">{{ s.title }}</h2>
+          <h2 class="title has-text-primary is-4 mb-3">{{ s.title }}</h2>
           <p class="content has-text-grey-dark mb-0">
             {{ s.text }}
           </p>
