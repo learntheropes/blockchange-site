@@ -7,8 +7,8 @@ heroSubheadline: >
 # breadcrumb
 breadcrumbHomeLabel: Home
 breadcrumbHomeHref: /
-breadcrumbBlogLabel: Blog
-breadcrumbBlogHref: /en/blog
+breadcrumbArchitectureLabel: Architecture
+breadcrumbArchitectureHref: /en#architecture
 breadcrumbCurrentLabel: In-ramp architecture
 
 sections:

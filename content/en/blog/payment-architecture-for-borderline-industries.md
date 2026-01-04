@@ -3,6 +3,13 @@ title: Payment Architecture for Borderline Industries
 description: How adult platforms, legal drug businesses, and high-risk marketplaces design multi-rail payment systems beyond traditional processors.
 navigation: true
 date: 2026-01-04
+
+# NEW: breadcrumb
+breadcrumbHomeLabel: Home
+breadcrumbHomeHref: /
+breadcrumbBlogLabel: Blog
+breadcrumbBlogHref: /en/blog
+breadcrumbCurrentLabel: Payment architecture for borderline industries
 ---
 
 ## Designing Payment Systems Beyond Traditional Processors

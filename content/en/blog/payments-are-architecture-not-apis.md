@@ -3,6 +3,13 @@ title: Payment Architecture from Legal Structure to Rails
 description: How to design payment systems by aligning legal structure, business model, and payment rails before developers write a single line of code.
 navigation: true
 date: 2026-01-03
+
+# NEW: breadcrumb
+breadcrumbHomeLabel: Home
+breadcrumbHomeHref: /
+breadcrumbBlogLabel: Blog
+breadcrumbBlogHref: /en/blog
+breadcrumbCurrentLabel: Payments are architecture not apis
 ---
 ## From Legal Structure to Payment Rails: Designing the Right System Before Writing Code
 

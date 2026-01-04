@@ -17,7 +17,7 @@
     </section>
 
     <!-- ARCHITECTURE LINKS -->
-    <section class="section">
+    <section class="section" id="architecture">
       <div class="container">
         <h2 class="title is-4">
           {{ home.meta.architectureLinksTitle }}
@@ -56,7 +56,7 @@
     </section>
 
     <!-- BLOG PREVIEW -->
-    <section class="section">
+    <section class="section" id="blog">
       <div class="container">
         <h2 class="title is-4 mb-4">
           {{ home.meta.latestInsightsTitle }}

@@ -11,6 +11,11 @@
                   {{ architecture.meta.breadcrumbHomeLabel }}
                 </NuxtLink>
               </li>
+              <li>
+                <NuxtLink :to="architecture.meta.breadcrumbArchitectureHref">
+                  {{ architecture.meta.breadcrumbArchitectureLabel }}
+                </NuxtLink>
+              </li>
               <li class="is-active">
                 <a aria-current="page">{{ architecture.meta.breadcrumbCurrentLabel }}</a>
               </li>
@@ -61,10 +66,10 @@
 </template>
 
 <script setup>
-const { locale } = useI18n()
 const route = useRoute()
+const { locale } = useI18n()
+const slug = route.params.slug
 const key = computed(() => `${route.path}-${locale.value}`)
-const slug = route.params.slug;
 
 const { data: architecture } = await useAsyncData(
   key.value + '-architecture',
