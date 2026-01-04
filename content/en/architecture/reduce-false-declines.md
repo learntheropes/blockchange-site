@@ -9,6 +9,8 @@ heroSubheadline: >
 # NEW: breadcrumb
 breadcrumbHomeLabel: Home
 breadcrumbHomeHref: /
+breadcrumbBlogLabel: Blog
+breadcrumbBlogHref: /en/blog
 breadcrumbCurrentLabel: Reduce false declines
 
 sections:

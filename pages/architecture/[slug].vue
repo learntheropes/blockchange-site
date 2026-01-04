@@ -65,7 +65,6 @@ const { locale } = useI18n()
 const route = useRoute()
 const key = computed(() => `${route.path}-${locale.value}`)
 const slug = route.params.slug;
-console.log("Slug:", slug);
 
 const { data: architecture } = await useAsyncData(
   key.value + '-architecture',
@@ -75,7 +74,6 @@ const { data: architecture } = await useAsyncData(
       .first(),
   { watch: [locale, () => route.path] }
 )
-console.log("Architecture Data:", architecture.value.meta);
 </script>
 
 <style scoped>

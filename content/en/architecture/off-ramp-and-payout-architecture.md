@@ -7,6 +7,8 @@ heroSubheadline: >
 # breadcrumb
 breadcrumbHomeLabel: Home
 breadcrumbHomeHref: /
+breadcrumbBlogLabel: Blog
+breadcrumbBlogHref: /en/blog
 breadcrumbCurrentLabel: Off-ramp & payout architecture
 
 sections:
