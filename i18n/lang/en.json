@@ -3,7 +3,8 @@
     "book": {
       "bookPaid": "Book a paid strategy call",
       "bookFree": "Get a free email consultation",
-      "learnMore": "Learn more"
+      "learnMore": "Learn more",
+      "learnMoreAria": "Learn more about the architecture"
     },
     "cta": {
       "primary": "Book a paid strategy call — $100/hour or get a free email consultation",
@@ -71,73 +72,73 @@
   "servicesTitle": "Our services and prices",
   "addToCart": "Add to cart",
   "services": [
-    { 
-      "title": "Paraguay company or branch setup", 
+    {
+      "title": "Paraguay company or branch setup",
       "description": "foo bar baz",
       "price": "0 USD"
     },
-    { 
-      "title": "Paraguay company nominee director", 
+    {
+      "title": "Paraguay company nominee director",
       "description": "",
       "price": "0 USD"
     },
-    { 
-      "title": "Paraguay company registered office", 
+    {
+      "title": "Paraguay company registered office",
       "description": "",
       "price": "0 USD"
     },
-    { 
-      "title": "Accounting and tax reporting in Paraguay", 
+    {
+      "title": "Accounting and tax reporting in Paraguay",
       "description": "",
       "price": "0 USD"
     },
-    { 
-      "title": "Paraguay director residency", 
+    {
+      "title": "Paraguay director residency",
       "description": "",
       "price": "0 USD"
     },
-    { 
-      "title": "Paraguay director residency address", 
+    {
+      "title": "Paraguay director residency address",
       "description": "",
       "price": "0 USD"
     },
-    { 
-      "title": "AML protocol draft", 
+    {
+      "title": "AML protocol draft",
       "description": "",
       "price": "0 USD"
     },
-    { 
-      "title": "Bank accounts openining in Paraguay", 
+    {
+      "title": "Bank accounts openining in Paraguay",
       "description": "",
       "price": "0 USD"
     },
-    { 
-      "title": "Bank accounts opening in EU and US", 
+    {
+      "title": "Bank accounts opening in EU and US",
       "description": "",
       "price": "0 USD"
     },
-    { 
-      "title": "Payment processor opening in Uruguay", 
+    {
+      "title": "Payment processor opening in Uruguay",
       "description": "",
       "price": "0 USD"
     },
-    { 
-      "title": "US/UK/CA subsidiary company formation", 
+    {
+      "title": "US/UK/CA subsidiary company formation",
       "description": "",
       "price": "0 USD"
     },
-    { 
-      "title": "US/UK/CA subsidiary company managment", 
+    {
+      "title": "US/UK/CA subsidiary company managment",
       "description": "",
       "price": "0 USD"
     },
-    { 
-      "title": "International banks opening for the US/UK/CA subsidiary", 
+    {
+      "title": "International banks opening for the US/UK/CA subsidiary",
       "description": "",
       "price": "0 USD"
     },
-    { 
-      "title": "International payment processors opening for US/UK/CA subsidiary", 
+    {
+      "title": "International payment processors opening for US/UK/CA subsidiary",
       "description": "",
       "price": "0 USD"
     }

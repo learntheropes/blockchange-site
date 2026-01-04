@@ -12,7 +12,7 @@
         </o-button>
       </div>
       <div class="column is-narrow">
-        <o-button variant="text" size="large" tag="a" href="/#explanation">
+        <o-button variant="text" size="large" tag="a" href="/#explanation" :aria-label="$t('home.book.learnMoreAria')">
           {{ $t('home.book.learnMore') }}
         </o-button>
       </div>

@@ -30,7 +30,7 @@
               <p class="has-text-grey mb-4">{{ p.text }}</p>
 
               <o-button variant="light" tag="a" :href="p.href" class="mt-auto" :aria-label="`Read: ${p.title}`">
-                {{ home.meta.learnMore }} <span class="sr-only">{{ p.title }}</span>
+                {{ home.meta.learnMore }}
               </o-button>
             </div>
           </div>
@@ -75,7 +75,7 @@
 
               <o-button class="mt-4" variant="light" size="small" tag="a" :href="post.path"
                 :aria-label="`Read: ${post.title}`">
-                {{ home.meta.readMore }} <span class="sr-only">{{ post.title }}</span>
+                {{ home.meta.readMore }}
               </o-button>
             </div>
           </div>
@@ -181,17 +181,5 @@ const { data: posts } = await useAsyncData(
 
 .mt-auto {
   margin-top: auto;
-}
-
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
 }
 </style>

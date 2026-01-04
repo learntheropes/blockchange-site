@@ -35,7 +35,7 @@
 
               <o-button class="mt-4" variant="light" size="small" tag="a" :href="post.path"
                 :aria-label="`Read: ${post.title}`">
-                Read → <span class="sr-only">{{ post.title }}</span>
+                Read →
               </o-button>
             </div>
           </div>
@@ -107,17 +107,5 @@ const { data: posts } = await useAsyncData(
   flex: 1;
   font-size: 1rem;
   line-height: 1.6;
-}
-
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
 }
 </style>
