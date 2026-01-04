@@ -45,7 +45,7 @@
       </div>
     </section>
 
-    <section class="section">
+    <section class="section" id="cta">
       <div class="container content-width">
         <div class="box cta-box shadow-soft">
           <div class="columns is-vcentered">

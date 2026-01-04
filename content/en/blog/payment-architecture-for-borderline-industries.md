@@ -3,8 +3,12 @@ title: Payment Architecture for Borderline Industries
 description: How adult platforms, legal drug businesses, and high-risk marketplaces design multi-rail payment systems beyond traditional processors.
 navigation: true
 date: 2026-01-04
-
-# NEW: breadcrumb
+bookingTitle: Design a resilient payment architecture
+bookingText: >
+  Analyze your risk profile, jurisdictions, and revenue flows.
+  Get a multi-rail architecture that survives policy and processor changes.
+bookingCtaLabel: Get in touch
+bookingCtaHref: /#book
 breadcrumbHomeLabel: Home
 breadcrumbHomeHref: /
 breadcrumbBlogLabel: Blog

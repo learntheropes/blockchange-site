@@ -3,8 +3,12 @@ title: Payment Architecture from Legal Structure to Rails
 description: How to design payment systems by aligning legal structure, business model, and payment rails before developers write a single line of code.
 navigation: true
 date: 2026-01-03
-
-# NEW: breadcrumb
+bookingTitle: Architect payments before writing code
+bookingText: >
+  Align legal structure, business model, and payment rails.
+  Leave with developer-ready guidance and a clear system design.
+bookingCtaLabel: Get in touch
+bookingCtaHref: /#book
 breadcrumbHomeLabel: Home
 breadcrumbHomeHref: /
 breadcrumbBlogLabel: Blog

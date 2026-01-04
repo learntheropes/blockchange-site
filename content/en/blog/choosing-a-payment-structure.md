@@ -3,8 +3,12 @@ title: Reduce False Payment Declines with Multi-Rail Architectures
 description: Why legitimate payments fail and how multi-rail architectures improve acceptance rates across borders, payment rails, and jurisdictions.
 navigation: true
 date: 2026-01-02
-
-# NEW: breadcrumb
+bookingTitle: Book a strategy call
+bookingText: >
+  Discuss your markets, customers, and risk profile.
+  Leave with a concrete payment architecture and routing plan.
+bookingCtaLabel: Get in touch
+bookingCtaHref: /#book
 breadcrumbHomeLabel: Home
 breadcrumbHomeHref: /
 breadcrumbBlogLabel: Blog

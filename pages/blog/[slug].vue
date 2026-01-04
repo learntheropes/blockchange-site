@@ -36,6 +36,24 @@
         <ContentRenderer :value="post" />
       </div>
     </div>
+
+    <section class="section" id="cta">
+      <div class="container content-width">
+        <div class="box cta-box shadow-soft">
+          <div class="columns is-vcentered">
+            <div class="column is-8">
+              <h2 class="title is-4 mb-2">{{ post.meta.bookingTitle }}</h2>
+              <p class="has-text-grey mb-0">{{ post.meta.bookingText }}</p>
+            </div>
+            <div class="column is-4 has-text-right">
+              <o-button variant="primary" size="large" tag="a" :href="post.meta.bookingCtaHref">
+                {{ post.meta.bookingCtaLabel }}
+              </o-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </NuxtLayout>
 </template>
 
