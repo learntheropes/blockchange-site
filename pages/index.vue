@@ -137,7 +137,7 @@ const { data: posts } = await useAsyncData(
         title: x.title,
         description: x.description,
         stem: x.stem,
-        date: x.date // expecting ISO: YYYY-MM-DD
+        date: x.meta.date // expecting ISO: YYYY-MM-DD
       }))
 
     const toTs = (d) => {
