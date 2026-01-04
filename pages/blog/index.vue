@@ -1,8 +1,27 @@
 <template>
   <NuxtLayout>
+    <section class="hero is-medium is-light page-hero">
+      <div class="hero-body">
+        <div class="container content-width">
+          <nav class="breadcrumb is-small mb-4" aria-label="breadcrumbs">
+            <ul>
+              <li>
+                <NuxtLink :to="posts[0].breadcrumbHomeHref">
+                  {{ posts[0].breadcrumbHomeLabel }}
+                </NuxtLink>
+              </li>
+              <li class="is-active">
+                <a aria-current="page">{{ posts[0].breadcrumbBlogLabel }}</a>
+              </li>
+            </ul>
+          </nav>
+          <h1 class="title has-text-primary is-2 mb-3">Blog & insights</h1>
+        </div>
+      </div>
+    </section>
+
     <div class="section">
       <div class="container">
-        <h1 class="title is-3 mb-6">Blog & insights</h1>
         <div class="columns is-multiline is-variable is-6 is-centered">
           <div v-for="post in posts" :key="post.path" class="column is-4">
             <div class="box shadow-soft blog-card">
@@ -50,10 +69,12 @@ const { data: posts } = await useAsyncData(
         path: x.path,
         title: x.title,
         description: x.description,
-        stem: x.stem,
-        date: x.meta.date // expecting ISO: YYYY-MM-DD
+        date: x.meta.date, // expecting ISO: YYYY-MM-DD
+        breadcrumbHomeLabel: x.meta.breadcrumbHomeLabel,
+        breadcrumbHomeHref: x.meta.breadcrumbHomeHref,
+        breadcrumbBlogLabel: x.meta.breadcrumbBlogLabel
       }))
-
+    console.log('Blog found:', items[0].breadcrumbHomeHref)
     const toTs = (d) => {
       if (!d) return -Infinity
       const ts = Date.parse(d)

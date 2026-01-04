@@ -23,7 +23,6 @@
           <h1 class="title has-text-primary is-2 mb-3">
             {{ post.title }}
           </h1>
-
           <p v-if="post.description" class="subtitle is-4 has-text-grey-dark">
             {{ post.description }}
           </p>
