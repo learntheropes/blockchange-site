@@ -1,31 +1,43 @@
 <template>
-  <main class="section">
-    <div class="container">
-      <h1 class="title is-3 mb-6">Blog & insights</h1>
+  <NuxtLayout>
+    <div class="section">
+      <div class="container">
+        <h1 class="title is-3 mb-6">Blog & insights</h1>
+        <div class="columns is-multiline is-variable is-6 is-centered">
+          <div v-for="post in posts" :key="post.path" class="column is-4">
+            <div class="box shadow-soft blog-card">
+              <h2 class="title is-5 mb-2">
+                {{ post.title }}
+              </h2>
 
-      <div class="columns is-multiline is-variable is-6 is-centered">
-        <div v-for="post in posts" :key="post.path" class="column is-4">
-          <div class="box shadow-soft blog-card">
-            <h2 class="title is-5 mb-2">
-              {{ post.title }}
-            </h2>
+              <p class="has-text-grey blog-excerpt">
+                {{ post.description }}
+              </p>
 
-            <p class="has-text-grey blog-excerpt">
-              {{ post.description }}
-            </p>
-
-            <o-button class="mt-4" variant="light" size="small" tag="a" :href="post.path">
-              Read →
-            </o-button>
+              <o-button class="mt-4" variant="light" size="small" tag="a" :href="post.path">
+                Read →
+              </o-button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </main>
+  </NuxtLayout>
 </template>
 
 <script setup>
 const { locale } = useI18n()
+
+useHead({
+  title: "Blog & insights",
+  meta: [
+    {
+      id: 'og:title',
+      name: 'og:title',
+      content: "Blog & insights"
+    }
+  ],
+});
 
 const { data: posts } = await useAsyncData(
   () => `blog-index-${locale.value}`,

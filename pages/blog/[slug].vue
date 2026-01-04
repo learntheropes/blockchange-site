@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <NuxtLayout>
     <section class="hero is-medium is-light page-hero">
       <div class="hero-body">
         <div class="container content-width">
@@ -36,7 +36,7 @@
         <ContentRenderer :value="post" />
       </div>
     </div>
-  </main>
+  </NuxtLayout>
 </template>
 
 <script setup>
@@ -53,6 +53,28 @@ const { data: post } = await useAsyncData(
       .first(),
   { watch: [locale, () => route.path] }
 )
+
+useHead({
+  title: post.value.title,
+  meta: [
+    {
+      id: 'description',
+      name: 'description',
+      content: data.value.description
+    },
+    {
+      id: 'og:title',
+      name: 'og:title',
+      content: data.value.title
+    },
+    {
+      id: 'og:description',
+      name: 'og:description',
+      content: data.value.description
+    },
+  ],
+});
+
 </script>
 
 <style scoped>

@@ -79,6 +79,28 @@ const { data: architecture } = await useAsyncData(
       .first(),
   { watch: [locale, () => route.path] }
 )
+
+useHead({
+  title: architecture.value.heroHeadline,
+  meta: [
+    {
+      id: 'description',
+      name: 'description',
+      content: architecture.value.heroSubheadline
+    },
+    {
+      id: 'og:title',
+      name: 'og:title',
+      content: architecture.value.heroHeadline
+    },
+    {
+      id: 'og:description',
+      name: 'og:description',
+      content: architecture.value.heroSubheadline
+    },
+  ],
+});
+
 </script>
 
 <style scoped>

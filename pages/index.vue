@@ -1,5 +1,5 @@
 <template>
-  <main v-if="home">
+  <NuxtLayout>
     <!-- HERO -->
     <IndexHero :home="home" />
 
@@ -87,12 +87,11 @@
         </div>
       </div>
     </section>
-  </main>
+  </NuxtLayout>
 </template>
 
 <script setup>
 const { locale } = useI18n()
-const route = useRoute()
 
 const { data: home } = await useAsyncData(
   () => `home-${locale.value}`,
@@ -105,6 +104,26 @@ const { data: home } = await useAsyncData(
   }
 )
 
+useHead({
+  title: data.value.heroHeadline,
+  meta: [
+    {
+      id: 'description',
+      name: 'description',
+      content: data.value.heroSubheadline
+    },
+    {
+      id: 'og:title',
+      name: 'og:title',
+      content: data.value.heroHeadline
+    },
+    {
+      id: 'og:description',
+      name: 'og:description',
+      content: data.value.heroSubheadline
+    },
+  ],
+});
 
 const { data: posts } = await useAsyncData(
   () => `blog-index-${locale.value}`,
@@ -127,10 +146,8 @@ const { data: posts } = await useAsyncData(
       return Number.isFinite(ts) ? ts : -Infinity
     }
 
-    // Newest first
     items.sort((a, b) => toTs(b.date) - toTs(a.date))
-
-    return items
+    return items.slice(0, 3);
   },
   {
     watch: [locale]
