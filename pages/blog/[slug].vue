@@ -60,17 +60,17 @@ useHead({
     {
       id: 'description',
       name: 'description',
-      content: data.value.description
+      content: post.value.description
     },
     {
       id: 'og:title',
       name: 'og:title',
-      content: data.value.title
+      content: post.value.title
     },
     {
       id: 'og:description',
       name: 'og:description',
-      content: data.value.description
+      content: post.value.description
     },
   ],
 });
