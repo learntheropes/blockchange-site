@@ -13,7 +13,7 @@
                 </li>
               </ul>
             </div>
-            <BookPaid />
+            <IndexBook />
           </div>
         </div>
       </div>

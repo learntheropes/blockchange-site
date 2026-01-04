@@ -1,11 +1,3 @@
-<script setup>
-const { locale } = useI18n()
-const route = useRoute()
-const key = computed(() => `${route.path}-${locale.value}`)
-const { data: home } = await useAsyncData(key + 'contacts', () => queryCollection('content').path(`/${locale.value}/home`).first(), { watch: [locale, () => route.path] })
-
-</script>
-
 <template>
   <div id="mail">
     <h3 class="title is-5 mb-2">
@@ -45,3 +37,10 @@ const { data: home } = await useAsyncData(key + 'contacts', () => queryCollectio
     </div>
   </div>
 </template>
+
+<script setup>
+const { locale } = useI18n()
+const route = useRoute()
+const key = computed(() => `${route.path}-${locale.value}`)
+const { data: home } = await useAsyncData(key + 'contacts', () => queryCollection('content').path(`/${locale.value}/home`).first(), { watch: [locale, () => route.path] })
+</script>
