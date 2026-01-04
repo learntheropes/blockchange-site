@@ -81,22 +81,22 @@ const { data: architecture } = await useAsyncData(
 )
 
 useHead({
-  title: architecture.value.heroHeadline,
+  title: architecture.value.meta.heroHeadline,
   meta: [
     {
       id: 'description',
       name: 'description',
-      content: architecture.value.heroSubheadline
+      content: architecture.value.meta.heroSubheadline
     },
     {
       id: 'og:title',
       name: 'og:title',
-      content: architecture.value.heroHeadline
+      content: architecture.value.meta.heroHeadline
     },
     {
       id: 'og:description',
       name: 'og:description',
-      content: architecture.value.heroSubheadline
+      content: architecture.value.meta.heroSubheadline
     },
   ],
 });

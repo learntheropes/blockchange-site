@@ -73,22 +73,22 @@ const { data: post } = await useAsyncData(
 )
 
 useHead({
-  title: post.value.title,
+  title: post.value.meta.title,
   meta: [
     {
       id: 'description',
       name: 'description',
-      content: post.value.description
+      content: post.value.meta.description
     },
     {
       id: 'og:title',
       name: 'og:title',
-      content: post.value.title
+      content: post.value.meta.title
     },
     {
       id: 'og:description',
       name: 'og:description',
-      content: post.value.description
+      content: post.value.meta.description
     },
   ],
 });
