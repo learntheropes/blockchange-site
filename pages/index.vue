@@ -29,8 +29,8 @@
               <h3 class="title is-5 mb-2">{{ p.title }}</h3>
               <p class="has-text-grey mb-4">{{ p.text }}</p>
 
-              <o-button variant="light" tag="a" :href="p.href" class="mt-auto">
-                {{ home.meta.learnMore }}
+              <o-button variant="light" tag="a" :href="p.href" class="mt-auto" :aria-label="`Read: ${p.title}`">
+                {{ home.meta.learnMore }} <span class="sr-only">{{ p.title }}</span>
               </o-button>
             </div>
           </div>
@@ -73,8 +73,9 @@
                 {{ post.description }}
               </p>
 
-              <o-button class="mt-4" variant="light" size="small" tag="a" :href="post.path">
-                {{ home.meta.readMore }}
+              <o-button class="mt-4" variant="light" size="small" tag="a" :href="post.path"
+                :aria-label="`Read: ${post.title}`">
+                {{ home.meta.readMore }} <span class="sr-only">{{ post.title }}</span>
               </o-button>
             </div>
           </div>
@@ -180,5 +181,17 @@ const { data: posts } = await useAsyncData(
 
 .mt-auto {
   margin-top: auto;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 </style>

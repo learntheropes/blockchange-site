@@ -33,8 +33,9 @@
                 {{ post.description }}
               </p>
 
-              <o-button class="mt-4" variant="light" size="small" tag="a" :href="post.path">
-                Read →
+              <o-button class="mt-4" variant="light" size="small" tag="a" :href="post.path"
+                :aria-label="`Read: ${post.title}`">
+                Read → <span class="sr-only">{{ post.title }}</span>
               </o-button>
             </div>
           </div>
@@ -74,7 +75,7 @@ const { data: posts } = await useAsyncData(
         breadcrumbHomeHref: x.meta.breadcrumbHomeHref,
         breadcrumbBlogLabel: x.meta.breadcrumbBlogLabel
       }))
-    console.log('Blog found:', items[0].breadcrumbHomeHref)
+
     const toTs = (d) => {
       if (!d) return -Infinity
       const ts = Date.parse(d)
@@ -89,7 +90,6 @@ const { data: posts } = await useAsyncData(
     watch: [locale]
   }
 )
-
 </script>
 
 <style scoped>
@@ -107,5 +107,17 @@ const { data: posts } = await useAsyncData(
   flex: 1;
   font-size: 1rem;
   line-height: 1.6;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 </style>
