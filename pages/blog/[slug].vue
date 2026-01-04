@@ -20,7 +20,7 @@
               </li>
             </ul>
           </nav>
-          <h1 class="title is-2 mb-3">
+          <h1 class="title has-text-primary is-2 mb-3">
             {{ post.title }}
           </h1>
 
