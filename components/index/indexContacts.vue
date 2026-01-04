@@ -1,6 +1,6 @@
 <template>
-  <div id="mail">
-    <h3 class="title is-5 mb-2">
+  <div>
+    <h3 class="title is-5 mb-2" id="mail">
       {{ home.meta.asyncTitle }}
     </h3>
 
