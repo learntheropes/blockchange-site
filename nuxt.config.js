@@ -56,6 +56,13 @@ export default defineNuxtConfig({
     }
   },
 
+  routeRules: {
+    '/en/blog': { redirect: '/en/#blog' },
+    '/blog': { redirect: '/en/#blog' },
+    '/en/architecture': { redirect: '/en/#architecture' },
+    '/architecture': { redirect: '/en/#architecture' }
+  },
+
   css: ['~/assets/scss/main.scss'],
   components: [{ path: '~/components', pathPrefix: false, global: true }],
 
