@@ -3,13 +3,13 @@ title: "Multi-Rail Payment Architecture: How to Route Across Cards, Banks, and L
 description: "How to design multi-rail payment systems that route transactions across cards, banks, and local rails based on geography, risk, cost, and settlement needs."
 navigation: true
 date: "2026-01-07"
-bookingTitle: "Architect payments before writing code"
-bookingText: >
-  Design multi-rail payment flows across cards, banks, and local rails.
-  Leave with developer-ready routing logic and a resilient system architecture.
-bookingCtaLabel: "Get in touch"
-bookingCtaHref: "/#book"
 
+bookingTitle: Design payment architecture before implementation
+bookingText: >
+  Define how payments should route across cards, banks, and local rails
+  before providers, APIs, or code lock you into fragile decisions.
+bookingCtaLabel: Discuss your architecture
+bookingCtaHref: /#book
 breadcrumbHomeLabel: "Home"
 breadcrumbHomeHref: "/"
 breadcrumbBlogLabel: "Blog"
