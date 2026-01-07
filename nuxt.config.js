@@ -11,6 +11,12 @@ const ABS_CALCOM_COMPONENTS = resolve('./node_modules/nuxt-calcom/runtime/compon
 const CALCOM_COMPONENTS_TARGET = resolve('./node_modules/nuxt-calcom/dist/runtime/components')
 
 export default defineNuxtConfig({
+
+  site: {
+    url: 'https://blockchange.com.py',
+    name: 'Blockchange'
+  },
+
   compatibilityDate: '2025-10-10',
 
   alias: {
@@ -58,7 +64,14 @@ export default defineNuxtConfig({
     external: process.env.NUXT_HUB_REMOTE === 'false' ? [] : undefined,
   },
 
-  modules: ['@nuxtjs/i18n', '@nuxt/content', 'nuxt-delay-hydration', 'nuxt-umami', 'nuxt-calcom', '@nuxthub/core'],
+  modules: [
+    '@nuxtjs/i18n',
+    'nuxt-delay-hydration',
+    'nuxt-umami',
+    'nuxt-calcom',
+    '@nuxthub/core',
+    '@nuxt/content',
+  ],
 
   hub: {
     blob: true,
@@ -104,5 +117,14 @@ export default defineNuxtConfig({
     'builder:watch': (event, path) => {
       if (path.includes('manifest-route-rule')) return false
     }
-  }
+  },
+
+  nitro: {
+    storage: {
+      'content:source': {
+        driver: 'fs',
+        base: resolve('./content'),
+      },
+    },
+  },
 })

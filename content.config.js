@@ -5,10 +5,7 @@ export default defineContentConfig({
     content: defineCollection({
       type: 'page',
       source: '**/*.md',
-      toc: {
-        depth: 3,
-        searchDepth: 3
-      }
+      toc: { depth: 3, searchDepth: 3 }
     })
   }
 })
