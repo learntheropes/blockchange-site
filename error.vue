@@ -1,55 +1,66 @@
-<script setup>
-const props = defineProps({
-  error: Object,
-  required: true
-});
-
-useHead({
-  title: props.error.statusCode,
-  meta: [
-    {
-      name: 'description',
-      content: props.error.statusMessage || props.error.message
-    },
-  ],
-});
-
-const {
-  locale,
-  t
-} = useI18n();
-
-let translatedErrorMessage
-switch(props.error.statusCode) {
-  case 401:
-    translatedErrorMessage = t('unauthorized')
-    break;
-  case 403:
-    translatedErrorMessage = t('unauthorized')
-    break;
-  case 404:
-    translatedErrorMessage = t('pageNotFound')
-    break;
-    break;
-  default:
-    translatedErrorMessage = t('somethingWentWrong')
-}
-
-const handleError = () => clearError({ redirect: `/${locale.value}` });
-</script>
-
 <template>
   <div class="hero is-fullheight">
     <div class="hero-body">
       <div class="container has-text-centered">
-        <p class="title">{{ translatedErrorMessage }}</p>
-        <DevOnly v-if="props.error.statusCode !== 404"> 
+        <p class="title">
+          {{ translatedErrorMessage }}
+        </p>
+
+        <o-button class="mt-4" variant="primary" size="small" @click="handleError">
+          {{ t('backToTheHomePage') }}
+        </o-button>
+
+        <DevOnly v-if="props.error?.statusCode !== 404">
           <div class="block content">
-            <div>{{ error.statusMessage || error.message }}</div>
-            <div>{{ error.stack }}</div>
+            <div>
+              {{ props.error?.statusMessage || props.error?.message }}
+            </div>
+            <pre style="text-align:left; white-space:pre-wrap;">
+{{ props.error?.stack }}
+            </pre>
           </div>
         </DevOnly>
       </div>
     </div>
   </div>
 </template>
+
+<script setup>
+const props = defineProps({
+  error: {
+    type: Object,
+    required: true
+  }
+})
+
+useHead(() => ({
+  title: String(props.error?.statusCode || 'Error'),
+  meta: [
+    {
+      name: 'description',
+      content: props.error?.statusMessage || props.error?.message || 'Error'
+    }
+  ]
+}))
+
+const { locale, t } = useI18n()
+
+const translatedErrorMessage = computed(() => {
+  const code = props.error?.statusCode
+
+  switch (code) {
+    case 401:
+      return t('unauthorized')
+    case 403:
+      return t('forbidden')
+    case 404:
+      return t('pageNotFound')
+    default:
+      return t('somethingWentWrong')
+  }
+})
+
+const handleError = () => {
+  clearError({ redirect: `/${locale.value}` })
+}
+</script>

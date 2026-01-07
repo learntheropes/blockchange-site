@@ -80,26 +80,22 @@ const { data: architecture } = await useAsyncData(
   { watch: [locale, () => route.path] }
 )
 
-useHead({
-  title: architecture.value.meta.heroHeadline,
-  meta: [
-    {
-      id: 'description',
-      name: 'description',
-      content: architecture.value.meta.heroSubheadline
-    },
-    {
-      id: 'og:title',
-      name: 'og:title',
-      content: architecture.value.meta.heroHeadline
-    },
-    {
-      id: 'og:description',
-      name: 'og:description',
-      content: architecture.value.meta.heroSubheadline
-    },
-  ],
-});
+if (!architecture.value) {
+  throw createError({ statusCode: 404, statusMessage: 'Page not found' })
+}
+
+
+useHead(() => {
+  const a = architecture.value
+  return {
+    title: a?.meta?.heroHeadline || 'Architecture',
+    meta: [
+      { id: 'description', name: 'description', content: a?.meta?.heroSubheadline || '' },
+      { id: 'og:title', name: 'og:title', content: a?.meta?.heroHeadline || '' },
+      { id: 'og:description', name: 'og:description', content: a?.meta?.heroSubheadline || '' },
+    ],
+  }
+})
 
 </script>
 

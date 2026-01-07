@@ -71,27 +71,35 @@ const { data: post } = await useAsyncData(
   { watch: [locale, () => route.path] }
 )
 
-useHead({
-  title: post.value.title,
-  meta: [
-    {
-      id: 'description',
-      name: 'description',
-      content: post.value.description
-    },
-    {
-      id: 'og:title',
-      name: 'og:title',
-      content: post.value.title
-    },
-    {
-      id: 'og:description',
-      name: 'og:description',
-      content: post.value.description
-    },
-  ],
-});
+if (!post.value) {
+  throw createError({ statusCode: 404, statusMessage: 'Page not found' })
+}
 
+
+useHead(() => {
+  const p = post.value
+
+  return {
+    title: p?.title || 'Blog',
+    meta: [
+      {
+        id: 'description',
+        name: 'description',
+        content: p?.description || ''
+      },
+      {
+        id: 'og:title',
+        name: 'og:title',
+        content: p?.title || ''
+      },
+      {
+        id: 'og:description',
+        name: 'og:description',
+        content: p?.description || ''
+      },
+    ],
+  }
+})
 </script>
 
 <style scoped>
