@@ -6,7 +6,7 @@
     "prebuild": "node scripts/generate-sitemap.mjs",
     "build": "nuxi build",
     "start": "nuxi start",
-    "generate": "nuxi generate"
+    "generate": "node scripts/generate-sitemap.mjs && nuxi generate"
   },
   "author": "Learntheropes <giovanni@learntheropes.xyz",
   "license": "MIT",

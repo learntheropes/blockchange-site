@@ -82,10 +82,11 @@
         </div>
 
         <div class="has-text-centered mt-5">
-          <o-button variant="primary" tag="a" :href="`/${locale}/blog`">
-            {{ home.meta.viewAllArticles }}
+          <o-button variant="primary" @click="showAllPosts = !showAllPosts">
+            {{ showAllPosts ? home.meta.viewLessArticles : home.meta.viewAllArticles }}
           </o-button>
         </div>
+
       </div>
     </section>
   </NuxtLayout>
@@ -126,7 +127,9 @@ useHead({
   ],
 });
 
-const { data: posts } = await useAsyncData(
+const showAllPosts = ref(false)
+
+const { data: allPosts } = await useAsyncData(
   () => `blog-index-${locale.value}`,
   async () => {
     const all = await queryCollection('content').limit(200).all()
@@ -138,7 +141,7 @@ const { data: posts } = await useAsyncData(
         title: x.title,
         description: x.description,
         stem: x.stem,
-        date: x.meta.date // expecting ISO: YYYY-MM-DD
+        date: x.meta?.date // expecting ISO: YYYY-MM-DD
       }))
 
     const toTs = (d) => {
@@ -148,12 +151,15 @@ const { data: posts } = await useAsyncData(
     }
 
     items.sort((a, b) => toTs(b.date) - toTs(a.date))
-    return items.slice(0, 3);
+    return items // <-- return ALL
   },
-  {
-    watch: [locale]
-  }
+  { watch: [locale] }
 )
+
+const posts = computed(() => {
+  const items = allPosts.value || []
+  return showAllPosts.value ? items : items.slice(0, 3)
+})
 </script>
 
 <style scoped>

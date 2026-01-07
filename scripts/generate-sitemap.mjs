@@ -3,12 +3,16 @@ import path from 'node:path'
 
 const SITE = 'https://blockchange.com.py'
 
-// Adjust to your real content folder structure
 const CONTENT_DIR = path.resolve(process.cwd(), 'content')
 const OUT_FILE = path.resolve(process.cwd(), 'public', 'sitemap.xml')
 
 // If your content is only in /content/en/... right now:
 const LOCALES = ['en']
+
+// Routes you NEVER want in the sitemap (exact locale endpoints)
+const EXCLUDE_LOCALE_ENDPOINTS = new Set(
+  LOCALES.flatMap(l => [`/${l}/blog`, `/${l}/architecture`])
+)
 
 function escapeXml(s = '') {
   return String(s)
@@ -68,18 +72,20 @@ function main() {
   const files = walk(CONTENT_DIR).filter(f => /\.(md|mdc)$/i.test(f))
   const urls = new Set()
 
-  // Always include these
+  // Always include base + locale root (ONLY)
   urls.add(`${SITE}/`)
   for (const l of LOCALES) {
     urls.add(`${SITE}/${l}`)
-    urls.add(`${SITE}/${l}/blog`)
-    urls.add(`${SITE}/${l}/architecture`)
   }
 
   // Add pages from content
   for (const f of files) {
     const route = fileToRoute(f)
     if (!route) continue
+
+    // hard exclude locale endpoints like /en/blog and /en/architecture
+    if (EXCLUDE_LOCALE_ENDPOINTS.has(route)) continue
+
     urls.add(`${SITE}${route}`)
   }
 
