@@ -41,7 +41,7 @@
     <!-- CONTACT / BOOKING -->
     <section class="section" id="book">
       <div class="container">
-        <div class="box shadow-soft">
+        <div>
           <h2 class="title is-4">
             {{ home.meta.contactTitle }}
           </h2>
