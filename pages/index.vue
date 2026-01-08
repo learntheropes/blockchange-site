@@ -50,7 +50,95 @@
             {{ home.meta.contactIntro }}
           </p>
 
-          <IndexContacts />
+          <!-- Quick anchors -->
+          <div class="buttons mb-5">
+            <o-button variant="light" size="small" tag="a" href="#call">
+              Call
+            </o-button>
+            <o-button variant="light" size="small" tag="a" href="#mail">
+              Email
+            </o-button>
+            <o-button variant="text" size="small" tag="a" href="#book">
+              Top
+            </o-button>
+          </div>
+
+          <!-- Context -->
+          <div v-if="contextText" class="notification is-info is-light mb-5">
+            <strong>Context</strong>
+            <pre class="mt-2">{{ contextText }}</pre>
+            <o-button variant="text" size="small" @click="copy(contextText)">
+              Copy context
+            </o-button>
+          </div>
+
+          <!-- CALL (PAID) -->
+          <div id="call" class="box shadow-soft section-card mb-6">
+            <h3 class="title is-4 mb-1">Book a call</h3>
+            <p class="has-text-grey mb-2">
+              1:1 synchronous call · <strong>$100</strong>
+            </p>
+            <p class="has-text-grey mb-4">
+              Best if you need real-time feedback, architecture review,
+              or decisions during the call.
+            </p>
+
+            <CalInlineWidget :cal-link="calLink" :ui-options="{ theme: 'light' }" height="680px" />
+
+            <p class="is-size-7 has-text-grey mt-3">
+              Context is prefilled in the booking notes.
+              If not visible, paste it manually before confirming.
+            </p>
+
+            <p class="is-size-7 has-text-grey mt-2">
+              Paid calls help keep async support free and focused.
+            </p>
+          </div>
+
+          <!-- EMAIL (FREE) -->
+          <div id="mail" class="box shadow-soft section-card">
+            <h3 class="title is-4 mb-1">Email</h3>
+            <p class="has-text-grey mb-2">
+              Asynchronous · <strong>Free</strong>
+            </p>
+            <p class="has-text-grey mb-4">
+              Ideal for structured questions, written context,
+              or when timing is not urgent.
+            </p>
+
+            <div class="buttons">
+              <o-button variant="primary" size="large" tag="a" :href="mailtoHref">
+                Email with context
+              </o-button>
+
+              <o-button v-if="contextText" variant="text" size="large" @click="copy(contextText)">
+                Copy context
+              </o-button>
+            </div>
+
+            <hr />
+
+            <h4 class="title is-6 mb-2">PGP Public Key</h4>
+            <pre class="p-3 has-background-light" style="white-space: pre-wrap;">
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+xjMEZ7mqMRYJKwYBBAHaRw8BAQdAno9TkyGUNtgvwj9r8fxVINjI6Rwzl9G42kua
+zH0A/LDNM2hlbGxvQGJsb2NrY2hhbmdlLmNvbS5weSA8aGVsbG9AYmxvY2tjaGFu
+Z2UuY29tLnB5PsLAEQQTFgoAgwWCZ7mqMQMLCQcJkINN8LrhQ7KMRRQAAAAAABwA
+IHNhbHRAbm90YXRpb25zLm9wZW5wZ3Bqcy5vcmdw8xKYbGObjt18guKYmEph2KVl
+9hFjxbg3/PGsGlg3egMVCggEFgACAQIZAQKbAwIeARYhBKEEX1rBhWpXzgwC7oNN
+8LrhQ7KMAAD4QQD9EU7/tfL1XXAtuFZgAIDlVAu7DS0nYSecU3GNSQ1zvEYA+gN+
+uX0fp8ySrK3yj+jgdNaqC5L4mBAGmN7yKyoaAOoJzjgEZ7mqMRIKKwYBBAGXVQEF
+AQEHQDVZENdsrDZf4PlRPeP5IqgGV52QR844eEqvIV2Td9UQAwEIB8K+BBgWCgBw
+BYJnuaoxCZCDTfC64UOyjEUUAAAAAAAcACBzYWx0QG5vdGF0aW9ucy5vcGVucGdw
+anMub3JnN20CGjwg7IXiOADOw9LDmPb/61vi3qXrIMOXfwAJn2MCmwwWIQShBF9a
+wYVqV84MAu6DTfC64UOyjAAASt0A/jLnhYaOVa8Zd6kHh1WJpN3UNoZXnABoN+hW
+MTile9olAP4rZdhk9q1iiBLstS9ouyocsGbadWTbqBm5iAy8qKpUBg==
+=sC5I
+-----END PGP PUBLIC KEY BLOCK-----
+            </pre>
+          </div>
+
         </div>
       </div>
     </section>
@@ -86,47 +174,38 @@
             {{ showAllPosts ? home.meta.viewLessArticles : home.meta.viewAllArticles }}
           </o-button>
         </div>
-
       </div>
     </section>
   </NuxtLayout>
 </template>
 
 <script setup>
+import { computed, ref } from 'vue'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
 const { locale } = useI18n()
 
+/* Home content */
 const { data: home } = await useAsyncData(
   () => `home-${locale.value}`,
   () =>
     queryCollection('content')
       .path(`/${locale.value}/home`)
       .first(),
-  {
-    watch: [locale]
-  }
+  { watch: [locale] }
 )
 
 useHead({
   title: home.value.meta.heroHeadline,
   meta: [
-    {
-      id: 'description',
-      name: 'description',
-      content: home.value.meta.heroSubheadline
-    },
-    {
-      id: 'og:title',
-      name: 'og:title',
-      content: home.value.meta.heroHeadline
-    },
-    {
-      id: 'og:description',
-      name: 'og:description',
-      content: home.value.heroSubheadline
-    },
+    { id: 'description', name: 'description', content: home.value.meta.heroSubheadline },
+    { id: 'og:title', name: 'og:title', content: home.value.meta.heroHeadline },
+    { id: 'og:description', name: 'og:description', content: home.value.heroSubheadline },
   ],
-});
+})
 
+/* Blog list */
 const showAllPosts = ref(false)
 
 const { data: allPosts } = await useAsyncData(
@@ -140,18 +219,11 @@ const { data: allPosts } = await useAsyncData(
         path: x.path,
         title: x.title,
         description: x.description,
-        stem: x.stem,
-        date: x.meta?.date // expecting ISO: YYYY-MM-DD
+        date: x.meta?.date
       }))
 
-    const toTs = (d) => {
-      if (!d) return -Infinity
-      const ts = Date.parse(d)
-      return Number.isFinite(ts) ? ts : -Infinity
-    }
-
-    items.sort((a, b) => toTs(b.date) - toTs(a.date))
-    return items // <-- return ALL
+    items.sort((a, b) => Date.parse(b.date || 0) - Date.parse(a.date || 0))
+    return items
   },
   { watch: [locale] }
 )
@@ -160,6 +232,53 @@ const posts = computed(() => {
   const items = allPosts.value || []
   return showAllPosts.value ? items : items.slice(0, 3)
 })
+
+/* Attribution from CTA */
+const src = computed(() => (route.query.src || '').toString())
+const cta = computed(() => (route.query.cta || '').toString())
+
+const contextText = computed(() => {
+  const lines = []
+  if (src.value) lines.push(`Source: ${src.value}`)
+  if (cta.value) lines.push(`CTA: ${cta.value}`)
+  return lines.join('\n')
+})
+
+/* Cal.com */
+const calLink = computed(() => {
+  const base = `blockchange/${locale.value}`
+  const q = new URLSearchParams()
+  if (contextText.value) q.set('notes', contextText.value)
+  return q.toString() ? `${base}?${q.toString()}` : base
+})
+
+/* Email */
+const emailTo = 'hello@blockchange.com'
+
+function encode(s) {
+  return encodeURIComponent(String(s || ''))
+}
+
+const mailtoHref = computed(() => {
+  const subject = 'Blockchange — request'
+  const body = [
+    'Hi Giovanni,',
+    '',
+    'Context:',
+    contextText.value || '(no context)',
+    '',
+    'Message:',
+    ''
+  ].join('\n')
+
+  return `mailto:${emailTo}?subject=${encode(subject)}&body=${encode(body)}`
+})
+
+async function copy(text) {
+  try {
+    await navigator.clipboard.writeText(text)
+  } catch { }
+}
 </script>
 
 <style scoped>
@@ -167,12 +286,7 @@ const posts = computed(() => {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
 }
 
-.pillar-card {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
+.pillar-card,
 .blog-card {
   display: flex;
   flex-direction: column;
