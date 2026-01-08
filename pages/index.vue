@@ -50,19 +50,6 @@
             {{ home.meta.contactIntro }}
           </p>
 
-          <!-- Quick anchors -->
-          <div class="buttons mb-5">
-            <o-button variant="light" size="small" tag="a" href="#call">
-              Call
-            </o-button>
-            <o-button variant="light" size="small" tag="a" href="#mail">
-              Email
-            </o-button>
-            <o-button variant="text" size="small" tag="a" href="#book">
-              Top
-            </o-button>
-          </div>
-
           <!-- Context -->
           <div v-if="contextText" class="notification is-info is-light mb-5">
             <strong>Context</strong>
