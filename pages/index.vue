@@ -29,7 +29,8 @@
               <h3 class="title is-5 mb-2">{{ p.title }}</h3>
               <p class="has-text-grey mb-4">{{ p.text }}</p>
 
-              <o-button variant="light" tag="a" :href="p.href" class="mt-auto" :aria-label="`Read: ${p.title}`">
+              <o-button variant="light" tag="a" :href="p.href" class="mt-auto"
+                :aria-label="`${home.meta.a11yReadPrefix}: ${p.title}`">
                 {{ home.meta.learnMore }}
               </o-button>
             </div>
@@ -50,62 +51,78 @@
             {{ home.meta.contactIntro }}
           </p>
 
+          <!-- Quick anchors -->
+          <div class="buttons mb-5">
+            <o-button variant="light" size="small" tag="a" href="#call">
+              {{ home.meta.bookAnchorsCallLabel }}
+            </o-button>
+            <o-button variant="light" size="small" tag="a" href="#mail">
+              {{ home.meta.bookAnchorsMailLabel }}
+            </o-button>
+            <o-button variant="text" size="small" tag="a" href="#book">
+              {{ home.meta.bookAnchorsTopLabel }}
+            </o-button>
+          </div>
+
           <!-- Context -->
           <div v-if="contextText" class="notification is-info is-light mb-5">
-            <strong>Context</strong>
+            <strong>{{ home.meta.bookContextTitle }}</strong>
             <pre class="mt-2">{{ contextText }}</pre>
             <o-button variant="text" size="small" @click="copy(contextText)">
-              Copy context
+              {{ home.meta.bookCopyContextLabel }}
             </o-button>
           </div>
 
           <!-- CALL (PAID) -->
           <div id="call" class="box shadow-soft section-card mb-6">
-            <h3 class="title is-4 mb-1">Book a call</h3>
+            <h3 class="title is-4 mb-1">{{ home.meta.bookCallTitle }}</h3>
+
             <p class="has-text-grey mb-2">
-              1:1 synchronous call · <strong>$100</strong>
+              {{ home.meta.bookCallMetaPrefix }}
+              <strong>{{ home.meta.bookCallPrice }}</strong>
             </p>
+
             <p class="has-text-grey mb-4">
-              Best if you need real-time feedback, architecture review,
-              or decisions during the call.
+              {{ home.meta.bookCallDescription }}
             </p>
 
             <CalInlineWidget :cal-link="calLink" :ui-options="{ theme: 'light' }" height="680px" />
 
             <p class="is-size-7 has-text-grey mt-3">
-              Context is prefilled in the booking notes.
-              If not visible, paste it manually before confirming.
+              {{ home.meta.bookCallNotesHint }}
             </p>
 
             <p class="is-size-7 has-text-grey mt-2">
-              Paid calls help keep async support free and focused.
+              {{ home.meta.bookCallWhyPaidHint }}
             </p>
           </div>
 
           <!-- EMAIL (FREE) -->
           <div id="mail" class="box shadow-soft section-card">
-            <h3 class="title is-4 mb-1">Email</h3>
+            <h3 class="title is-4 mb-1">{{ home.meta.bookMailTitle }}</h3>
+
             <p class="has-text-grey mb-2">
-              Asynchronous · <strong>Free</strong>
+              {{ home.meta.bookMailMetaPrefix }}
+              <strong>{{ home.meta.bookMailPrice }}</strong>
             </p>
+
             <p class="has-text-grey mb-4">
-              Ideal for structured questions, written context,
-              or when timing is not urgent.
+              {{ home.meta.bookMailDescription }}
             </p>
 
             <div class="buttons">
               <o-button variant="primary" size="large" tag="a" :href="mailtoHref">
-                Email with context
+                {{ home.meta.bookMailCtaLabel }}
               </o-button>
 
               <o-button v-if="contextText" variant="text" size="large" @click="copy(contextText)">
-                Copy context
+                {{ home.meta.bookCopyContextLabel }}
               </o-button>
             </div>
 
             <hr />
 
-            <h4 class="title is-6 mb-2">PGP Public Key</h4>
+            <h4 class="title is-6 mb-2">{{ home.meta.bookPgpTitle }}</h4>
             <pre class="p-3 has-background-light" style="white-space: pre-wrap;">
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 
@@ -149,7 +166,7 @@ MTile9olAP4rZdhk9q1iiBLstS9ouyocsGbadWTbqBm5iAy8qKpUBg==
               </p>
 
               <o-button class="mt-4" variant="light" size="small" tag="a" :href="post.path"
-                :aria-label="`Read: ${post.title}`">
+                :aria-label="`${home.meta.a11yReadPrefix}: ${post.title}`">
                 {{ home.meta.readMore }}
               </o-button>
             </div>
@@ -226,8 +243,8 @@ const cta = computed(() => (route.query.cta || '').toString())
 
 const contextText = computed(() => {
   const lines = []
-  if (src.value) lines.push(`Source: ${src.value}`)
-  if (cta.value) lines.push(`CTA: ${cta.value}`)
+  if (src.value) lines.push(`${home.value?.meta?.bookContextSourceLabel || 'Source'}: ${src.value}`)
+  if (cta.value) lines.push(`${home.value?.meta?.bookContextCtaLabel || 'CTA'}: ${cta.value}`)
   return lines.join('\n')
 })
 
@@ -247,14 +264,14 @@ function encode(s) {
 }
 
 const mailtoHref = computed(() => {
-  const subject = 'Blockchange — request'
+  const subject = home.value?.meta?.bookMailSubject || 'Blockchange — request'
   const body = [
-    'Hi Giovanni,',
+    home.value?.meta?.bookMailBodyGreeting || 'Hi Giovanni,',
     '',
-    'Context:',
-    contextText.value || '(no context)',
+    home.value?.meta?.bookMailBodyContextTitle || 'Context:',
+    contextText.value || (home.value?.meta?.bookMailBodyNoContext || '(no context)'),
     '',
-    'Message:',
+    home.value?.meta?.bookMailBodyMessageTitle || 'Message:',
     ''
   ].join('\n')
 

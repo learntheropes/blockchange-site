@@ -88,4 +88,51 @@ bookingNote: >
 contactOneLinerPrefix: Send as an email to
 contactOneLinerMiddle: with optional PGP encryption with fingerprint
 contactOneLinerSuffix: or book a call below.
+
+# Accessibility
+a11yReadPrefix: Read
+
+# Booking anchors
+bookAnchorsCallLabel: Call
+bookAnchorsMailLabel: Email
+bookAnchorsTopLabel: Top
+
+# Booking context block
+bookContextTitle: Context
+bookCopyContextLabel: Copy context
+bookContextSourceLabel: Source
+bookContextCtaLabel: CTA
+
+# Call block
+bookCallTitle: Book a call
+bookCallMetaPrefix: "1:1 synchronous call · "
+bookCallPrice: "$100"
+bookCallDescription: >
+  Best if you need real-time feedback, architecture review,
+  or decisions during the call.
+bookCallNotesHint: >
+  Context is prefilled in the booking notes.
+  If not visible, paste it manually before confirming.
+bookCallWhyPaidHint: >
+  Paid calls help keep async support free and focused.
+
+# Email block
+bookMailTitle: Email
+bookMailMetaPrefix: "Asynchronous · "
+bookMailPrice: "Free"
+bookMailDescription: >
+  Ideal for structured questions, written context,
+  or when timing is not urgent.
+bookMailCtaLabel: Email with context
+
+# Email content
+bookMailSubject: "Blockchange — request"
+bookMailBodyGreeting: "Hi Giovanni,"
+bookMailBodyContextTitle: "Context:"
+bookMailBodyNoContext: "(no context)"
+bookMailBodyMessageTitle: "Message:"
+
+# PGP
+bookPgpTitle: PGP Public Key
+
 ---
