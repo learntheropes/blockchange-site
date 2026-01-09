@@ -17,6 +17,8 @@ export default defineNuxtConfig({
     name: 'Blockchange'
   },
 
+  baseURL: '/blockchange-nuxthub/',
+
   compatibilityDate: '2025-10-10',
 
   alias: {
