@@ -92,3 +92,5 @@ sw.*
 .output/
 
 .data/
+
+public/sitemap.xml
