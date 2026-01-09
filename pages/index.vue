@@ -29,7 +29,8 @@
               <h3 class="title is-5 mb-2">{{ p.title }}</h3>
               <p class="has-text-grey mb-4">{{ p.text }}</p>
 
-              <o-button variant="light" tag="a" :href="base(localePath(p.href))" class="mt-auto"
+              <!-- IMPORTANT: localePath() include anche baseURL su GH Pages -->
+              <o-button variant="light" tag="a" :href="localePath(p.href)" class="mt-auto"
                 :aria-label="`${home.meta.a11yReadPrefix}: ${p.title}`">
                 {{ home.meta.learnMore }}
               </o-button>
@@ -144,13 +145,13 @@ MTile9olAP4rZdhk9q1iiBLstS9ouyocsGbadWTbqBm5iAy8qKpUBg==
 =sC5I
 -----END PGP PUBLIC KEY BLOCK-----
             </pre>
+
             <div class="mb-5">
               <o-button variant="text" size="small" tag="a" href="#book">
                 {{ home.meta.bookAnchorsTopLabel }}
               </o-button>
             </div>
           </div>
-
         </div>
       </div>
     </section>
@@ -173,7 +174,9 @@ MTile9olAP4rZdhk9q1iiBLstS9ouyocsGbadWTbqBm5iAy8qKpUBg==
                 {{ post.description }}
               </p>
 
-              <o-button class="mt-4" variant="light" size="small" tag="a" :href="base(post.path)"
+              <!-- post.path è già /en/... quindi NON localePath()
+                   Però su GH Pages serve la base: con withBase -->
+              <o-button class="mt-4" variant="light" size="small" tag="a" :href="withBase(post.path, baseURL)"
                 :aria-label="`${home.meta.a11yReadPrefix}: ${post.title}`">
                 {{ home.meta.readMore }}
               </o-button>
@@ -200,9 +203,7 @@ const route = useRoute()
 const { locale } = useI18n()
 const localePath = useLocalePath()
 
-// baseURL handles GitHub Pages subpath (e.g. /blockchange-nuxthub/)
 const baseURL = useRuntimeConfig().app.baseURL
-const base = (p) => withBase(p, baseURL)
 
 /* Home content */
 const { data: home } = await useAsyncData(
@@ -293,9 +294,7 @@ const mailtoHref = computed(() => {
 })
 
 async function copy(text) {
-  try {
-    await navigator.clipboard.writeText(text)
-  } catch { }
+  try { await navigator.clipboard.writeText(text) } catch { }
 }
 </script>
 
