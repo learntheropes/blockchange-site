@@ -59,9 +59,6 @@
             <o-button variant="light" size="small" tag="a" href="#mail">
               {{ home.meta.bookAnchorsMailLabel }}
             </o-button>
-            <o-button variant="text" size="small" tag="a" href="#book">
-              {{ home.meta.bookAnchorsTopLabel }}
-            </o-button>
           </div>
 
           <!-- Context -->
@@ -95,6 +92,12 @@
             <p class="is-size-7 has-text-grey mt-2">
               {{ home.meta.bookCallWhyPaidHint }}
             </p>
+
+            <div class="mb-5">
+              <o-button variant="text" size="small" tag="a" href="#book">
+                {{ home.meta.bookAnchorsTopLabel }}
+              </o-button>
+            </div>
           </div>
 
           <!-- EMAIL (FREE) -->
@@ -141,6 +144,11 @@ MTile9olAP4rZdhk9q1iiBLstS9ouyocsGbadWTbqBm5iAy8qKpUBg==
 =sC5I
 -----END PGP PUBLIC KEY BLOCK-----
             </pre>
+            <div class="mb-5">
+              <o-button variant="text" size="small" tag="a" href="#book">
+                {{ home.meta.bookAnchorsTopLabel }}
+              </o-button>
+            </div>
           </div>
 
         </div>
