@@ -1,18 +1,14 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
-const SITE = 'https://blockchange.com.py'
+console.log('RUNNING SITEMAP SCRIPT v2 (hreflang)')
 
+const SITE = 'https://blockchange.com.py'
 const CONTENT_DIR = path.resolve(process.cwd(), 'content')
 const OUT_FILE = path.resolve(process.cwd(), 'public', 'sitemap.xml')
 
-// If your content is only in /content/en/... right now:
-const LOCALES = ['en']
-
-// Routes you NEVER want in the sitemap (exact locale endpoints)
-const EXCLUDE_LOCALE_ENDPOINTS = new Set(
-  LOCALES.flatMap(l => [`/${l}/blog`, `/${l}/architecture`])
-)
+const LOCALES = ['en']          // later: ['en', 'es', 'ru']
+const DEFAULT_LOCALE = 'en'     // must match your i18n defaultLocale
 
 function escapeXml(s = '') {
   return String(s)
@@ -34,33 +30,56 @@ function walk(dir) {
   return out
 }
 
-function fileToRoute(file) {
-  // Examples:
-  // content/en/home.md -> /en
-  // content/en/blog/foo.md -> /en/blog/foo
+/**
+ * From a file like content/en/blog/foo.md
+ * return { locale: "en", rest: "blog/foo" } or rest "" for home/index.
+ */
+function fileToLocaleAndRest(file) {
   const rel = path.relative(CONTENT_DIR, file).replaceAll('\\', '/')
   const noExt = rel.replace(/\.(md|mdc)$/i, '')
   const parts = noExt.split('/').filter(Boolean)
-
   if (!parts.length) return null
 
   const locale = parts[0]
   if (!LOCALES.includes(locale)) return null
 
-  let rest = parts.slice(1)
+  let restParts = parts.slice(1)
 
-  // home/index -> locale root
-  if (rest.length === 0) return `/${locale}`
-  if (rest.length === 1 && ['home', 'index'].includes(rest[0].toLowerCase())) return `/${locale}`
+  // home or index => root
+  if (restParts.length === 0) restParts = ['']
+  if (restParts.length === 1 && ['home', 'index'].includes(restParts[0].toLowerCase())) {
+    restParts = ['']
+  }
 
   // drop trailing index
-  if (rest[rest.length - 1]?.toLowerCase() === 'index') rest = rest.slice(0, -1)
+  if (restParts[restParts.length - 1]?.toLowerCase() === 'index') {
+    restParts = restParts.slice(0, -1)
+  }
 
-  return `/${locale}/${rest.join('/')}`
+  const rest = restParts.filter(Boolean).join('/')
+  return { locale, rest }
 }
 
-function urlNode(loc) {
-  return `  <url><loc>${escapeXml(loc)}</loc></url>`
+function pathFor(locale, rest, { unprefixedDefault = false } = {}) {
+  const cleanRest = rest ? `/${rest}` : ''
+  if (unprefixedDefault && locale === DEFAULT_LOCALE) {
+    // default locale without prefix
+    return cleanRest || '/'
+  }
+  // normal prefixed route
+  return `/${locale}${cleanRest}`
+}
+
+function urlNode({ loc, alternates = [] }) {
+  const links = alternates
+    .map(a =>
+      `    <xhtml:link rel="alternate" hreflang="${escapeXml(a.hreflang)}" href="${escapeXml(a.href)}" />`
+    )
+    .join('\n')
+
+  return `  <url>
+    <loc>${escapeXml(loc)}</loc>
+${links ? links + '\n' : ''}  </url>`
 }
 
 function main() {
@@ -70,34 +89,61 @@ function main() {
   }
 
   const files = walk(CONTENT_DIR).filter(f => /\.(md|mdc)$/i.test(f))
-  const urls = new Set()
 
-  // Always include base + locale root (ONLY)
-  urls.add(`${SITE}/`)
-  for (const l of LOCALES) {
-    urls.add(`${SITE}/${l}`)
+  // Map "rest path" => locales that exist for it (based on content files)
+  const restToLocales = new Map()
+
+  for (const f of files) {
+    const info = fileToLocaleAndRest(f)
+    if (!info) continue
+    const { locale, rest } = info
+
+    // Only include pages that have DEFAULT_LOCALE content, otherwise we can’t build a /unprefixed loc.
+    // (If you want to include non-default-only pages too, say so.)
+    if (!restToLocales.has(rest)) restToLocales.set(rest, new Set())
+    restToLocales.get(rest).add(locale)
   }
 
-  // Add pages from content
-  for (const f of files) {
-    const route = fileToRoute(f)
-    if (!route) continue
+  // Build sitemap entries
+  const entries = []
 
-    // hard exclude locale endpoints like /en/blog and /en/architecture
-    if (EXCLUDE_LOCALE_ENDPOINTS.has(route)) continue
+  for (const [rest, localesSet] of restToLocales.entries()) {
+    if (!localesSet.has(DEFAULT_LOCALE)) continue
 
-    urls.add(`${SITE}${route}`)
+    // Primary loc is the unprefixed default URL: /test (or / for home)
+    const locPath = pathFor(DEFAULT_LOCALE, rest, { unprefixedDefault: true })
+    const loc = `${SITE}${locPath === '/' ? '/' : locPath}`
+
+    const alternates = []
+
+    // x-default points to the default (unprefixed) URL
+    alternates.push({ hreflang: 'x-default', href: loc })
+
+    // Add all locale-prefixed versions that exist
+    for (const l of LOCALES) {
+      if (!localesSet.has(l)) continue
+      const hrefPath = pathFor(l, rest, { unprefixedDefault: false })
+      alternates.push({ hreflang: l, href: `${SITE}${hrefPath}` })
+    }
+
+    entries.push({ loc, alternates })
   }
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${Array.from(urls).sort().map(urlNode).join('\n')}
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml"
+>
+${entries
+      .sort((a, b) => a.loc.localeCompare(b.loc))
+      .map(urlNode)
+      .join('\n')}
 </urlset>
 `
 
   fs.mkdirSync(path.dirname(OUT_FILE), { recursive: true })
   fs.writeFileSync(OUT_FILE, xml, 'utf8')
-  console.log(`✅ Wrote ${OUT_FILE} with ${urls.size} URLs`)
+  console.log(`✅ Wrote ${OUT_FILE} with ${entries.length} URL entries`)
 }
 
 main()

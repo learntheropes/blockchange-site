@@ -94,3 +94,5 @@ sw.*
 .data/
 
 public/sitemap.xml
+
+pages/test.vue
