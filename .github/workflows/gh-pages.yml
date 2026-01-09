@@ -30,6 +30,8 @@ jobs:
 
       - name: Generate (sitemap + SSG)
         run: npm run generate
+        env:
+          NUXT_APP_BASE_URL: /blockchange-nuxthub/
 
       - name: Disable Jekyll
         run: touch .output/public/.nojekyll
