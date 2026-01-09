@@ -12,7 +12,7 @@ bookingCtaHref: /#book
 breadcrumbHomeLabel: Home
 breadcrumbHomeHref: /
 breadcrumbBlogLabel: Blog
-breadcrumbBlogHref: /en/blog
+breadcrumbBlogHref: /#blog
 breadcrumbCurrentLabel: Choosing a payment structure
 ---
 ## There Is No “Best” Payment Setup

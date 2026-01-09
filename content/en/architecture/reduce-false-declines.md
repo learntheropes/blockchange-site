@@ -10,7 +10,7 @@ heroSubheadline: >
 breadcrumbHomeLabel: Home
 breadcrumbHomeHref: /
 breadcrumbArchitectureLabel: Architecture
-breadcrumbArchitectureHref: /en#architecture
+breadcrumbArchitectureHref: /#architecture
 breadcrumbCurrentLabel: Reduce false declines
 
 sections:

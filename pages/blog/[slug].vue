@@ -6,12 +6,12 @@
           <nav class="breadcrumb is-small mb-4" aria-label="breadcrumbs">
             <ul>
               <li>
-                <NuxtLink :to="post.meta.breadcrumbHomeHref">
+                <NuxtLink :to="base(localePath(post.meta.breadcrumbHomeHref))">
                   {{ post.meta.breadcrumbHomeLabel }}
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink :to="post.meta.breadcrumbBlogHref">
+                <NuxtLink :to="base(localePath(post.meta.breadcrumbBlogHref))">
                   {{ post.meta.breadcrumbBlogLabel }}
                 </NuxtLink>
               </li>
@@ -20,9 +20,11 @@
               </li>
             </ul>
           </nav>
+
           <h1 class="title has-text-primary is-2 mb-3">
             {{ post.title }}
           </h1>
+
           <p v-if="post.description" class="subtitle is-4 has-text-grey-dark">
             {{ post.description }}
           </p>
@@ -44,8 +46,9 @@
               <h2 class="title is-4 mb-2">{{ post.meta.bookingTitle }}</h2>
               <p class="has-text-grey mb-0">{{ post.meta.bookingText }}</p>
             </div>
+
             <div class="column is-4 has-text-right">
-              <o-button variant="primary" size="large" tag="a" :href="post.meta.bookingCtaHref">
+              <o-button variant="primary" size="large" tag="a" :href="base(localePath(post.meta.bookingCtaHref))">
                 {{ post.meta.bookingCtaLabel }}
               </o-button>
             </div>
@@ -57,8 +60,18 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+import { withBase } from 'ufo'
+
 const route = useRoute()
 const { locale } = useI18n()
+const localePath = useLocalePath()
+
+// baseURL handles GitHub Pages subpath (e.g. /blockchange-nuxthub/)
+const baseURL = useRuntimeConfig().app.baseURL
+const base = (p) => withBase(p, baseURL)
+
 const slug = route.params.slug
 const key = computed(() => `${route.path}-${locale.value}`)
 
@@ -74,7 +87,6 @@ const { data: post } = await useAsyncData(
 if (!post.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found' })
 }
-
 
 useHead(() => {
   const p = post.value

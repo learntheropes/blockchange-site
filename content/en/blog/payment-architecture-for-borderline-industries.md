@@ -12,7 +12,7 @@ bookingCtaHref: /#book
 breadcrumbHomeLabel: Home
 breadcrumbHomeHref: /
 breadcrumbBlogLabel: Blog
-breadcrumbBlogHref: /en/blog
+breadcrumbBlogHref: /#blog
 breadcrumbCurrentLabel: Payment architecture for borderline industries
 ---
 

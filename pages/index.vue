@@ -29,7 +29,7 @@
               <h3 class="title is-5 mb-2">{{ p.title }}</h3>
               <p class="has-text-grey mb-4">{{ p.text }}</p>
 
-              <o-button variant="light" tag="a" :href="p.href" class="mt-auto"
+              <o-button variant="light" tag="a" :href="base(localePath(p.href))" class="mt-auto"
                 :aria-label="`${home.meta.a11yReadPrefix}: ${p.title}`">
                 {{ home.meta.learnMore }}
               </o-button>
@@ -173,7 +173,7 @@ MTile9olAP4rZdhk9q1iiBLstS9ouyocsGbadWTbqBm5iAy8qKpUBg==
                 {{ post.description }}
               </p>
 
-              <o-button class="mt-4" variant="light" size="small" tag="a" :href="post.path"
+              <o-button class="mt-4" variant="light" size="small" tag="a" :href="base(post.path)"
                 :aria-label="`${home.meta.a11yReadPrefix}: ${post.title}`">
                 {{ home.meta.readMore }}
               </o-button>
@@ -194,9 +194,15 @@ MTile9olAP4rZdhk9q1iiBLstS9ouyocsGbadWTbqBm5iAy8qKpUBg==
 <script setup>
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { withBase } from 'ufo'
 
 const route = useRoute()
 const { locale } = useI18n()
+const localePath = useLocalePath()
+
+// baseURL handles GitHub Pages subpath (e.g. /blockchange-nuxthub/)
+const baseURL = useRuntimeConfig().app.baseURL
+const base = (p) => withBase(p, baseURL)
 
 /* Home content */
 const { data: home } = await useAsyncData(

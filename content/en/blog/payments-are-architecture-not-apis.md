@@ -12,7 +12,7 @@ bookingCtaHref: /#book
 breadcrumbHomeLabel: Home
 breadcrumbHomeHref: /
 breadcrumbBlogLabel: Blog
-breadcrumbBlogHref: /en/blog
+breadcrumbBlogHref: /#blog
 breadcrumbCurrentLabel: Payments are architecture not apis
 ---
 ## From Legal Structure to Payment Rails: Designing the Right System Before Writing Code

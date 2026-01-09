@@ -17,7 +17,6 @@ const head = useLocaleHead({
 
 <template>
   <div class="is-tall">
-    <!-- <LayoutHero /> -->
     <main class="is-tall-container">
       <slot />
     </main>

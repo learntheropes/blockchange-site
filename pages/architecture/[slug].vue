@@ -7,12 +7,12 @@
           <nav class="breadcrumb is-small mb-4" aria-label="breadcrumbs">
             <ul>
               <li>
-                <NuxtLink :to="architecture.meta.breadcrumbHomeHref">
+                <NuxtLink :to="base(localePath(architecture.meta.breadcrumbHomeHref))">
                   {{ architecture.meta.breadcrumbHomeLabel }}
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink :to="architecture.meta.breadcrumbArchitectureHref">
+                <NuxtLink :to="base(localePath(architecture.meta.breadcrumbArchitectureHref))">
                   {{ architecture.meta.breadcrumbArchitectureLabel }}
                 </NuxtLink>
               </li>
@@ -54,7 +54,8 @@
               <p class="has-text-grey mb-0">{{ architecture.meta.bookingText }}</p>
             </div>
             <div class="column is-4 has-text-right">
-              <o-button variant="primary" size="large" tag="a" :href="architecture.meta.bookingCtaHref">
+              <o-button variant="primary" size="large" tag="a"
+                :href="base(localePath(architecture.meta.bookingCtaHref))">
                 {{ architecture.meta.bookingCtaLabel }}
               </o-button>
             </div>
@@ -66,8 +67,18 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+import { withBase } from 'ufo'
+
 const route = useRoute()
 const { locale } = useI18n()
+const localePath = useLocalePath()
+
+// baseURL handles GitHub Pages subpath (e.g. /blockchange-nuxthub/)
+const baseURL = useRuntimeConfig().app.baseURL
+const base = (p) => withBase(p, baseURL)
+
 const slug = route.params.slug
 const key = computed(() => `${route.path}-${locale.value}`)
 
@@ -84,7 +95,6 @@ if (!architecture.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found' })
 }
 
-
 useHead(() => {
   const a = architecture.value
   return {
@@ -96,7 +106,6 @@ useHead(() => {
     ],
   }
 })
-
 </script>
 
 <style scoped>
