@@ -6,7 +6,9 @@
     "prebuild": "node scripts/generate-sitemap.mjs",
     "build": "nuxi build",
     "start": "nuxi start",
-    "generate": "node scripts/generate-sitemap.mjs && nuxi generate"
+    "sitemap": "node scripts/generate-sitemap.mjs",
+    "generate": "NUXT_SSG=true node scripts/generate-sitemap.mjs && NUXT_SSG=true nuxi generate && node scripts/post-generate.mjs",
+    "preview:ssg": "npx serve .output/public -l 3000"
   },
   "author": "Learntheropes <giovanni@learntheropes.xyz",
   "license": "MIT",

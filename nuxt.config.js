@@ -1,5 +1,5 @@
 import { resolve } from 'node:path'
-
+const isSSG = process.env.NUXT_SSG === 'true'
 const isDeployed = process.env.NODE_ENV === 'production'
 const deploymentDomain = process.env.URL || 'http://localhost:3000'
 
@@ -76,17 +76,19 @@ export default defineNuxtConfig({
     'nuxt-delay-hydration',
     'nuxt-umami',
     'nuxt-calcom',
-    '@nuxthub/core',
     '@nuxt/content',
+    ...(isSSG ? [] : ['@nuxthub/core'])
   ],
 
-  hub: {
-    blob: true,
-    cache: true,
-    database: true,
-    kv: false,
-    remote: process.env.NUXT_HUB_REMOTE === 'true',
-  },
+  ...(isSSG ? {} : {
+    hub: {
+      blob: true,
+      cache: true,
+      database: true,
+      kv: false,
+      remote: process.env.NUXT_HUB_REMOTE === 'true',
+    },
+  }),
 
   umami: {
     enabled: isDeployed,
