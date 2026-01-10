@@ -1,4 +1,3 @@
-<!-- pages/index.vue -->
 <template>
   <NuxtLayout>
     <!-- HERO -->
@@ -30,8 +29,8 @@
               <h3 class="title is-5 mb-2">{{ p.title }}</h3>
               <p class="has-text-grey mb-4">{{ p.text }}</p>
 
-              <!-- ✅ internal link: Oruga expects router-link + :to -->
-              <o-button variant="light" tag="router-link" :to="base(localePath(p.href))" class="mt-auto"
+              <!-- ✅ internal link -->
+              <o-button variant="light" tag="router-link" :to="localePath(p.href)" class="mt-auto"
                 :aria-label="`${home.meta.a11yReadPrefix}: ${p.title}`">
                 {{ home.meta.learnMore }}
               </o-button>
@@ -53,7 +52,7 @@
             {{ home.meta.contactIntro }}
           </p>
 
-          <!-- Quick anchors (same page) -->
+          <!-- Quick anchors -->
           <div class="buttons mb-5">
             <o-button variant="light" size="small" tag="a" href="#call">
               {{ home.meta.bookAnchorsCallLabel }}
@@ -144,8 +143,10 @@ anMub3JnN20CGjwg7IXiOADOw9LDmPb/61vi3qXrIMOXfwAJn2MCmwwWIQShBF9a
 wYVqV84MAu6DTfC64UOyjAAASt0A/jLnhYaOVa8Zd6kHh1WJpN3UNoZXnABoN+hW
 MTile9olAP4rZdhk9q1iiBLstS9ouyocsGbadWTbqBm5iAy8qKpUBg==
 =sC5I
+
 -----END PGP PUBLIC KEY BLOCK-----
             </pre>
+
             <div class="mb-5">
               <o-button variant="text" size="small" tag="a" href="#book">
                 {{ home.meta.bookAnchorsTopLabel }}
@@ -174,8 +175,7 @@ MTile9olAP4rZdhk9q1iiBLstS9ouyocsGbadWTbqBm5iAy8qKpUBg==
                 {{ post.description }}
               </p>
 
-              <!-- ✅ internal link: router-link + base(localePath()) -->
-              <o-button class="mt-4" variant="light" size="small" tag="router-link" :to="base(localePath(post.path))"
+              <o-button class="mt-4" variant="light" size="small" tag="router-link" :to="post.path"
                 :aria-label="`${home.meta.a11yReadPrefix}: ${post.title}`">
                 {{ home.meta.readMore }}
               </o-button>
@@ -196,15 +196,10 @@ MTile9olAP4rZdhk9q1iiBLstS9ouyocsGbadWTbqBm5iAy8qKpUBg==
 <script setup>
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { withBase } from 'ufo'
 
 const route = useRoute()
 const { locale } = useI18n()
 const localePath = useLocalePath()
-
-// ✅ base for GitHub Pages subpath
-const baseURL = useRuntimeConfig().app.baseURL
-const base = (p) => withBase(p, baseURL)
 
 /* Home content */
 const { data: home } = await useAsyncData(
@@ -236,7 +231,7 @@ const { data: allPosts } = await useAsyncData(
     const items = (all || [])
       .filter(x => x?.stem?.startsWith(`${locale.value}/blog/`))
       .map(x => ({
-        path: x.path,
+        path: x.path, // this will be like /en/blog/slug
         title: x.title,
         description: x.description,
         date: x.meta?.date
@@ -274,10 +269,7 @@ const calLink = computed(() => {
 
 /* Email */
 const emailTo = 'hello@blockchange.com'
-
-function encode(s) {
-  return encodeURIComponent(String(s || ''))
-}
+function encode(s) { return encodeURIComponent(String(s || '')) }
 
 const mailtoHref = computed(() => {
   const subject = home.value?.meta?.bookMailSubject || 'Blockchange — request'
@@ -295,9 +287,7 @@ const mailtoHref = computed(() => {
 })
 
 async function copy(text) {
-  try {
-    await navigator.clipboard.writeText(text)
-  } catch { }
+  try { await navigator.clipboard.writeText(text) } catch { }
 }
 </script>
 

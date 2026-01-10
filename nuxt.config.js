@@ -1,7 +1,12 @@
 import { resolve } from 'node:path'
+
 const isSSG = process.env.NUXT_SSG === 'true'
 const isDeployed = process.env.NODE_ENV === 'production'
-const deploymentDomain = process.env.URL || 'http://localhost:3000'
+
+const deploymentDomain =
+  process.env.NUXT_PUBLIC_SITE_URL ||
+  process.env.URL ||
+  'http://localhost:3000'
 
 import { locales, localeCodes, defaultLocale } from './assets/js/localization'
 
@@ -11,13 +16,10 @@ const ABS_CALCOM_COMPONENTS = resolve('./node_modules/nuxt-calcom/runtime/compon
 const CALCOM_COMPONENTS_TARGET = resolve('./node_modules/nuxt-calcom/dist/runtime/components')
 
 export default defineNuxtConfig({
-
   site: {
     url: 'https://blockchange.com.py',
-    name: 'Blockchange'
+    name: 'Blockchange',
   },
-
-  baseURL: '/blockchange-nuxthub/',
 
   compatibilityDate: '2025-10-10',
 
@@ -35,13 +37,14 @@ export default defineNuxtConfig({
         [ABS_CALCOM_PLUGIN]: CALCOM_PLUGIN_TARGET,
         'nuxt-calcom/runtime/components': CALCOM_COMPONENTS_TARGET,
         [ABS_CALCOM_COMPONENTS]: CALCOM_COMPONENTS_TARGET,
-      }
-    }
+      },
+    },
   },
 
   build: { transpile: ['nuxt-calcom'] },
 
   app: {
+    // ✅ only place where baseURL should exist
     baseURL: process.env.NUXT_APP_BASE_URL || '/',
     head: {
       meta: [
@@ -55,24 +58,19 @@ export default defineNuxtConfig({
         { id: 'twitter:card', name: 'twitter:card', content: 'summary' },
         { id: 'twitter:image', name: 'twitter:image', content: `${deploymentDomain}/favicon/favicon.png` },
       ],
-      link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon/favicon.ico' }]
-    }
+      link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon/favicon.ico' }],
+    },
   },
 
   routeRules: {
     '/en/blog': { redirect: '/en/#blog' },
     '/blog': { redirect: '/en/#blog' },
     '/en/architecture': { redirect: '/en/#architecture' },
-    '/architecture': { redirect: '/en/#architecture' }
+    '/architecture': { redirect: '/en/#architecture' },
   },
 
   css: ['~/assets/scss/main.scss'],
   components: [{ path: '~/components', pathPrefix: false, global: true }],
-
-  nitro: {
-    preset: 'cloudflare_module',
-    external: process.env.NUXT_HUB_REMOTE === 'false' ? [] : undefined,
-  },
 
   modules: [
     '@nuxtjs/i18n',
@@ -80,18 +78,20 @@ export default defineNuxtConfig({
     'nuxt-umami',
     'nuxt-calcom',
     '@nuxt/content',
-    ...(isSSG ? [] : ['@nuxthub/core'])
+    ...(isSSG ? [] : ['@nuxthub/core']),
   ],
 
-  ...(isSSG ? {} : {
-    hub: {
-      blob: true,
-      cache: true,
-      database: true,
-      kv: false,
-      remote: process.env.NUXT_HUB_REMOTE === 'true',
-    },
-  }),
+  ...(isSSG
+    ? {}
+    : {
+      hub: {
+        blob: true,
+        cache: true,
+        database: true,
+        kv: false,
+        remote: process.env.NUXT_HUB_REMOTE === 'true',
+      },
+    }),
 
   umami: {
     enabled: isDeployed,
@@ -114,13 +114,13 @@ export default defineNuxtConfig({
       useCookie: false,
       redirectOnRoot: true,
       redirectOn: 'root',
-    }
+    },
   },
 
   content: {
     locales: localeCodes,
     defaultLocale,
-    anchorLinks: false
+    anchorLinks: false,
   },
 
   delayHydration: { mode: 'init', debug: !isDeployed },
@@ -128,10 +128,12 @@ export default defineNuxtConfig({
   hooks: {
     'builder:watch': (event, path) => {
       if (path.includes('manifest-route-rule')) return false
-    }
+    },
   },
 
   nitro: {
+    preset: 'cloudflare_module',
+    external: process.env.NUXT_HUB_REMOTE === 'false' ? [] : undefined,
     storage: {
       'content:source': {
         driver: 'fs',
