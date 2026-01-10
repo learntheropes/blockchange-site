@@ -1,3 +1,5 @@
+import fs from 'node:fs'
+import path from 'node:path'
 import { resolve } from 'node:path'
 
 const isSSG = process.env.NUXT_SSG === 'true'
@@ -15,6 +17,70 @@ const ABS_CALCOM_PLUGIN = resolve('./node_modules/nuxt-calcom/runtime/plugin')
 const CALCOM_PLUGIN_TARGET = resolve('./node_modules/nuxt-calcom/dist/runtime/plugin.ts')
 const ABS_CALCOM_COMPONENTS = resolve('./node_modules/nuxt-calcom/runtime/components')
 const CALCOM_COMPONENTS_TARGET = resolve('./node_modules/nuxt-calcom/dist/runtime/components')
+
+const CONTENT_DIR = path.resolve(process.cwd(), 'content')
+
+function walk(dir) {
+  const out = []
+  const entries = fs.readdirSync(dir, { withFileTypes: true })
+  for (const e of entries) {
+    const full = path.join(dir, e.name)
+    if (e.isDirectory()) out.push(...walk(full))
+    else out.push(full)
+  }
+  return out
+}
+
+function withTrailingSlash(p) {
+  if (p === '/') return '/'
+  return p.endsWith('/') ? p : `${p}/`
+}
+
+function contentFileToRoute(file, localeList) {
+  const rel = path.relative(CONTENT_DIR, file).replaceAll('\\', '/')
+  const noExt = rel.replace(/\.(md|mdc)$/i, '')
+  const parts = noExt.split('/').filter(Boolean)
+  if (!parts.length) return null
+
+  const locale = parts[0]
+  if (!localeList.includes(locale)) return null
+
+  let rest = parts.slice(1)
+
+  // home/index => /{locale}/
+  if (rest.length === 0) rest = []
+  if (rest.length === 1 && ['home', 'index'].includes(rest[0].toLowerCase())) rest = []
+
+  // drop trailing index
+  if (rest[rest.length - 1]?.toLowerCase() === 'index') rest = rest.slice(0, -1)
+
+  const route = rest.length ? `/${locale}/${rest.join('/')}` : `/${locale}`
+  return withTrailingSlash(route)
+}
+
+function buildPrerenderRoutes(localeList) {
+  if (!fs.existsSync(CONTENT_DIR)) return []
+
+  const files = walk(CONTENT_DIR).filter(f => /\.(md|mdc)$/i.test(f))
+  const routes = new Set()
+
+  // seed roots
+  routes.add('/')
+  for (const l of localeList) routes.add(withTrailingSlash(`/${l}`))
+
+  for (const f of files) {
+    const r = contentFileToRoute(f, localeList)
+    if (!r) continue
+
+    // exclude ONLY the listing endpoints (exact pages)
+    // (if you actually have content pages for these and want them, remove these 2 lines)
+    if (r === '/en/blog/' || r === '/en/architecture/') continue
+
+    routes.add(r)
+  }
+
+  return [...routes]
+}
 
 export default defineNuxtConfig({
   site: {
@@ -141,6 +207,8 @@ export default defineNuxtConfig({
   nitro: {
     prerender: {
       failOnError: false,
+      crawlLinks: true,
+      routes: buildPrerenderRoutes(localeCodes),
     },
     preset: isSSG ? 'static' : 'cloudflare_module',
     external: process.env.NUXT_HUB_REMOTE === 'false' ? [] : undefined,
