@@ -61,15 +61,6 @@
             </o-button>
           </div>
 
-          <!-- Context -->
-          <div v-if="contextText" class="notification is-info is-light mb-5">
-            <strong>{{ home.meta.bookContextTitle }}</strong>
-            <pre class="mt-2">{{ contextText }}</pre>
-            <o-button variant="text" size="small" @click="copy(contextText)">
-              {{ home.meta.bookCopyContextLabel }}
-            </o-button>
-          </div>
-
           <!-- CALL (PAID) -->
           <div id="call" class="box shadow-soft section-card mb-6">
             <h3 class="title is-4 mb-1">{{ home.meta.bookCallTitle }}</h3>
@@ -250,11 +241,13 @@ const posts = computed(() => {
 /* Attribution from CTA */
 const src = computed(() => (route.query.src || '').toString())
 const cta = computed(() => (route.query.cta || '').toString())
+const notes = computed(() => (route.query.notes || '').toString())
 
 const contextText = computed(() => {
   const lines = []
   if (src.value) lines.push(`${home.value?.meta?.bookContextSourceLabel || 'Source'}: ${src.value}`)
   if (cta.value) lines.push(`${home.value?.meta?.bookContextCtaLabel || 'CTA'}: ${cta.value}`)
+  if (!cta.value && notes.value) lines.push(`${home.value?.meta?.bookContextCtaLabel || 'CTA'}: ${notes.value}`)
   return lines.join('\n')
 })
 

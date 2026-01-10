@@ -52,8 +52,7 @@
               <p class="has-text-grey mb-0">{{ architecture.meta.bookingText }}</p>
             </div>
             <div class="column is-4 has-text-right">
-              <o-button variant="primary" size="large" tag="router-link"
-                :to="localePath(architecture.meta.bookingCtaHref)">
+              <o-button variant="primary" size="large" tag="router-link" :to="bookingCtaTo">
                 {{ architecture.meta.bookingCtaLabel }}
               </o-button>
             </div>
@@ -71,6 +70,21 @@ const route = useRoute()
 const { locale } = useI18n()
 const localePath = useLocalePath()
 
+function withQueryBeforeHash(url, params) {
+  const [path, hash = ''] = String(url || '').split('#')
+  const q = new URLSearchParams()
+
+  Object.entries(params || {}).forEach(([k, v]) => {
+    if (v === undefined || v === null) return
+    const s = String(v)
+    if (!s.length) return
+    q.set(k, s)
+  })
+
+  const qs = q.toString()
+  return `${path}${qs ? `?${qs}` : ''}${hash ? `#${hash}` : ''}`
+}
+
 const slug = route.params.slug
 const key = computed(() => `${route.path}-${locale.value}`)
 
@@ -86,6 +100,18 @@ const { data: architecture } = await useAsyncData(
 if (!architecture.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found' })
 }
+
+const bookingCtaTo = computed(() => {
+  const href = architecture.value?.meta?.bookingCtaHref || '/#book'
+  const label = architecture.value?.meta?.bookingCtaLabel || ''
+  const base = localePath(href)
+
+  // Canonical: /{locale}?src=<current-path>&cta=<label>#book
+  return withQueryBeforeHash(base, {
+    src: route.path,
+    cta: label,
+  })
+})
 
 useHead(() => {
   const a = architecture.value
