@@ -29,7 +29,6 @@
               <h3 class="title is-5 mb-2">{{ p.title }}</h3>
               <p class="has-text-grey mb-4">{{ p.text }}</p>
 
-              <!-- ✅ internal link -->
               <o-button variant="light" tag="router-link" :to="localePath(p.href)" class="mt-auto"
                 :aria-label="`${home.meta.a11yReadPrefix}: ${p.title}`">
                 {{ home.meta.learnMore }}
