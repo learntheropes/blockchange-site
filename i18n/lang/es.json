@@ -34,5 +34,10 @@
       "inRamp": "Leer: Arquitectura de entrada (in-ramp)",
       "offRamp": "Leer: Arquitectura de salida y pagos"
     }
+  },
+  "related": {
+    "architectureTitle": "Explorar la arquitectura",
+    "postsTitle": "Artículos relacionados",
+    "more": "Leer más →"
   }
 }

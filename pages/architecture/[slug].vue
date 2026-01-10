@@ -43,6 +43,49 @@
       </div>
     </section>
 
+    <!-- RELATED LINKS (internal linking) -->
+    <section class="section" v-if="otherArchitecture?.length || recommendedPosts?.length">
+      <div class="container content-width">
+        <div class="box shadow-soft related-box">
+          <div class="columns is-variable is-6">
+            <div class="column is-6" v-if="otherArchitecture?.length">
+              <h3 class="title is-5 mb-3">
+                {{ t('related.architectureTitle') }}
+              </h3>
+
+              <ul class="related-list">
+                <li v-for="a in otherArchitecture" :key="a.path">
+                  <NuxtLink :to="a.path">
+                    {{ a.title }}
+                  </NuxtLink>
+                </li>
+              </ul>
+            </div>
+
+            <div class="column is-6" v-if="recommendedPosts?.length">
+              <h3 class="title is-5 mb-3">
+                {{ t('related.postsTitle') }}
+              </h3>
+
+              <ul class="related-list">
+                <li v-for="p in recommendedPosts" :key="p.path">
+                  <NuxtLink :to="p.path">
+                    {{ p.title }}
+                  </NuxtLink>
+                </li>
+              </ul>
+
+              <div class="mt-4">
+                <NuxtLink :to="localizedHref('/#blog')">
+                  {{ t('related.more') }}
+                </NuxtLink>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="section" id="cta">
       <div class="container content-width">
         <div class="box cta-box shadow-soft">
@@ -65,15 +108,15 @@
 
 <script setup>
 import { computed } from 'vue'
+import { ARCH_PILLARS, getArchRelatedBlogSlugs } from '~/utils/related'
 
 const route = useRoute()
-const { locale } = useI18n()
+const { locale, t } = useI18n()
 const localePath = useLocalePath()
 
 function stripLocalePrefix(p = '') {
   const s = String(p).trim()
   const withSlash = s.startsWith('/') ? s : `/${s}`
-  // remove leading "/en", "/es", "/ru" if present
   return withSlash.replace(/^\/(en|es|ru)(\/|$)/, '/')
 }
 
@@ -99,6 +142,12 @@ function withQueryBeforeHash(url, params) {
   return `${path}${qs ? `?${qs}` : ''}${hash ? `#${hash}` : ''}`
 }
 
+function stemToSlug(stem = '') {
+  const s = String(stem || '')
+  const parts = s.split('/')
+  return parts[parts.length - 1] || ''
+}
+
 const slug = route.params.slug
 const key = computed(() => `${route.path}-${locale.value}`)
 
@@ -120,12 +169,77 @@ const bookingCtaTo = computed(() => {
   const label = architecture.value?.meta?.bookingCtaLabel || ''
   const base = localizedHref(href)
 
-  // Canonical: /{locale}?src=<current-path>&cta=<label>#book
   return withQueryBeforeHash(base, {
     src: route.path,
     cta: label,
   })
 })
+
+/* Other architecture pillars */
+const { data: otherArchitecture } = await useAsyncData(
+  key.value + '-other-architecture',
+  async () => {
+    const docs = await Promise.all(
+      ARCH_PILLARS.map(async (s) => {
+        const doc = await queryCollection('content')
+          .path(`/${locale.value}/architecture/${s}`)
+          .first()
+        if (!doc) return null
+        return {
+          path: doc.path,
+          title: doc?.meta?.heroHeadline || doc?.title || s,
+        }
+      })
+    )
+
+    const currentPath = architecture.value?.path
+    return (docs || []).filter(Boolean).filter(x => x.path !== currentPath)
+  },
+  { watch: [locale, () => architecture.value?.path] }
+)
+
+/* 3 recommended blog posts for this architecture */
+const { data: recommendedPosts } = await useAsyncData(
+  key.value + '-recommended-posts',
+  async () => {
+    const archSlug = stemToSlug(architecture.value?.stem)
+    const wanted = getArchRelatedBlogSlugs(archSlug, 3)
+
+    const resolved = []
+    for (const s of wanted) {
+      const doc = await queryCollection('content')
+        .path(`/${locale.value}/blog/${s}`)
+        .first()
+
+      if (!doc) continue
+      resolved.push({
+        path: doc.path,
+        title: doc.title || s,
+      })
+    }
+
+    if (resolved.length < 3) {
+      const all = await queryCollection('content').limit(400).all()
+      const fill = (all || [])
+        .filter(x => x?.stem?.startsWith(`${locale.value}/blog/`))
+        .map(x => ({
+          path: x.path,
+          title: x.title,
+          date: x.meta?.date,
+        }))
+        .sort((a, b) => Date.parse(b.date || 0) - Date.parse(a.date || 0))
+
+      for (const item of fill) {
+        if (resolved.length >= 3) break
+        if (resolved.some(r => r.path === item.path)) continue
+        resolved.push({ path: item.path, title: item.title })
+      }
+    }
+
+    return resolved.slice(0, 3)
+  },
+  { watch: [locale, () => architecture.value?.path] }
+)
 
 useHead(() => {
   const a = architecture.value
@@ -159,5 +273,18 @@ useHead(() => {
 
 .cta-box {
   border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.related-box {
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.related-list {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.related-list li+li {
+  margin-top: 0.4rem;
 }
 </style>

@@ -34,5 +34,10 @@
       "inRamp": "Read: In-ramp architecture",
       "offRamp": "Read: Off-ramp & payout architecture"
     }
+  },
+  "related": {
+    "architectureTitle": "Explore the architecture",
+    "postsTitle": "Related articles",
+    "more": "Read more →"
   }
 }
