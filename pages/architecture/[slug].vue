@@ -1,3 +1,4 @@
+<!-- pages/architecture/[slug].vue -->
 <template>
   <NuxtLayout>
     <section class="hero is-medium is-light page-hero">
@@ -6,12 +7,12 @@
           <nav class="breadcrumb is-small mb-4" aria-label="breadcrumbs">
             <ul>
               <li>
-                <NuxtLink :to="localePath(architecture.meta.breadcrumbHomeHref)">
+                <NuxtLink :to="base(localePath(architecture.meta.breadcrumbHomeHref))">
                   {{ architecture.meta.breadcrumbHomeLabel }}
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink :to="localePath(architecture.meta.breadcrumbArchitectureHref)">
+                <NuxtLink :to="base(localePath(architecture.meta.breadcrumbArchitectureHref))">
                   {{ architecture.meta.breadcrumbArchitectureLabel }}
                 </NuxtLink>
               </li>
@@ -51,8 +52,11 @@
               <h2 class="title is-4 mb-2">{{ architecture.meta.bookingTitle }}</h2>
               <p class="has-text-grey mb-0">{{ architecture.meta.bookingText }}</p>
             </div>
+
             <div class="column is-4 has-text-right">
-              <o-button variant="primary" size="large" tag="a" :href="localePath(architecture.meta.bookingCtaHref)">
+              <!-- ✅ internal link: router-link + base(localePath()) -->
+              <o-button variant="primary" size="large" tag="router-link"
+                :to="base(localePath(architecture.meta.bookingCtaHref))">
                 {{ architecture.meta.bookingCtaLabel }}
               </o-button>
             </div>
@@ -65,25 +69,23 @@
 
 <script setup>
 import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { withBase } from 'ufo'
 
 const route = useRoute()
 const { locale } = useI18n()
 const localePath = useLocalePath()
 
-const slug = computed(() => {
-  const s = route.params.slug
-  if (Array.isArray(s)) return String(s[s.length - 1] || '')
-  return String(s || '')
-})
+const baseURL = useRuntimeConfig().app.baseURL
+const base = (p) => withBase(p, baseURL)
 
+const slug = route.params.slug
 const key = computed(() => `${route.path}-${locale.value}`)
 
 const { data: architecture } = await useAsyncData(
   key.value + '-architecture',
   () =>
     queryCollection('content')
-      .path(`/${locale.value}/architecture/${slug.value}`)
+      .path(`/${locale.value}/architecture/${slug}`)
       .first(),
   { watch: [locale, () => route.path] }
 )
@@ -112,12 +114,6 @@ useHead(() => {
 
 .page-hero {
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-}
-
-.cta-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
 }
 
 .shadow-soft {

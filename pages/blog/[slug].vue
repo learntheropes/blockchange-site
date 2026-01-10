@@ -1,3 +1,4 @@
+<!-- pages/blog/[slug].vue -->
 <template>
   <NuxtLayout>
     <section class="hero is-medium is-light page-hero">
@@ -6,12 +7,12 @@
           <nav class="breadcrumb is-small mb-4" aria-label="breadcrumbs">
             <ul>
               <li>
-                <NuxtLink :to="localePath('/')">
+                <NuxtLink :to="base(localePath(post.meta.breadcrumbHomeHref))">
                   {{ post.meta.breadcrumbHomeLabel }}
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink :to="localePath('/blog')">
+                <NuxtLink :to="base(localePath(post.meta.breadcrumbBlogHref))">
                   {{ post.meta.breadcrumbBlogLabel }}
                 </NuxtLink>
               </li>
@@ -46,9 +47,11 @@
               <h2 class="title is-4 mb-2">{{ post.meta.bookingTitle }}</h2>
               <p class="has-text-grey mb-0">{{ post.meta.bookingText }}</p>
             </div>
+
             <div class="column is-4 has-text-right">
-              <!-- bookingCtaHref deve essere tipo "/#book" (senza /en) -->
-              <o-button variant="primary" size="large" tag="a" :href="localePath(post.meta.bookingCtaHref || '/#book')">
+              <!-- ✅ internal link: router-link + base(localePath()) -->
+              <o-button variant="primary" size="large" tag="router-link"
+                :to="base(localePath(post.meta.bookingCtaHref))">
                 {{ post.meta.bookingCtaLabel }}
               </o-button>
             </div>
@@ -61,10 +64,14 @@
 
 <script setup>
 import { computed } from 'vue'
+import { withBase } from 'ufo'
 
 const route = useRoute()
 const { locale } = useI18n()
 const localePath = useLocalePath()
+
+const baseURL = useRuntimeConfig().app.baseURL
+const base = (p) => withBase(p, baseURL)
 
 const slug = route.params.slug
 const key = computed(() => `${route.path}-${locale.value}`)
@@ -84,6 +91,7 @@ if (!post.value) {
 
 useHead(() => {
   const p = post.value
+
   return {
     title: p?.title || 'Blog',
     meta: [
