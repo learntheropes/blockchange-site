@@ -2,7 +2,7 @@
   "name": "blockchange-nuxthub",
   "version": "0.1.0",
   "scripts": {
-    "dev": "node scripts/generate-sitemap.mjs && NUXT_HUB_REMOTE=true nuxi dev --remote",
+    "dev": "node scripts/generate-sitemap.mjs && ROBOTS_MODE=public node scripts/write-robots.mjs && NUXT_HUB_REMOTE=true nuxi dev --remote",
     "prebuild": "node scripts/generate-sitemap.mjs",
     "build": "node scripts/generate-sitemap.mjs && node scripts/write-robots.mjs &&  nuxi build",
     "start": "nuxi start",

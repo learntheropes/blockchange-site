@@ -32,7 +32,8 @@ jobs:
           NUXT_HUB_REMOTE: "false"
           NUXT_APP_BASE_URL: "/"
           NUXT_PUBLIC_SITE_URL: "https://app.blockchange.com.py"
-          
+          ROBOTS_MODE: app
+
       - name: Deploy to NuxtHub
         uses: nuxt-hub/action@v2
         with:
