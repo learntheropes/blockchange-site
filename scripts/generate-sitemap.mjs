@@ -57,18 +57,15 @@ function fileToLocaleRest(file) {
 
   let restParts = parts.slice(1)
 
-  // home/index -> root
   if (restParts.length === 0) restParts = []
   if (restParts.length === 1 && ['home', 'index'].includes(restParts[0].toLowerCase())) restParts = []
 
-  // drop trailing index
   if (restParts[restParts.length - 1]?.toLowerCase() === 'index') restParts = restParts.slice(0, -1)
 
   const rest = restParts.join('/')
   return { locale, rest }
 }
 
-// ✅ trailing slash canonical (except root)
 function withTrailingSlash(p) {
   if (p === '/') return '/'
   return p.endsWith('/') ? p : `${p}/`
@@ -107,7 +104,6 @@ function main() {
 
   const files = walk(CONTENT_DIR).filter(f => /\.(md|mdc)$/i.test(f))
 
-  // restPath -> Set(locales with that page)
   const restMap = new Map()
 
   for (const f of files) {
@@ -116,7 +112,6 @@ function main() {
 
     const { locale, rest } = info
 
-    // exclude ONLY the listing endpoints (exact pages)
     if (rest === 'blog' || rest === 'architecture') continue
 
     if (!restMap.has(rest)) restMap.set(rest, new Set())
@@ -126,16 +121,13 @@ function main() {
   const entries = []
 
   for (const [rest, localesSet] of restMap.entries()) {
-    // Only publish if default locale exists, so loc can be unprefixed
     if (!localesSet.has(DEFAULT_LOCALE)) continue
 
     const loc = `${SITE}${unprefixedPath(rest)}`
     const alternates = []
 
-    // x-default -> canonical (unprefixed default-locale URL)
     alternates.push({ hreflang: 'x-default', href: loc })
 
-    // add all existing translations
     for (const code of LOCALES) {
       if (!localesSet.has(code)) continue
       alternates.push({

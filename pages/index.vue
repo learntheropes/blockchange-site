@@ -29,10 +29,11 @@
               <h3 class="title is-5 mb-2">{{ p.title }}</h3>
               <p class="has-text-grey mb-4">{{ p.text }}</p>
 
-              <o-button variant="light" tag="router-link" :to="localePath(p.href)" class="mt-auto"
-                :aria-label="`${home.meta.a11yReadPrefix}: ${p.title}`">
-                {{ home.meta.learnMore }}
-              </o-button>
+              <NuxtLink :to="localePath(p.href)" class="mt-auto">
+                <o-button variant="light" class="mt-auto" :aria-label="`${home.meta.a11yReadPrefix}: ${p.title}`">
+                  {{ home.meta.learnMore }}
+                </o-button>
+              </NuxtLink>
             </div>
           </div>
         </div>
@@ -50,7 +51,7 @@
           {{ home.meta.contactIntro }}
         </p>
 
-        <!-- Quick anchors (same page, keep as plain anchors) -->
+        <!-- Quick anchors -->
         <div class="buttons mb-5">
           <o-button variant="light" size="small" tag="a" href="#call">
             {{ home.meta.bookAnchorsCallLabel }}
@@ -161,10 +162,12 @@ MTile9olAP4rZdhk9q1iiBLstS9ouyocsGbadWTbqBm5iAy8qKpUBg==
                 {{ post.description }}
               </p>
 
-              <o-button class="mt-4" variant="light" size="small" tag="router-link" :to="post.path"
-                :aria-label="`${home.meta.a11yReadPrefix}: ${post.title}`">
-                {{ home.meta.readMore }}
-              </o-button>
+              <NuxtLink :to="post.path" class="mt-4">
+                <o-button class="mt-4" variant="light" size="small"
+                  :aria-label="`${home.meta.a11yReadPrefix}: ${post.title}`">
+                  {{ home.meta.readMore }}
+                </o-button>
+              </NuxtLink>
             </div>
           </div>
         </div>
