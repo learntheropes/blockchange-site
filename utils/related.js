@@ -39,6 +39,11 @@ export const BLOG_RELATED_BY_SLUG = {
     'false-payment-declines-reasons',
   ],
 
+  'payment-processor-dependency-risk': [
+    'why-payments-fail-internationally',
+    'multi-rail-payment-architecture',
+    'payments-are-architecture-not-apis',
+  ],
 }
 
 export const ARCH_RECOMMENDED_POSTS = {
