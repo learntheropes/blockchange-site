@@ -95,6 +95,8 @@ const route = useRoute()
 const { locale, t } = useI18n()
 const localePath = useLocalePath()
 
+const slug = computed(() => String(route.params.slug || ''))
+
 function stripLocalePrefix(p = '') {
   const s = String(p).trim()
   const withSlash = s.startsWith('/') ? s : `/${s}`
@@ -129,22 +131,25 @@ function stemToSlug(stem = '') {
   return parts[parts.length - 1] || ''
 }
 
+/* ✅ STABLE key: does not depend on route.path */
+const dataKey = computed(() => `blog:${locale.value}:${slug.value}`)
+
 /* Content */
-const slug = route.params.slug
-const key = computed(() => `${route.path}-${locale.value}`)
-
 const { data: post } = await useAsyncData(
-  key.value + '-blog-post',
-  () =>
-    queryCollection('content')
-      .path(`/${locale.value}/blog/${slug}`)
-      .first(),
-  { watch: [locale, () => route.path] }
-)
+  dataKey.value,
+  async () => {
+    const doc = await queryCollection('content')
+      .path(`/${locale.value}/blog/${slug.value}`)
+      .first()
 
-if (!post.value) {
-  throw createError({ statusCode: 404, statusMessage: 'Page not found' })
-}
+    if (!doc) {
+      throw createError({ statusCode: 404, statusMessage: 'Page not found' })
+    }
+
+    return doc
+  },
+  { watch: [locale, slug] }
+)
 
 /* CTA */
 const bookingCtaTo = computed(() => {
@@ -160,15 +165,21 @@ const bookingCtaTo = computed(() => {
 
 /* Related architecture */
 const { data: relatedArchitecture } = await useAsyncData(
-  key.value + '-related-architecture',
+  () => `related-arch:${locale.value}:${slug.value}`,
   async () => {
     const docs = await Promise.all(
       ARCH_PILLARS.map(async (s) => {
-        const doc = await queryCollection('content').path(`/${locale.value}/architecture/${s}`).first()
+        const doc = await queryCollection('content')
+          .path(`/${locale.value}/architecture/${s}`)
+          .first()
         if (!doc) return null
-        return { path: doc.path, title: doc?.meta?.heroHeadline || doc?.title || s }
+        return {
+          path: doc.path,
+          title: doc?.meta?.heroHeadline || doc?.title || s,
+        }
       })
     )
+
     return (docs || []).filter(Boolean)
   },
   { watch: [locale] }
@@ -176,16 +187,22 @@ const { data: relatedArchitecture } = await useAsyncData(
 
 /* Related posts */
 const { data: relatedPosts } = await useAsyncData(
-  key.value + '-related-posts',
+  () => `related-posts:${locale.value}:${slug.value}`,
   async () => {
     const currentSlug = stemToSlug(post.value?.stem)
     const wanted = getBlogRelatedSlugs(currentSlug, 3)
 
     const resolved = []
     for (const s of wanted) {
-      const doc = await queryCollection('content').path(`/${locale.value}/blog/${s}`).first()
+      const doc = await queryCollection('content')
+        .path(`/${locale.value}/blog/${s}`)
+        .first()
+
       if (!doc) continue
-      resolved.push({ path: doc.path, title: doc.title || s })
+      resolved.push({
+        path: doc.path,
+        title: doc.title || s,
+      })
     }
 
     if (resolved.length < 3) {
@@ -193,7 +210,11 @@ const { data: relatedPosts } = await useAsyncData(
       const fill = (all || [])
         .filter(x => x?.stem?.startsWith(`${locale.value}/blog/`))
         .filter(x => x?.path !== post.value?.path)
-        .map(x => ({ path: x.path, title: x.title, date: x.meta?.date }))
+        .map(x => ({
+          path: x.path,
+          title: x.title,
+          date: x.meta?.date,
+        }))
         .sort((a, b) => Date.parse(b.date || 0) - Date.parse(a.date || 0))
 
       for (const item of fill) {
@@ -220,6 +241,7 @@ useHead(() => {
   }
 })
 </script>
+
 
 <style scoped>
 .container {

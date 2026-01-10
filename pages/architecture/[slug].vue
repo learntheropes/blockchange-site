@@ -101,6 +101,8 @@ const route = useRoute()
 const { locale, t } = useI18n()
 const localePath = useLocalePath()
 
+const slug = computed(() => String(route.params.slug || ''))
+
 function stripLocalePrefix(p = '') {
   const s = String(p).trim()
   const withSlash = s.startsWith('/') ? s : `/${s}`
@@ -135,18 +137,24 @@ function stemToSlug(stem = '') {
   return parts[parts.length - 1] || ''
 }
 
-const slug = route.params.slug
-const key = computed(() => `${route.path}-${locale.value}`)
+/* ✅ STABLE key */
+const dataKey = computed(() => `arch:${locale.value}:${slug.value}`)
 
 const { data: architecture } = await useAsyncData(
-  key.value + '-architecture',
-  () => queryCollection('content').path(`/${locale.value}/architecture/${slug}`).first(),
-  { watch: [locale, () => route.path] }
-)
+  dataKey.value,
+  async () => {
+    const doc = await queryCollection('content')
+      .path(`/${locale.value}/architecture/${slug.value}`)
+      .first()
 
-if (!architecture.value) {
-  throw createError({ statusCode: 404, statusMessage: 'Page not found' })
-}
+    if (!doc) {
+      throw createError({ statusCode: 404, statusMessage: 'Page not found' })
+    }
+
+    return doc
+  },
+  { watch: [locale, slug] }
+)
 
 const bookingCtaTo = computed(() => {
   const href = architecture.value?.meta?.bookingCtaHref || '/#book'
@@ -159,14 +167,20 @@ const bookingCtaTo = computed(() => {
   })
 })
 
+/* Other architecture pillars */
 const { data: otherArchitecture } = await useAsyncData(
-  key.value + '-other-architecture',
+  () => `other-arch:${locale.value}:${slug.value}`,
   async () => {
     const docs = await Promise.all(
       ARCH_PILLARS.map(async (s) => {
-        const doc = await queryCollection('content').path(`/${locale.value}/architecture/${s}`).first()
+        const doc = await queryCollection('content')
+          .path(`/${locale.value}/architecture/${s}`)
+          .first()
         if (!doc) return null
-        return { path: doc.path, title: doc?.meta?.heroHeadline || doc?.title || s }
+        return {
+          path: doc.path,
+          title: doc?.meta?.heroHeadline || doc?.title || s,
+        }
       })
     )
 
@@ -176,24 +190,35 @@ const { data: otherArchitecture } = await useAsyncData(
   { watch: [locale, () => architecture.value?.path] }
 )
 
+/* 3 recommended blog posts for this architecture */
 const { data: recommendedPosts } = await useAsyncData(
-  key.value + '-recommended-posts',
+  () => `recommended-posts:${locale.value}:${slug.value}`,
   async () => {
     const archSlug = stemToSlug(architecture.value?.stem)
     const wanted = getArchRelatedBlogSlugs(archSlug, 3)
 
     const resolved = []
     for (const s of wanted) {
-      const doc = await queryCollection('content').path(`/${locale.value}/blog/${s}`).first()
+      const doc = await queryCollection('content')
+        .path(`/${locale.value}/blog/${s}`)
+        .first()
+
       if (!doc) continue
-      resolved.push({ path: doc.path, title: doc.title || s })
+      resolved.push({
+        path: doc.path,
+        title: doc.title || s,
+      })
     }
 
     if (resolved.length < 3) {
       const all = await queryCollection('content').limit(400).all()
       const fill = (all || [])
         .filter(x => x?.stem?.startsWith(`${locale.value}/blog/`))
-        .map(x => ({ path: x.path, title: x.title, date: x.meta?.date }))
+        .map(x => ({
+          path: x.path,
+          title: x.title,
+          date: x.meta?.date,
+        }))
         .sort((a, b) => Date.parse(b.date || 0) - Date.parse(a.date || 0))
 
       for (const item of fill) {
@@ -220,6 +245,7 @@ useHead(() => {
   }
 })
 </script>
+
 
 <style scoped>
 .content-width {
