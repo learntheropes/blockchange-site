@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="robots" content="noindex" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Not found</title>
+  <script>
+    (function () {
+      var loc = window.location;
+      var path = loc.pathname || "/";
+
+      // ignore files (favicon, sitemap.xml, robots.txt, assets, etc.)
+      if (path.indexOf(".") !== -1) return;
+
+      // normalize multiple slashes
+      path = path.replace(/\/{2,}/g, "/");
+
+      // If someone hits /{locale}/blog or /{locale}/architecture (no listing pages),
+      // send them to /{locale}/#blog or /{locale}/#architecture (with trailing slash)
+      var m = path.match(/^\/([a-z]{2})(?:-[a-z0-9]+)?\/(blog|architecture)\/?$/i);
+      if (m) {
+        var locale = m[1];
+        var section = m[2];
+        var target = "/" + locale + "/#" + section + (loc.search || "");
+        // keep search query; hash is set by us
+        loc.replace(target);
+        return;
+      }
+
+      // add trailing slash if missing
+      if (path !== "/" && !path.endsWith("/")) {
+        loc.replace(path + "/" + (loc.search || "") + (loc.hash || ""));
+        return;
+      }
+    })();
+  </script>
+</head>
+
+<body></body>
+
+</html>

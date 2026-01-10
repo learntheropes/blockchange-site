@@ -21,9 +21,7 @@
             </ul>
           </nav>
 
-          <h1 class="title has-text-primary is-2 mb-3">
-            {{ post.title }}
-          </h1>
+          <h1 class="title has-text-primary is-2 mb-3">{{ post.title }}</h1>
           <p v-if="post.description" class="subtitle is-4 has-text-grey-dark">
             {{ post.description }}
           </p>
@@ -37,40 +35,29 @@
       </div>
     </div>
 
-    <!-- RELATED LINKS (internal linking) -->
     <section class="section" v-if="relatedArchitecture?.length || relatedPosts?.length">
       <div class="container content-width">
         <div class="box shadow-soft related-box">
           <div class="columns is-variable is-6">
             <div class="column is-6" v-if="relatedArchitecture?.length">
-              <h3 class="title is-5 mb-3">
-                {{ t('related.architectureTitle') }}
-              </h3>
-
+              <h3 class="title is-5 mb-3">{{ t('related.architectureTitle') }}</h3>
               <ul class="related-list">
                 <li v-for="a in relatedArchitecture" :key="a.path">
-                  <NuxtLink :to="a.path">
-                    {{ a.title }}
-                  </NuxtLink>
+                  <NuxtLink :to="a.path">{{ a.title }}</NuxtLink>
                 </li>
               </ul>
             </div>
 
             <div class="column is-6" v-if="relatedPosts?.length">
-              <h3 class="title is-5 mb-3">
-                {{ t('related.postsTitle') }}
-              </h3>
-
+              <h3 class="title is-5 mb-3">{{ t('related.postsTitle') }}</h3>
               <ul class="related-list">
                 <li v-for="p in relatedPosts" :key="p.path">
-                  <NuxtLink :to="p.path">
-                    {{ p.title }}
-                  </NuxtLink>
+                  <NuxtLink :to="p.path">{{ p.title }}</NuxtLink>
                 </li>
               </ul>
 
               <div class="mt-4">
-                <NuxtLink :to="localizedHref('/#blog')">
+                <NuxtLink :to="{ path: localePath('/'), hash: '#blog' }">
                   {{ t('related.more') }}
                 </NuxtLink>
               </div>
@@ -177,17 +164,11 @@ const { data: relatedArchitecture } = await useAsyncData(
   async () => {
     const docs = await Promise.all(
       ARCH_PILLARS.map(async (s) => {
-        const doc = await queryCollection('content')
-          .path(`/${locale.value}/architecture/${s}`)
-          .first()
+        const doc = await queryCollection('content').path(`/${locale.value}/architecture/${s}`).first()
         if (!doc) return null
-        return {
-          path: doc.path,
-          title: doc?.meta?.heroHeadline || doc?.title || s,
-        }
+        return { path: doc.path, title: doc?.meta?.heroHeadline || doc?.title || s }
       })
     )
-
     return (docs || []).filter(Boolean)
   },
   { watch: [locale] }
@@ -202,15 +183,9 @@ const { data: relatedPosts } = await useAsyncData(
 
     const resolved = []
     for (const s of wanted) {
-      const doc = await queryCollection('content')
-        .path(`/${locale.value}/blog/${s}`)
-        .first()
-
+      const doc = await queryCollection('content').path(`/${locale.value}/blog/${s}`).first()
       if (!doc) continue
-      resolved.push({
-        path: doc.path,
-        title: doc.title || s,
-      })
+      resolved.push({ path: doc.path, title: doc.title || s })
     }
 
     if (resolved.length < 3) {
@@ -218,11 +193,7 @@ const { data: relatedPosts } = await useAsyncData(
       const fill = (all || [])
         .filter(x => x?.stem?.startsWith(`${locale.value}/blog/`))
         .filter(x => x?.path !== post.value?.path)
-        .map(x => ({
-          path: x.path,
-          title: x.title,
-          date: x.meta?.date,
-        }))
+        .map(x => ({ path: x.path, title: x.title, date: x.meta?.date }))
         .sort((a, b) => Date.parse(b.date || 0) - Date.parse(a.date || 0))
 
       for (const item of fill) {

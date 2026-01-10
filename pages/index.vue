@@ -50,7 +50,7 @@
           {{ home.meta.contactIntro }}
         </p>
 
-        <!-- Quick anchors -->
+        <!-- Quick anchors (same page, keep as plain anchors) -->
         <div class="buttons mb-5">
           <o-button variant="light" size="small" tag="a" href="#call">
             {{ home.meta.bookAnchorsCallLabel }}

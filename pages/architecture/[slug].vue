@@ -36,47 +36,34 @@
       <div class="container content-width">
         <div v-for="(s, i) in architecture.meta.sections" :key="i" class="box shadow-soft section-card">
           <h2 class="title has-text-primary is-4 mb-3">{{ s.title }}</h2>
-          <p class="content has-text-grey-dark mb-0">
-            {{ s.text }}
-          </p>
+          <p class="content has-text-grey-dark mb-0">{{ s.text }}</p>
         </div>
       </div>
     </section>
 
-    <!-- RELATED LINKS (internal linking) -->
     <section class="section" v-if="otherArchitecture?.length || recommendedPosts?.length">
       <div class="container content-width">
         <div class="box shadow-soft related-box">
           <div class="columns is-variable is-6">
             <div class="column is-6" v-if="otherArchitecture?.length">
-              <h3 class="title is-5 mb-3">
-                {{ t('related.architectureTitle') }}
-              </h3>
-
+              <h3 class="title is-5 mb-3">{{ t('related.architectureTitle') }}</h3>
               <ul class="related-list">
                 <li v-for="a in otherArchitecture" :key="a.path">
-                  <NuxtLink :to="a.path">
-                    {{ a.title }}
-                  </NuxtLink>
+                  <NuxtLink :to="a.path">{{ a.title }}</NuxtLink>
                 </li>
               </ul>
             </div>
 
             <div class="column is-6" v-if="recommendedPosts?.length">
-              <h3 class="title is-5 mb-3">
-                {{ t('related.postsTitle') }}
-              </h3>
-
+              <h3 class="title is-5 mb-3">{{ t('related.postsTitle') }}</h3>
               <ul class="related-list">
                 <li v-for="p in recommendedPosts" :key="p.path">
-                  <NuxtLink :to="p.path">
-                    {{ p.title }}
-                  </NuxtLink>
+                  <NuxtLink :to="p.path">{{ p.title }}</NuxtLink>
                 </li>
               </ul>
 
               <div class="mt-4">
-                <NuxtLink :to="localizedHref('/#blog')">
+                <NuxtLink :to="{ path: localePath('/'), hash: '#blog' }">
                   {{ t('related.more') }}
                 </NuxtLink>
               </div>
@@ -153,10 +140,7 @@ const key = computed(() => `${route.path}-${locale.value}`)
 
 const { data: architecture } = await useAsyncData(
   key.value + '-architecture',
-  () =>
-    queryCollection('content')
-      .path(`/${locale.value}/architecture/${slug}`)
-      .first(),
+  () => queryCollection('content').path(`/${locale.value}/architecture/${slug}`).first(),
   { watch: [locale, () => route.path] }
 )
 
@@ -175,20 +159,14 @@ const bookingCtaTo = computed(() => {
   })
 })
 
-/* Other architecture pillars */
 const { data: otherArchitecture } = await useAsyncData(
   key.value + '-other-architecture',
   async () => {
     const docs = await Promise.all(
       ARCH_PILLARS.map(async (s) => {
-        const doc = await queryCollection('content')
-          .path(`/${locale.value}/architecture/${s}`)
-          .first()
+        const doc = await queryCollection('content').path(`/${locale.value}/architecture/${s}`).first()
         if (!doc) return null
-        return {
-          path: doc.path,
-          title: doc?.meta?.heroHeadline || doc?.title || s,
-        }
+        return { path: doc.path, title: doc?.meta?.heroHeadline || doc?.title || s }
       })
     )
 
@@ -198,7 +176,6 @@ const { data: otherArchitecture } = await useAsyncData(
   { watch: [locale, () => architecture.value?.path] }
 )
 
-/* 3 recommended blog posts for this architecture */
 const { data: recommendedPosts } = await useAsyncData(
   key.value + '-recommended-posts',
   async () => {
@@ -207,26 +184,16 @@ const { data: recommendedPosts } = await useAsyncData(
 
     const resolved = []
     for (const s of wanted) {
-      const doc = await queryCollection('content')
-        .path(`/${locale.value}/blog/${s}`)
-        .first()
-
+      const doc = await queryCollection('content').path(`/${locale.value}/blog/${s}`).first()
       if (!doc) continue
-      resolved.push({
-        path: doc.path,
-        title: doc.title || s,
-      })
+      resolved.push({ path: doc.path, title: doc.title || s })
     }
 
     if (resolved.length < 3) {
       const all = await queryCollection('content').limit(400).all()
       const fill = (all || [])
         .filter(x => x?.stem?.startsWith(`${locale.value}/blog/`))
-        .map(x => ({
-          path: x.path,
-          title: x.title,
-          date: x.meta?.date,
-        }))
+        .map(x => ({ path: x.path, title: x.title, date: x.meta?.date }))
         .sort((a, b) => Date.parse(b.date || 0) - Date.parse(a.date || 0))
 
       for (const item of fill) {
