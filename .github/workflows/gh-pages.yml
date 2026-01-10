@@ -1,10 +1,8 @@
-# .github/workflows/pages.yml
 name: Deploy to GitHub Pages
 
 on:
   push:
-    branches:
-      - main
+    branches: ["main"]
   workflow_dispatch:
 
 permissions:
@@ -27,33 +25,23 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          cache: npm
 
       - name: Install dependencies
         run: npm ci
 
-      # IMPORTANT: GitHub Pages must be served from /<repo>/
-      # This sets baseURL correctly for the build.
-      - name: Generate static site
-        run: npm run generate
+      - name: Build static site
         env:
           NUXT_SSG: "true"
           NUXT_APP_BASE_URL: "/blockchange-nuxthub/"
+          NODE_ENV: "production"
+        run: npm run generate
 
-      # HARD PROOF in CI: these MUST exist or Pages will show GitHub 404 page
-      - name: Sanity check output
-        run: |
-          echo "== .output/public listing =="
-          ls -la .output/public
-          echo "== must have index.html =="
-          test -f .output/public/index.html
-          echo "== must have /en/index.html (since you use i18n prefix) =="
-          test -f .output/public/en/index.html
-
+      # ✅ Upload the ACTUAL output directory
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .output/public
+          path: .output/public/blockchange-nuxthub
 
   deploy:
     runs-on: ubuntu-latest

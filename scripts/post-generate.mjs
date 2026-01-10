@@ -2,34 +2,38 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
-function exists(p) {
-  try {
-    fs.accessSync(p)
-    return true
-  } catch {
-    return false
+function ensureDir(p) {
+  fs.mkdirSync(p, { recursive: true })
+}
+
+function copyFileIfExists(src, dst) {
+  if (fs.existsSync(src)) fs.copyFileSync(src, dst)
+}
+
+function main() {
+  const baseURL = process.env.NUXT_APP_BASE_URL || '/'
+  const baseFolder = baseURL.replace(/^\/|\/$/g, '') // "blockchange-nuxthub" or ""
+  const outRoot = path.resolve(process.cwd(), '.output/public')
+
+  // If baseURL is /blockchange-nuxthub/ Nuxt may output into .output/public/blockchange-nuxthub
+  const outDir = baseFolder ? path.join(outRoot, baseFolder) : outRoot
+
+  ensureDir(outDir)
+
+  // GitHub Pages SPA fallback
+  const html200 = path.join(outDir, '200.html')
+  const indexHtml = path.join(outDir, 'index.html')
+
+  if (fs.existsSync(html200)) {
+    fs.copyFileSync(html200, indexHtml)
+    console.log(`✅ index.html overwritten from 200.html in ${outDir}`)
+  } else if (!fs.existsSync(indexHtml)) {
+    console.warn('⚠ 200.html not found and index.html not present — nothing to overwrite')
   }
+
+  // Disable Jekyll processing
+  fs.writeFileSync(path.join(outDir, '.nojekyll'), '')
+  console.log(`✅ .nojekyll created in ${outDir}`)
 }
 
-// Nuxt output for your build is nested because baseURL is /blockchange-nuxthub/
-const ROOT = path.resolve(process.cwd(), '.output', 'public')
-const NESTED = path.join(ROOT, 'blockchange-nuxthub')
-
-// Use nested if it exists, otherwise fallback to root
-const OUT = exists(NESTED) ? NESTED : ROOT
-
-// Ensure .nojekyll exists in the folder that GitHub Pages actually serves
-fs.writeFileSync(path.join(OUT, '.nojekyll'), '')
-console.log(`✅ .nojekyll created in ${OUT}`)
-
-// OPTIONAL: SPA fallback (only if you really want it)
-// If 200.html exists, copy to index.html
-const html200 = path.join(OUT, '200.html')
-const indexHtml = path.join(OUT, 'index.html')
-
-if (exists(html200)) {
-  fs.copyFileSync(html200, indexHtml)
-  console.log('✅ index.html overwritten from 200.html')
-} else {
-  console.log('ℹ️ 200.html not found, leaving index.html as generated')
-}
+main()
