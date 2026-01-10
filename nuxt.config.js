@@ -3,10 +3,11 @@ import { resolve } from 'node:path'
 const isSSG = process.env.NUXT_SSG === 'true'
 const isDeployed = process.env.NODE_ENV === 'production'
 
-const deploymentDomain =
-  process.env.NUXT_PUBLIC_SITE_URL ||
-  process.env.URL ||
-  'http://localhost:3000'
+const deploymentDomain = String(
+  process.env.NUXT_PUBLIC_SITE_URL || process.env.URL || 'http://localhost:3000'
+)
+  .trim()
+  .replace(/\/+$/, '') // no trailing slash
 
 import { locales, localeCodes, defaultLocale } from './assets/js/localization'
 
@@ -22,6 +23,13 @@ export default defineNuxtConfig({
   },
 
   compatibilityDate: '2025-10-10',
+
+  // ✅ make trailing slash canonical for GH Pages / static hosting
+  router: {
+    options: {
+      trailingSlash: true,
+    },
+  },
 
   alias: {
     'nuxt-calcom/runtime/plugin': CALCOM_PLUGIN_TARGET,
@@ -132,7 +140,7 @@ export default defineNuxtConfig({
 
   nitro: {
     prerender: {
-      failOnError: false
+      failOnError: false,
     },
     preset: isSSG ? 'static' : 'cloudflare_module',
     external: process.env.NUXT_HUB_REMOTE === 'false' ? [] : undefined,

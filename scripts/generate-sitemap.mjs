@@ -4,7 +4,7 @@ import path from 'node:path'
 // Canonical site URL (prefer env, fallback to WWW)
 const SITE = String(process.env.NUXT_PUBLIC_SITE_URL || 'https://www.blockchange.com.py')
   .trim()
-  .replace(/\/+$/, '') // remove trailing slash
+  .replace(/\/+$/, '') // remove trailing slash on domain only
 
 const CONTENT_DIR = path.resolve(process.cwd(), 'content')
 const OUT_FILE = path.resolve(process.cwd(), 'public', 'sitemap.xml')
@@ -68,12 +68,18 @@ function fileToLocaleRest(file) {
   return { locale, rest }
 }
 
+// ✅ trailing slash canonical (except root)
+function withTrailingSlash(p) {
+  if (p === '/') return '/'
+  return p.endsWith('/') ? p : `${p}/`
+}
+
 function unprefixedPath(rest) {
-  return rest ? `/${rest}` : '/'
+  return withTrailingSlash(rest ? `/${rest}` : '/')
 }
 
 function prefixedPath(locale, rest) {
-  return rest ? `/${locale}/${rest}` : `/${locale}`
+  return withTrailingSlash(rest ? `/${locale}/${rest}` : `/${locale}`)
 }
 
 function urlNode(loc, alternates) {
