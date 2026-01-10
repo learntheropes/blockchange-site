@@ -6,12 +6,12 @@
           <nav class="breadcrumb is-small mb-4" aria-label="breadcrumbs">
             <ul>
               <li>
-                <NuxtLink :to="localePath(post.meta.breadcrumbHomeHref)">
+                <NuxtLink :to="localizedHref(post.meta.breadcrumbHomeHref)">
                   {{ post.meta.breadcrumbHomeLabel }}
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink :to="localePath(post.meta.breadcrumbBlogHref)">
+                <NuxtLink :to="localizedHref(post.meta.breadcrumbBlogHref)">
                   {{ post.meta.breadcrumbBlogLabel }}
                 </NuxtLink>
               </li>
@@ -64,6 +64,21 @@ const route = useRoute()
 const { locale } = useI18n()
 const localePath = useLocalePath()
 
+function stripLocalePrefix(p = '') {
+  const s = String(p).trim()
+  const withSlash = s.startsWith('/') ? s : `/${s}`
+  // remove leading "/en", "/es", "/ru" if present
+  return withSlash.replace(/^\/(en|es|ru)(\/|$)/, '/')
+}
+
+function localizedHref(href) {
+  // only localize internal links
+  if (!href || typeof href !== 'string') return href
+  if (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('mailto:')) return href
+  const cleaned = stripLocalePrefix(href)
+  return localePath(cleaned)
+}
+
 function withQueryBeforeHash(url, params) {
   const [path, hash = ''] = String(url || '').split('#')
   const q = new URLSearchParams()
@@ -98,7 +113,7 @@ if (!post.value) {
 const bookingCtaTo = computed(() => {
   const href = post.value?.meta?.bookingCtaHref || '/#book'
   const label = post.value?.meta?.bookingCtaLabel || ''
-  const base = localePath(href)
+  const base = localizedHref(href)
 
   // Canonical: /{locale}?src=<current-path>&cta=<label>#book
   return withQueryBeforeHash(base, {

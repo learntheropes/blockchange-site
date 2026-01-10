@@ -1,14 +1,12 @@
 <script setup>
 import { computed } from 'vue'
-import { withBase } from 'ufo'
 
 const { locale, locales } = useI18n()
 const switchLocalePath = useSwitchLocalePath()
-const availableLocales = computed(() => locales.value.filter(i => i.code !== locale.value))
 
-// baseURL handles GitHub Pages subpath (e.g. /blockchange-nuxthub/)
-const baseURL = useRuntimeConfig().app.baseURL
-const base = (p) => withBase(p, baseURL)
+const availableLocales = computed(() =>
+  locales.value.filter(i => i.code !== locale.value)
+)
 
 const socials = [
   { name: 'Youtube', href: 'https://www.youtube.com/@blockchange_com_py' },
@@ -24,20 +22,31 @@ const socials = [
       <nav class="level">
         <div class="level-left">
           <div class="level-item">
-            <!-- <div class="buttons">
-              <OButton v-for="social in socials" :key="social.name" tag="a" :href="social.href" variant="primary"
-                inverted target="_blank" rel="noopener noreferrer">
+            <!-- socials kept commented as you had -->
+            <!--
+            <div class="buttons">
+              <OButton
+                v-for="social in socials"
+                :key="social.name"
+                tag="a"
+                :href="social.href"
+                variant="primary"
+                inverted
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 {{ social.name }}
               </OButton>
-            </div> -->
+            </div>
+            -->
           </div>
         </div>
 
         <div class="level-right">
           <div class="level-item">
             <div class="buttons">
-              <OButton v-for="l in availableLocales" :key="l.code" tag="router-link"
-                :to="base(switchLocalePath(l.code))" variant="primary" inverted>
+              <OButton v-for="l in availableLocales" :key="l.code" tag="router-link" :to="switchLocalePath(l.code)"
+                variant="primary" inverted>
                 {{ l.name }}
               </OButton>
             </div>

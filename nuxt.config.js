@@ -130,8 +130,10 @@ export default defineNuxtConfig({
     },
   },
 
-  // ✅ IMPORTANT: preset must switch depending on SSG vs NuxtHub/Cloudflare
   nitro: {
+    prerender: {
+      failOnError: false
+    },
     preset: isSSG ? 'static' : 'cloudflare_module',
     external: process.env.NUXT_HUB_REMOTE === 'false' ? [] : undefined,
     storage: {
