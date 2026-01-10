@@ -32,10 +32,16 @@ export const BLOG_RELATED_BY_SLUG = {
     'multi-rail-payment-architecture',
     'choosing-a-payment-structure',
   ],
+
+  'why-payments-fail-internationally': [
+    'payments-are-architecture-not-apis',
+    'multi-rail-payment-architecture',
+    'false-payment-declines-reasons',
+  ],
+
 }
 
 export const ARCH_RECOMMENDED_POSTS = {
-  // Each architecture page links to EXACTLY 3 posts
   'in-ramp-architecture': [
     'multi-rail-payment-architecture',
     'payments-are-architecture-not-apis',
