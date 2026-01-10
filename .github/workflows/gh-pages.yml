@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   workflow_dispatch:
 
 permissions:
@@ -33,13 +33,11 @@ jobs:
       - name: Build (Nuxt SSG)
         env:
           NUXT_SSG: "true"
-          # repo pages base path:
           NUXT_APP_BASE_URL: "/blockchange-nuxthub/"
+          NUXT_PUBLIC_SITE_URL: "https://learntheropes.github.io/blockchange-nuxthub"
           NODE_ENV: production
         run: npm run generate
 
-      # ✅ IMPORTANT: if Nuxt outputs inside .output/public/blockchange-nuxthub/,
-      # move it to .output/public/ so Pages serves it correctly.
       - name: Normalize output folder for Pages
         run: |
           set -euxo pipefail
@@ -47,7 +45,6 @@ jobs:
             rsync -a ".output/public/blockchange-nuxthub/" ".output/public/"
             rm -rf ".output/public/blockchange-nuxthub"
           fi
-          # GitHub Pages SPA fallback: keep .nojekyll at root
           touch ".output/public/.nojekyll"
           echo "== .output/public listing =="
           ls -la ".output/public"

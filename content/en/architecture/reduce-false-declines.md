@@ -104,7 +104,6 @@ bookingText: >
   and payment rails. Leave with a concrete in- & off-ramp architecture
   designed to reduce unnecessary declines.
 
-# NEW: CTA button
-bookingCtaLabel: Get in touch
+bookingCtaLabel: Analyze my decline problem
 bookingCtaHref: /#book
 ---

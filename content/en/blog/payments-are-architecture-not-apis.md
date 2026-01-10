@@ -7,7 +7,7 @@ bookingTitle: Architect payments before writing code
 bookingText: >
   Align legal structure, business model, and payment rails.
   Leave with developer-ready guidance and a clear system design.
-bookingCtaLabel: Get in touch
+bookingCtaLabel: Architect my payment system
 bookingCtaHref: /#book
 breadcrumbHomeLabel: Home
 breadcrumbHomeHref: /

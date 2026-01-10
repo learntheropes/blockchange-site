@@ -7,7 +7,7 @@ bookingTitle: Design a resilient payment architecture
 bookingText: >
   Analyze your risk profile, jurisdictions, and revenue flows.
   Get a multi-rail architecture that survives policy and processor changes.
-bookingCtaLabel: Get in touch
+bookingCtaLabel: Review my risk & rails
 bookingCtaHref: /#book
 breadcrumbHomeLabel: Home
 breadcrumbHomeHref: /

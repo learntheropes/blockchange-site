@@ -96,3 +96,6 @@ sw.*
 public/sitemap.xml
 
 pages/test.vue
+
+.env.gh-pages
+.env.production

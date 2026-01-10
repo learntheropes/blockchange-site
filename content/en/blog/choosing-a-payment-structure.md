@@ -7,7 +7,7 @@ bookingTitle: Book a strategy call
 bookingText: >
   Discuss your markets, customers, and risk profile.
   Leave with a concrete payment architecture and routing plan.
-bookingCtaLabel: Get in touch
+bookingCtaLabel: Discuss your payment setup
 bookingCtaHref: /#book
 breadcrumbHomeLabel: Home
 breadcrumbHomeHref: /
