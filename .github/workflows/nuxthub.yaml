@@ -32,12 +32,30 @@ jobs:
           NUXT_HUB_REMOTE: "false"
           NUXT_APP_BASE_URL: "/"
           NUXT_PUBLIC_SITE_URL: "https://app.blockchange.com.py"
-          ROBOTS_MODE: app
+          ROBOTS_MODE: "app"
+
+      # 🔍 HARD PROOF: show what you generated and what will be deployed
+      - name: Debug robots before deploy
+        run: |
+          echo "== public/robots.txt =="
+          ls -la public || true
+          cat public/robots.txt || true
+
+          echo "== .output/public/robots.txt =="
+          ls -la .output/public || true
+          cat .output/public/robots.txt || true
 
       - name: Deploy to NuxtHub
         uses: nuxt-hub/action@v2
         with:
           project-key: ${{ secrets.NUXT_HUB_PROJECT_KEY }}
         env:
+          # ✅ IMPORTANT: if the action rebuilds, it MUST have the same env
+          NODE_ENV: production
+          NUXT_HUB_REMOTE: "false"
+          NUXT_APP_BASE_URL: "/"
+          NUXT_PUBLIC_SITE_URL: "https://app.blockchange.com.py"
+          ROBOTS_MODE: "app"
+
           NUXT_HUB_PROJECT_URL: ${{ secrets.NUXT_HUB_PROJECT_URL }}
           NUXT_HUB_PROJECT_SECRET_KEY: ${{ secrets.NUXT_HUB_PROJECT_SECRET_KEY }}
