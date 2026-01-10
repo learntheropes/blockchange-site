@@ -1,25 +1,35 @@
+// scripts/post-generate.mjs
 import fs from 'node:fs'
 import path from 'node:path'
 
-const out = path.resolve('.output/public')
-
-const from = path.join(out, '200.html')
-const to = path.join(out, 'index.html')
-const nojekyll = path.join(out, '.nojekyll')
-
-if (!fs.existsSync(out)) {
-  console.error('❌ .output/public not found')
-  process.exit(1)
+function exists(p) {
+  try {
+    fs.accessSync(p)
+    return true
+  } catch {
+    return false
+  }
 }
 
-if (fs.existsSync(from)) {
-  fs.copyFileSync(from, to)
-  console.log('✅ index.html created from 200.html')
+// Nuxt output for your build is nested because baseURL is /blockchange-nuxthub/
+const ROOT = path.resolve(process.cwd(), '.output', 'public')
+const NESTED = path.join(ROOT, 'blockchange-nuxthub')
+
+// Use nested if it exists, otherwise fallback to root
+const OUT = exists(NESTED) ? NESTED : ROOT
+
+// Ensure .nojekyll exists in the folder that GitHub Pages actually serves
+fs.writeFileSync(path.join(OUT, '.nojekyll'), '')
+console.log(`✅ .nojekyll created in ${OUT}`)
+
+// OPTIONAL: SPA fallback (only if you really want it)
+// If 200.html exists, copy to index.html
+const html200 = path.join(OUT, '200.html')
+const indexHtml = path.join(OUT, 'index.html')
+
+if (exists(html200)) {
+  fs.copyFileSync(html200, indexHtml)
+  console.log('✅ index.html overwritten from 200.html')
 } else {
-  console.warn('⚠ 200.html not found, index.html not created')
-}
-
-if (!fs.existsSync(nojekyll)) {
-  fs.writeFileSync(nojekyll, '')
-  console.log('✅ .nojekyll created')
+  console.log('ℹ️ 200.html not found, leaving index.html as generated')
 }
