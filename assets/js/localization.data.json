@@ -1,0 +1,23 @@
+{
+  "locales": [
+    {
+      "code": "en",
+      "file": "en.json",
+      "language": "en",
+      "name": "English",
+      "default": true
+    },
+    {
+      "code": "es",
+      "file": "es.json",
+      "language": "es-419",
+      "name": "Español"
+    },
+    {
+      "code": "ru",
+      "file": "ru.json",
+      "language": "ru",
+      "name": "Русский"
+    }
+  ]
+}

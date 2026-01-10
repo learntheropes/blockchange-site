@@ -44,7 +44,6 @@ export default defineNuxtConfig({
   build: { transpile: ['nuxt-calcom'] },
 
   app: {
-    // ✅ only place where baseURL should exist
     baseURL: process.env.NUXT_APP_BASE_URL || '/',
     head: {
       meta: [

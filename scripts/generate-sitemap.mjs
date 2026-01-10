@@ -6,8 +6,18 @@ const SITE = 'https://blockchange.com.py'
 const CONTENT_DIR = path.resolve(process.cwd(), 'content')
 const OUT_FILE = path.resolve(process.cwd(), 'public', 'sitemap.xml')
 
-const LOCALES = ['en']        // later: ['en', 'es', 'ru']
-const DEFAULT_LOCALE = 'en'   // must match your i18n defaultLocale
+// Read locales from a Node-safe JSON file (single source of truth)
+const LOCALE_DATA_FILE = path.resolve(process.cwd(), 'assets/js/localization.data.json')
+const LOCALE_DATA = JSON.parse(fs.readFileSync(LOCALE_DATA_FILE, 'utf8'))
+const LOCALE_DEFS = LOCALE_DATA?.locales || []
+
+const LOCALES = LOCALE_DEFS.map(l => l.code)
+const DEFAULT_LOCALE = (LOCALE_DEFS.find(l => l.default) || LOCALE_DEFS[0] || { code: 'en' }).code
+
+function hreflangFor(code) {
+  const def = LOCALE_DEFS.find(l => l.code === code)
+  return def?.language || code
+}
 
 function escapeXml(s = '') {
   return String(s)
@@ -81,6 +91,11 @@ function main() {
     process.exit(1)
   }
 
+  if (!fs.existsSync(LOCALE_DATA_FILE)) {
+    console.error(`Missing locale data file: ${LOCALE_DATA_FILE}`)
+    process.exit(1)
+  }
+
   const files = walk(CONTENT_DIR).filter(f => /\.(md|mdc)$/i.test(f))
 
   // restPath -> Set(locales with that page)
@@ -102,19 +117,22 @@ function main() {
   const entries = []
 
   for (const [rest, localesSet] of restMap.entries()) {
-    // only publish if default locale exists, so loc can be unprefixed
+    // Only publish if default locale exists, so loc can be unprefixed
     if (!localesSet.has(DEFAULT_LOCALE)) continue
 
     const loc = `${SITE}${unprefixedPath(rest)}`
     const alternates = []
 
-    // default
+    // x-default -> canonical (unprefixed default-locale URL)
     alternates.push({ hreflang: 'x-default', href: loc })
 
-    // all locale-prefixed variants that exist (currently en only)
-    for (const l of LOCALES) {
-      if (!localesSet.has(l)) continue
-      alternates.push({ hreflang: l, href: `${SITE}${prefixedPath(l, rest)}` })
+    // add all existing translations
+    for (const code of LOCALES) {
+      if (!localesSet.has(code)) continue
+      alternates.push({
+        hreflang: hreflangFor(code),
+        href: `${SITE}${prefixedPath(code, rest)}`
+      })
     }
 
     entries.push({ loc, alternates })
@@ -123,10 +141,7 @@ function main() {
   entries.sort((a, b) => a.loc.localeCompare(b.loc))
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset
-  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-  xmlns:xhtml="http://www.w3.org/1999/xhtml"
->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${entries.map(e => urlNode(e.loc, e.alternates)).join('\n')}
 </urlset>
 `

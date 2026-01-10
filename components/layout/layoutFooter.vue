@@ -24,12 +24,12 @@ const socials = [
       <nav class="level">
         <div class="level-left">
           <div class="level-item">
-            <div class="buttons">
+            <!-- <div class="buttons">
               <OButton v-for="social in socials" :key="social.name" tag="a" :href="social.href" variant="primary"
                 inverted target="_blank" rel="noopener noreferrer">
                 {{ social.name }}
               </OButton>
-            </div>
+            </div> -->
           </div>
         </div>
 

@@ -1,15 +1,7 @@
-import find from 'lodash.find';
+import data from './localization.data.json'
 
-export const locales = [
-  {
-    code: 'en',
-    file: 'en.json',
-    language: 'en',
-    name: 'English',
-    default: true 
-  }, 
-];
+export const locales = data.locales
 
-export const localeCodes = locales.map(locale => locale.code);
+export const localeCodes = locales.map(l => l.code)
 
-export const defaultLocale = find(locales, { default: true }).code;
+export const defaultLocale = (locales.find(l => l.default) || locales[0] || { code: 'en' }).code

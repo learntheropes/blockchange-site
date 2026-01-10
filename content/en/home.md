@@ -134,5 +134,4 @@ bookMailBodyMessageTitle: "Message:"
 
 # PGP
 bookPgpTitle: PGP Public Key
-
 ---

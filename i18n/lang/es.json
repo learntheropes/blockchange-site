@@ -1,6 +1,38 @@
 {
-  "pageNotFound": "Esta página no se pudo encontrar",
+  "pageNotFound": "No se pudo encontrar esta página",
   "unauthorized": "No autorizado",
   "somethingWentWrong": "Algo salió mal",
-  "backToTheHomePage": "Volver a la página de inicio"
+  "backToTheHomePage": "Volver a la página de inicio",
+  "home": {
+    "book": {
+      "bookPaid": "Reserva una llamada estratégica de pago",
+      "bookFree": "Obtén una consulta gratuita por correo electrónico",
+      "learnMore": "Saber más",
+      "learnMoreAria": "Saber más sobre la arquitectura"
+    },
+    "cta": {
+      "primary": "Reserva una llamada estratégica de pago — $100/hora o obtén una consulta gratuita por correo electrónico",
+      "secondary": "Ver cómo funciona"
+    },
+    "payments": {
+      "title": "Pagos aceptados actualmente",
+      "btc": "Bitcoin (Lightning y on-chain)",
+      "usdt": "USDT",
+      "cardsSoon": "Tarjetas de crédito/débito (próximamente)"
+    },
+    "proof": {
+      "primary": "Reservar ahora",
+      "secondary": "Ver pruebas"
+    },
+    "nav": {
+      "problems": "Problemas",
+      "deliver": "Qué entregamos",
+      "inRamp": "Arquitectura de entrada (in-ramp)",
+      "offRamp": "Salida y pagos"
+    },
+    "links": {
+      "inRamp": "Leer: Arquitectura de entrada (in-ramp)",
+      "offRamp": "Leer: Arquitectura de salida y pagos"
+    }
+  }
 }
