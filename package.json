@@ -4,10 +4,10 @@
   "scripts": {
     "dev": "node scripts/generate-sitemap.mjs && NUXT_HUB_REMOTE=true nuxi dev --remote",
     "prebuild": "node scripts/generate-sitemap.mjs",
-    "build": "nuxi build",
+    "build": "node scripts/generate-sitemap.mjs && node scripts/write-robots.mjs &&  nuxi build",
     "start": "nuxi start",
     "sitemap": "node scripts/generate-sitemap.mjs",
-    "generate": "NUXT_SSG=true node scripts/generate-sitemap.mjs && NUXT_SSG=true nuxi generate && node scripts/post-generate.mjs",
+    "generate": "NUXT_SSG=true node scripts/generate-sitemap.mjs && node scripts/write-robots.mjs && NUXT_SSG=true nuxi generate && node scripts/post-generate.mjs",
     "preview:ssg": "npx serve .output/public -l 3000"
   },
   "author": "Learntheropes <giovanni@learntheropes.xyz",
