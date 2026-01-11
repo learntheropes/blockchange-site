@@ -302,13 +302,8 @@ useJsonld(() => {
 
 /* umami event for CTA click */
 function trackCta() {
-  // Nuxt Umami module usually injects one of these globals.
-  const umami = window.umami || window.__umami
-
-  console.log('umami', umami)
-
-  umami.track('blog-cta', {
-    from: route.path
+  umTrackEvent('blog-cta', {
+    from: route.path,
   })
 }
 </script>

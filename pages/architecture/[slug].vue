@@ -298,18 +298,9 @@ useJsonld(() => {
 
 /* umami event for CTA click */
 function trackCta() {
-  // Nuxt Umami module usually injects one of these globals.
-  const umami = window.umami || window.__umami
-
-  if (typeof umami?.track === 'function') {
-    umami.track('architecture-cta', { path: route.path })
-    return
-  }
-
-  // Fallback: if module exposes a function (depends on module)
-  if (typeof window.umami === 'function') {
-    window.umami('track', 'architecture-cta', { path: route.path })
-  }
+  umTrackEvent('blog-cta', {
+    from: route.path,
+  })
 }
 </script>
 
