@@ -20,10 +20,10 @@ It complements the public documentation and long-form analysis published on the 
 A detailed breakdown of **multi-rail payment architecture**, including real-world failure modes and routing strategies, is available here:
 
 👉 **Blockchange – Multi-Rail Payment Architecture**  
-https://blockchange.com.py/en/blog/multi-rail-payment-architecture
+https://www.blockchange.com.py/en/blog/multi-rail-payment-architecture/
 
 Additional architecture overviews and design principles:
-https://blockchange.com.py/en/architecture
+https://www.blockchange.com.py/en/#architecture
 
 ## Why multi-rail matters
 
