@@ -1,10 +1,11 @@
-
-# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
-
 name: Deploy to NuxtHub
 
 on:
   workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
 
 jobs:
   deploy:
@@ -12,12 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: production
-    permissions:
-      contents: read
-      id-token: write
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -25,7 +24,7 @@ jobs:
           node-version: 20
           cache: npm
 
-      - name: Install dependencies
+      - name: Install
         run: npm ci
 
       - name: Build (NuxtHub)
@@ -33,32 +32,19 @@ jobs:
         env:
           NODE_ENV: production
           NUXT_HUB_REMOTE: "false"
-          NUXT_APP_BASE_URL: "/"
-          NUXT_PUBLIC_SITE_URL: "https://app.blockchange.com.py"
+          NUXT_APP_BASE_URL: ${{ vars.NUXT_APP_BASE_URL }}
           ROBOTS_MODE: "app"
-
-      # 🔍 HARD PROOF: show what you generated and what will be deployed
-      - name: Debug robots before deploy
-        run: |
-          echo "== public/robots.txt =="
-          ls -la public || true
-          cat public/robots.txt || true
-
-          echo "== .output/public/robots.txt =="
-          ls -la .output/public || true
-          cat .output/public/robots.txt || true
+          WEBSITE_URL: "https://app.blockchange.com.py"
 
       - name: Deploy to NuxtHub
         uses: nuxt-hub/action@v2
         with:
           project-key: ${{ secrets.NUXT_HUB_PROJECT_KEY }}
         env:
-          # ✅ IMPORTANT: if the action rebuilds, it MUST have the same env
           NODE_ENV: production
           NUXT_HUB_REMOTE: "false"
-          NUXT_APP_BASE_URL: "/"
-          NUXT_PUBLIC_SITE_URL: "https://app.blockchange.com.py"
+          NUXT_APP_BASE_URL: ${{ vars.NUXT_APP_BASE_URL }}
           ROBOTS_MODE: "app"
-
+          WEBSITE_URL: "https://app.blockchange.com.py"
           NUXT_HUB_PROJECT_URL: ${{ secrets.NUXT_HUB_PROJECT_URL }}
           NUXT_HUB_PROJECT_SECRET_KEY: ${{ secrets.NUXT_HUB_PROJECT_SECRET_KEY }}

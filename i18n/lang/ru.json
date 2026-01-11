@@ -3,6 +3,13 @@
   "unauthorized": "Нет доступа",
   "somethingWentWrong": "Что-то пошло не так",
   "backToTheHomePage": "Вернуться на главную страницу",
+  "schema": {
+    "breadcrumbs": {
+      "home": "Главная",
+      "blog": "Блог",
+      "architecture": "Архитектура"
+    }
+  },
   "home": {
     "book": {
       "bookPaid": "Записаться на платную стратегическую консультацию",

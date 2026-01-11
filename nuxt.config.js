@@ -2,8 +2,7 @@ import { resolve } from 'node:path'
 
 const isSSG = process.env.NUXT_SSG === 'true'
 const isDeployed = process.env.NODE_ENV === 'production'
-const deploymentDomain = process.env.NUXT_PUBLIC_DEPLOYMENT_DOMAIN || 'http://localhost:3000' // e.g. https://blockchange.com.py
-const canonicalDomain = process.env.NUXT_PUBLIC_CANONICAL_DOMAIN || 'http://localhost:3000'   // e.g. https://www.blockchange.com.py  
+const websiteUrl = process.env.WEBSITE_URL || 'http://localhost:3000'
 import { locales, localeCodes, defaultLocale } from './assets/js/localization'
 
 const ABS_CALCOM_PLUGIN = resolve('./node_modules/nuxt-calcom/runtime/plugin')
@@ -21,11 +20,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      isSSG,
-      isDeployed,
-      deploymentDomain,
-      canonicalDomain,
-      testvar: process.env.NUXT_APP_BASE_URL
+      websiteUrl,
     }
   },
 
@@ -63,11 +58,11 @@ export default defineNuxtConfig({
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         { id: 'googlebot', name: 'googlebot', content: 'notranslate' },
         { id: 'og:type', name: 'og:type', content: 'website' },
-        { id: 'og:url', name: 'og:url', content: deploymentDomain },
+        { id: 'og:url', name: 'og:url', content: websiteUrl },
         { id: 'og:site_name', name: 'og:site_name', content: 'Blockchange' },
-        { id: 'og:image', name: 'og:image', content: `${deploymentDomain}/favicon/favicon.png` },
+        { id: 'og:image', name: 'og:image', content: `${websiteUrl}/favicon/favicon.png` },
         { id: 'twitter:card', name: 'twitter:card', content: 'summary' },
-        { id: 'twitter:image', name: 'twitter:image', content: `${deploymentDomain}/favicon/favicon.png` },
+        { id: 'twitter:image', name: 'twitter:image', content: `${websiteUrl}/favicon/favicon.png` },
       ],
       link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon/favicon.ico' }],
     },
@@ -106,7 +101,7 @@ export default defineNuxtConfig({
   },
 
   i18n: {
-    baseUrl: deploymentDomain,
+    baseUrl: websiteUrl,
     locales,
     defaultLocale,
     lazy: true,

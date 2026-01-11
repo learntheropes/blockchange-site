@@ -3,6 +3,13 @@
   "unauthorized": "No autorizado",
   "somethingWentWrong": "Algo salió mal",
   "backToTheHomePage": "Volver a la página de inicio",
+  "schema": {
+    "breadcrumbs": {
+      "home": "Inicio",
+      "blog": "Blog",
+      "architecture": "Arquitectura"
+    }
+  },
   "home": {
     "book": {
       "bookPaid": "Reserva una llamada estratégica de pago",

@@ -133,6 +133,11 @@ function stemToSlug(stem = '') {
   return parts[parts.length - 1] || ''
 }
 
+function withTrailingSlash(u = '') {
+  const s = String(u || '')
+  return s.endsWith('/') ? s : `${s}/`
+}
+
 const dataKey = computed(() => `blog:${locale.value}:${slug.value}`)
 
 /* Content */
@@ -257,14 +262,10 @@ useJsonld(() => {
   const datePublished = p.meta?.date || p.meta?.datePublished || null
   const dateModified = p.meta?.updated || p.meta?.dateModified || datePublished || null
 
-  // canonical absolute URL (IMPORTANT for Google)
-  const canonicalUrl = (() => {
-    const u = String(p.path || route.path || '')
-    const withSlash = u.endsWith('/') ? u : `${u}/`
-    return withSlash // plugin will make it absolute using deploymentDomain
-  })()
+  // Keep as path + trailing slash; plugin makes it absolute from websiteUrl
+  const canonicalUrl = withTrailingSlash(String(p.path || route.path || ''))
 
-  // breadcrumbs URLs (keep your existing meta hrefs, just ensure trailing slash for Home)
+  // Use i18n labels (schema.breadcrumbs.*) instead of hardcoding
   const homeHref = localizedHref(p.meta?.breadcrumbHomeHref || `/${locale.value}/`)
   const blogHref = localizedHref(p.meta?.breadcrumbBlogHref || `/${locale.value}/#blog`)
   const currentLabel = p.meta?.breadcrumbCurrentLabel || title
@@ -272,7 +273,7 @@ useJsonld(() => {
   return $jsonld.graph([
     $jsonld.logo(),
     $jsonld.organization(),
-    $jsonld.website('Blockchange', description),
+    $jsonld.website(),
 
     $jsonld.blogWebPage({
       url: canonicalUrl,
@@ -280,12 +281,11 @@ useJsonld(() => {
       description,
     }),
 
-    // IMPORTANT: pass webpageUrl (not webpageId) so breadcrumb @id becomes absolute
     $jsonld.blogBreadcrumbs({
       webpageUrl: canonicalUrl,
       items: [
-        { name: p.meta?.breadcrumbHomeLabel || 'Home', url: homeHref },
-        { name: p.meta?.breadcrumbBlogLabel || 'Blog', url: blogHref },
+        { name: t('schema.breadcrumbs.home'), url: homeHref },
+        { name: t('schema.breadcrumbs.blog'), url: blogHref },
         { name: currentLabel, url: canonicalUrl },
       ],
     }),

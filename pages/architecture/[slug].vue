@@ -266,7 +266,7 @@ useJsonld(() => {
   const description = a?.meta?.heroSubheadline || ''
   const dateModified = a?.meta?.updated || a?.meta?.dateModified || null
 
-  // IMPORTANT: keep as path + trailing slash; plugin makes it absolute using deploymentDomain
+  // Keep as path + trailing slash; plugin makes it absolute from websiteUrl
   const canonicalUrl = withTrailingSlash(String(a.path || route.path || ''))
 
   const homeHref = localizedHref(a.meta?.breadcrumbHomeHref || `/${locale.value}/`)
@@ -276,7 +276,7 @@ useJsonld(() => {
   return $jsonld.graph([
     $jsonld.logo(),
     $jsonld.organization(),
-    $jsonld.website('Blockchange', description),
+    $jsonld.website(),
 
     $jsonld.archWebPage({
       url: canonicalUrl,
@@ -285,12 +285,11 @@ useJsonld(() => {
       dateModified,
     }),
 
-    // IMPORTANT: webpageUrl (not webpageId) => absolute @id in output
     $jsonld.archBreadcrumbs({
       webpageUrl: canonicalUrl,
       items: [
-        { name: a.meta?.breadcrumbHomeLabel || 'Home', url: homeHref },
-        { name: a.meta?.breadcrumbArchitectureLabel || 'Architecture', url: archIndexHref },
+        { name: t('schema.breadcrumbs.home'), url: homeHref },
+        { name: t('schema.breadcrumbs.architecture'), url: archIndexHref },
         { name: currentLabel, url: canonicalUrl },
       ],
     }),

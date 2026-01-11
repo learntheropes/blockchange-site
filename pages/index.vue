@@ -187,7 +187,7 @@ import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
-const { locale } = useI18n()
+const { locale, t } = useI18n()
 const localePath = useLocalePath()
 
 /* Home content */
@@ -246,8 +246,14 @@ useJsonld(() => {
   return $jsonld.graph([
     $jsonld.logo(),
     $jsonld.organization(),
-    $jsonld.website(home.value?.meta?.heroHeadline, home.value?.meta?.heroSubheadline),
+    $jsonld.website(),
     $jsonld.indexWebPage(home.value?.meta?.heroHeadline, home.value?.meta?.heroSubheadline),
+    $jsonld.indexBreadcrumbs({
+      homeLabel: t('schema.breadcrumbs.home'),
+      homePath: `/${locale.value}/`
+    }),
+    $jsonld.indexSection({ id: 'explanation', name: home.value?.meta?.explanationTitle || 'Explanation' }),
+    $jsonld.indexSection({ id: 'blog', name: home.value?.meta?.latestInsightsTitle || 'Blog' }),
     $jsonld.indexArchitecturesItemList(pillars),
     $jsonld.indexBlogPostsItemList(posts),
   ])

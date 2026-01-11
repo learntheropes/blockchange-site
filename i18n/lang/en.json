@@ -3,6 +3,13 @@
   "unauthorized": "Unauthorized",
   "somethingWentWrong": "Something went wrong",
   "backToTheHomePage": "Back to the home page",
+  "schema": {
+    "breadcrumbs": {
+      "home": "Home",
+      "blog": "Blog",
+      "architecture": "Architecture"
+    }
+  },
   "home": {
     "book": {
       "bookPaid": "Book a paid strategy call",

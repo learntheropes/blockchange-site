@@ -1,10 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
-// Canonical site URL (prefer env, fallback to WWW)
-const SITE = String(process.env.NUXT_PUBLIC_DEPLOYMENT_DOMAIN)
-  .trim()
-  .replace(/\/+$/, '') // remove trailing slash on domain only
+const SITE = process.env.WEBSITE_URL || 'http://localhost:3000'
 
 const CONTENT_DIR = path.resolve(process.cwd(), 'content')
 const OUT_FILE = path.resolve(process.cwd(), 'public', 'sitemap.xml')
@@ -149,8 +146,6 @@ ${entries.map(e => urlNode(e.loc, e.alternates)).join('\n')}
 
   fs.mkdirSync(path.dirname(OUT_FILE), { recursive: true })
   fs.writeFileSync(OUT_FILE, xml, 'utf8')
-  console.log(`✅ Wrote ${OUT_FILE} with ${entries.length} URL entries`)
-  console.log(`ℹ️ SITE=${SITE}`)
 }
 
 main()
