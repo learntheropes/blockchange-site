@@ -5,27 +5,45 @@ export default defineNuxtPlugin((nuxtApp) => {
   const { public: { deploymentDomain, canonicalDomain } } = useRuntimeConfig()
   const { locale } = nuxtApp.$i18n
 
-  // 1) Prefer canonicalDomain, then deploymentDomain
-  const rawDomain = String(deploymentDomain || '').replace(/\/$/, '')
-  const rawCanonical = String(canonicalDomain || '').replace(/\/$/, '')
+  function stripTrailingSlash(u = '') {
+    return String(u || '').replace(/\/$/, '')
+  }
 
-  // 2) Fallback to actual request origin (SSR) or browser origin (client)
-  const originFallback = (() => {
-    // SSR
-    try {
-      const reqUrl = useRequestURL()
-      if (reqUrl?.origin) return reqUrl.origin
-    } catch (e) { }
+  // IMPORTANT: domain is dynamic (never frozen at init)
+  function getDomain() {
+    const canon = stripTrailingSlash(canonicalDomain)
+    if (canon) return canon
 
-    // Client
+    const dep = stripTrailingSlash(deploymentDomain)
+    if (dep) return dep
+
+    // Client fallback (works for SSG too)
     if (process.client && typeof window !== 'undefined' && window.location?.origin) {
-      return window.location.origin
+      return stripTrailingSlash(window.location.origin)
     }
 
-    return ''
-  })()
+    // Server fallback (behind proxies)
+    try {
+      const h = useRequestHeaders([
+        'x-forwarded-host',
+        'x-forwarded-proto',
+        'host'
+      ])
 
-  const domain = (rawCanonical || rawDomain || originFallback).replace(/\/$/, '')
+      const proto =
+        String(h['x-forwarded-proto'] || '').split(',')[0].trim() ||
+        'https'
+
+      const host =
+        String(h['x-forwarded-host'] || '').split(',')[0].trim() ||
+        String(h['host'] || '').trim()
+
+      if (host) return `${proto}://${host}`
+    } catch (e) { }
+
+    // Last resort: keep empty (better than localhost)
+    return ''
+  }
 
   function lang() {
     const code = String(locale.value || 'en')
@@ -36,24 +54,31 @@ export default defineNuxtPlugin((nuxtApp) => {
     )
   }
 
-  // absolute URL helper (also rewrites to canonical host when possible)
   function toAbsUrl(u = '') {
     const s = String(u || '').trim()
     if (!s) return s
 
+    // already absolute
     if (s.startsWith('http://') || s.startsWith('https://')) {
-      // If canonicalDomain is set and URL starts with deploymentDomain, rewrite to canonicalDomain
-      if (rawCanonical && rawDomain && s.startsWith(rawDomain)) {
-        return rawCanonical + s.slice(rawDomain.length)
+      // if canonicalDomain is set, rewrite to it (host-only)
+      const canon = stripTrailingSlash(canonicalDomain)
+      if (!canon) return s
+
+      // Replace only when it matches deploymentDomain OR current origin
+      const dep = stripTrailingSlash(deploymentDomain)
+      if (dep && s.startsWith(dep)) return canon + s.slice(dep.length)
+
+      if (process.client && typeof window !== 'undefined' && window.location?.origin) {
+        const origin = stripTrailingSlash(window.location.origin)
+        if (origin && s.startsWith(origin)) return canon + s.slice(origin.length)
       }
-      // Also if canonicalDomain is set and URL starts with originFallback, rewrite to canonicalDomain
-      if (rawCanonical && originFallback && s.startsWith(originFallback)) {
-        return rawCanonical + s.slice(originFallback.length)
-      }
+
       return s
     }
 
-    return `${domain}${s.startsWith('/') ? s : `/${s}`}`
+    const base = getDomain()
+    if (!base) return s.startsWith('/') ? s : `/${s}`
+    return `${base}${s.startsWith('/') ? s : `/${s}`}`
   }
 
   function withTrailingSlashIfNoHash(u = '') {
@@ -75,96 +100,115 @@ export default defineNuxtPlugin((nuxtApp) => {
           '@graph': nodes
         }),
 
-        logo: () => ({
-          '@type': 'ImageObject',
-          '@id': `${domain}/#logo`,
-          url: `${domain}/favicon/favicon.png`,
-          contentUrl: `${domain}/favicon/favicon.png`,
-          width: 256,
-          height: 256
-        }),
+        logo: () => {
+          const domain = getDomain()
+          return {
+            '@type': 'ImageObject',
+            '@id': `${domain}/#logo`,
+            url: `${domain}/favicon/favicon.png`,
+            contentUrl: `${domain}/favicon/favicon.png`,
+            width: 256,
+            height: 256
+          }
+        },
 
-        organization: () => ({
-          '@type': 'Organization',
-          '@id': `${domain}/#organization`,
-          name: 'Blockchange',
-          url: `${domain}/`,
-          logo: { '@id': `${domain}/#logo` }
-        }),
+        organization: () => {
+          const domain = getDomain()
+          return {
+            '@type': 'Organization',
+            '@id': `${domain}/#organization`,
+            name: 'Blockchange',
+            url: `${domain}/`,
+            logo: { '@id': `${domain}/#logo` }
+          }
+        },
 
-        website: (_heroHeadline, heroSubheadline) => ({
-          '@type': 'WebSite',
-          '@id': `${domain}/#website`,
-          url: `${domain}/`,
-          name: 'Blockchange',
-          description: heroSubheadline,
-          publisher: { '@id': `${domain}/#organization` },
-          inLanguage: lang()
-        }),
+        website: (_heroHeadline, heroSubheadline) => {
+          const domain = getDomain()
+          return {
+            '@type': 'WebSite',
+            '@id': `${domain}/#website`,
+            url: `${domain}/`,
+            name: 'Blockchange',
+            description: heroSubheadline,
+            publisher: { '@id': `${domain}/#organization` },
+            inLanguage: lang()
+          }
+        },
 
-        indexWebPage: (heroHeadline, heroSubheadline) => ({
-          '@type': 'WebPage',
-          '@id': `${domain}/${locale.value}/#webpage`,
-          url: `${domain}/${locale.value}/`,
-          name: 'Homepage',
-          headline: heroHeadline,
-          description: heroSubheadline,
-          isPartOf: { '@id': `${domain}/#website` },
-          publisher: { '@id': `${domain}/#organization` },
-          inLanguage: lang(),
-          mainEntity: [
-            { '@id': `${domain}/${locale.value}/#explanation` },
-            { '@id': `${domain}/${locale.value}/#blog` }
-          ]
-        }),
+        indexWebPage: (heroHeadline, heroSubheadline) => {
+          const domain = getDomain()
+          return {
+            '@type': 'WebPage',
+            '@id': `${domain}/${locale.value}/#webpage`,
+            url: `${domain}/${locale.value}/`,
+            name: 'Homepage',
+            headline: heroHeadline,
+            description: heroSubheadline,
+            isPartOf: { '@id': `${domain}/#website` },
+            publisher: { '@id': `${domain}/#organization` },
+            inLanguage: lang(),
+            mainEntity: [
+              { '@id': `${domain}/${locale.value}/#explanation` },
+              { '@id': `${domain}/${locale.value}/#blog` }
+            ]
+          }
+        },
 
-        indexArchitecturesItemList: (pillars) => ({
-          '@type': 'Collection',
-          '@id': `${domain}/${locale.value}/#explanation`,
-          url: `${domain}/${locale.value}/#explanation`,
-          name: 'Architectures collection',
-          collectionSize: pillars.length,
-          isPartOf: { '@id': `${domain}/${locale.value}/#webpage` },
-          mainEntity: {
-            '@type': 'ItemList',
-            numberOfItems: pillars.length,
-            itemListElement: pillars.map((item, index) => {
-              const href = String(item.href || '').replace(/^\/+/, '')
-              return {
-                '@type': 'ListItem',
-                position: index + 1,
-                name: item.title,
-                url: `${domain}/${locale.value}/${href}/`
-              }
-            })
-          },
-          inLanguage: lang()
-        }),
+        indexArchitecturesItemList: (pillars) => {
+          const domain = getDomain()
+          return {
+            '@type': 'Collection',
+            '@id': `${domain}/${locale.value}/#explanation`,
+            url: `${domain}/${locale.value}/#explanation`,
+            name: 'Architectures collection',
+            collectionSize: pillars.length,
+            isPartOf: { '@id': `${domain}/${locale.value}/#webpage` },
+            mainEntity: {
+              '@type': 'ItemList',
+              numberOfItems: pillars.length,
+              itemListElement: pillars.map((item, index) => {
+                const href = String(item.href || '').replace(/^\/+/, '')
+                return {
+                  '@type': 'ListItem',
+                  position: index + 1,
+                  name: item.title,
+                  url: `${domain}/${locale.value}/${href}/`
+                }
+              })
+            },
+            inLanguage: lang()
+          }
+        },
 
-        indexBlogPostsItemList: (allPosts) => ({
-          '@type': 'Collection',
-          '@id': `${domain}/${locale.value}/#blog`,
-          url: `${domain}/${locale.value}/#blog`,
-          name: 'Blog posts collection',
-          collectionSize: allPosts.length,
-          isPartOf: { '@id': `${domain}/${locale.value}/#webpage` },
-          mainEntity: {
-            '@type': 'ItemList',
-            numberOfItems: allPosts.length,
-            itemListElement: allPosts.map((item, index) => {
-              const path = String(item.path || '').replace(/^\/+/, '')
-              return {
-                '@type': 'ListItem',
-                position: index + 1,
-                name: item.title,
-                url: `${domain}/${path}/`
-              }
-            })
-          },
-          inLanguage: lang()
-        }),
+        indexBlogPostsItemList: (allPosts) => {
+          const domain = getDomain()
+          return {
+            '@type': 'Collection',
+            '@id': `${domain}/${locale.value}/#blog`,
+            url: `${domain}/${locale.value}/#blog`,
+            name: 'Blog posts collection',
+            collectionSize: allPosts.length,
+            isPartOf: { '@id': `${domain}/${locale.value}/#webpage` },
+            mainEntity: {
+              '@type': 'ItemList',
+              numberOfItems: allPosts.length,
+              itemListElement: allPosts.map((item, index) => {
+                const path = String(item.path || '').replace(/^\/+/, '')
+                return {
+                  '@type': 'ListItem',
+                  position: index + 1,
+                  name: item.title,
+                  url: `${domain}/${path}/`
+                }
+              })
+            },
+            inLanguage: lang()
+          }
+        },
 
         blogWebPage: ({ url, title, description }) => {
+          const domain = getDomain()
           const pageUrl = toAbsUrl(url)
           return {
             '@type': 'WebPage',
@@ -181,26 +225,23 @@ export default defineNuxtPlugin((nuxtApp) => {
         blogBreadcrumbs: ({ webpageUrl, items = [] }) => {
           const pageUrl = toAbsUrl(webpageUrl)
           const list = Array.isArray(items) ? items : []
-
           return {
             '@type': 'BreadcrumbList',
             '@id': `${pageUrl}#breadcrumbs`,
             itemListElement: list
               .filter(x => x?.name && x?.url)
-              .map((item, i) => {
-                const abs = toAbsUrl(item.url)
-                return {
-                  '@type': 'ListItem',
-                  position: i + 1,
-                  name: item.name,
-                  item: withTrailingSlashIfNoHash(abs)
-                }
-              }),
+              .map((item, i) => ({
+                '@type': 'ListItem',
+                position: i + 1,
+                name: item.name,
+                item: withTrailingSlashIfNoHash(toAbsUrl(item.url))
+              })),
             inLanguage: lang()
           }
         },
 
         blogPosting: ({ url, title, description, datePublished, dateModified }) => {
+          const domain = getDomain()
           const pageUrl = toAbsUrl(url)
 
           const out = {
@@ -217,11 +258,12 @@ export default defineNuxtPlugin((nuxtApp) => {
             inLanguage: lang()
           }
 
-          Object.keys(out).forEach((k) => out[k] === undefined && delete out[k])
+          Object.keys(out).forEach(k => out[k] === undefined && delete out[k])
           return out
         },
 
         archWebPage: ({ url, title, description, dateModified }) => {
+          const domain = getDomain()
           const pageUrl = toAbsUrl(url)
 
           const out = {
@@ -237,7 +279,7 @@ export default defineNuxtPlugin((nuxtApp) => {
             dateModified: dateModified || undefined
           }
 
-          Object.keys(out).forEach((k) => out[k] === undefined && delete out[k])
+          Object.keys(out).forEach(k => out[k] === undefined && delete out[k])
           return out
         },
 
@@ -250,18 +292,15 @@ export default defineNuxtPlugin((nuxtApp) => {
             '@id': `${pageUrl}#breadcrumbs`,
             itemListElement: list
               .filter(x => x?.name && x?.url)
-              .map((item, i) => {
-                const abs = toAbsUrl(item.url)
-                return {
-                  '@type': 'ListItem',
-                  position: i + 1,
-                  name: item.name,
-                  item: withTrailingSlashIfNoHash(abs)
-                }
-              }),
+              .map((item, i) => ({
+                '@type': 'ListItem',
+                position: i + 1,
+                name: item.name,
+                item: withTrailingSlashIfNoHash(toAbsUrl(item.url))
+              })),
             inLanguage: lang()
           }
-        },
+        }
       }
     }
   }
