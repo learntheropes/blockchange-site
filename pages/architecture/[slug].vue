@@ -82,7 +82,8 @@
               <p class="has-text-grey mb-0">{{ architecture.meta.bookingText }}</p>
             </div>
             <div class="column is-4 has-text-right">
-              <o-button variant="primary" size="large" tag="router-link" :to="bookingCtaTo">
+              <o-button variant="primary" size="large" tag="router-link" :to="bookingCtaTo"
+                v-umami="{ name: 'architecture-cta', slug: route.path }">
                 {{ architecture.meta.bookingCtaLabel }}
               </o-button>
             </div>

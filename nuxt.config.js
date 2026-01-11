@@ -11,11 +11,6 @@ const ABS_CALCOM_COMPONENTS = resolve('./node_modules/nuxt-calcom/runtime/compon
 const CALCOM_COMPONENTS_TARGET = resolve('./node_modules/nuxt-calcom/dist/runtime/components')
 
 export default defineNuxtConfig({
-  site: {
-    url: 'https://blockchange.com.py',
-    name: 'Blockchange',
-  },
-
   compatibilityDate: '2025-10-10',
 
   runtimeConfig: {
