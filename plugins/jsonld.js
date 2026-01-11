@@ -5,14 +5,28 @@ export default defineNuxtPlugin((nuxtApp) => {
   const { public: { deploymentDomain, canonicalDomain } } = useRuntimeConfig()
   const { locale } = nuxtApp.$i18n
 
-  // Base domains (no trailing slash)
+  // 1) Prefer canonicalDomain, then deploymentDomain
   const rawDomain = String(deploymentDomain || '').replace(/\/$/, '')
   const rawCanonical = String(canonicalDomain || '').replace(/\/$/, '')
 
-  // Use canonicalDomain if provided, otherwise fallback to deploymentDomain
-  const domain = rawCanonical || rawDomain
+  // 2) Fallback to actual request origin (SSR) or browser origin (client)
+  const originFallback = (() => {
+    // SSR
+    try {
+      const reqUrl = useRequestURL()
+      if (reqUrl?.origin) return reqUrl.origin
+    } catch (e) { }
 
-  // Language must be dynamic (don’t freeze at plugin init)
+    // Client
+    if (process.client && typeof window !== 'undefined' && window.location?.origin) {
+      return window.location.origin
+    }
+
+    return ''
+  })()
+
+  const domain = (rawCanonical || rawDomain || originFallback).replace(/\/$/, '')
+
   function lang() {
     const code = String(locale.value || 'en')
     return (
@@ -22,21 +36,23 @@ export default defineNuxtPlugin((nuxtApp) => {
     )
   }
 
-  // Minimal helper: make absolute URL + rewrite host to canonical when possible
+  // absolute URL helper (also rewrites to canonical host when possible)
   function toAbsUrl(u = '') {
     const s = String(u || '').trim()
     if (!s) return s
 
-    // absolute URL
     if (s.startsWith('http://') || s.startsWith('https://')) {
-      // if canonicalDomain is set and the URL starts with deploymentDomain, rewrite to canonicalDomain
+      // If canonicalDomain is set and URL starts with deploymentDomain, rewrite to canonicalDomain
       if (rawCanonical && rawDomain && s.startsWith(rawDomain)) {
         return rawCanonical + s.slice(rawDomain.length)
+      }
+      // Also if canonicalDomain is set and URL starts with originFallback, rewrite to canonicalDomain
+      if (rawCanonical && originFallback && s.startsWith(originFallback)) {
+        return rawCanonical + s.slice(originFallback.length)
       }
       return s
     }
 
-    // relative URL
     return `${domain}${s.startsWith('/') ? s : `/${s}`}`
   }
 

@@ -2,7 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 // Canonical site URL (prefer env, fallback to WWW)
-const SITE = String(process.env.NUXT_PUBLIC_SITE_URL)
+const SITE = String(process.env.NUXT_PUBLIC_SITE_URL || 'https://www.blockchange.com.py')
   .trim()
   .replace(/\/+$/, '') // remove trailing slash on domain only
 
