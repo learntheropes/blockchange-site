@@ -305,15 +305,11 @@ function trackCta() {
   // Nuxt Umami module usually injects one of these globals.
   const umami = window.umami || window.__umami
 
-  if (typeof umami?.track === 'function') {
-    umami.track('blog-cta', { path: route.path })
-    return
-  }
+  console.log('umami', umami)
 
-  // Fallback: if module exposes a function (depends on module)
-  if (typeof window.umami === 'function') {
-    window.umami('track', 'blog-cta', { path: route.path })
-  }
+  umami.track('blog-cta', {
+    from: route.path
+  })
 }
 </script>
 
