@@ -107,6 +107,7 @@ export default defineNuxtConfig({
     lazy: true,
     langDir: 'lang',
     strategy: 'prefix',
+    trailingSlash: true,
     bundle: {
       optimizeTranslationDirective: false,
     },
