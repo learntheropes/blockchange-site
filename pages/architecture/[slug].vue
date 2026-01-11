@@ -137,10 +137,10 @@ function stemToSlug(stem = '') {
   return parts[parts.length - 1] || ''
 }
 
-/* ✅ STABLE key */
 const dataKey = computed(() => `arch:${locale.value}:${slug.value}`)
 
-const { data: architecture } = await useAsyncData(
+/* Content */
+const { data: architecture, error: archError } = await useAsyncData(
   dataKey.value,
   async () => {
     const doc = await queryCollection('content')
@@ -156,6 +156,11 @@ const { data: architecture } = await useAsyncData(
   { watch: [locale, slug] }
 )
 
+if (archError.value) {
+  throw archError.value
+}
+
+/* CTA */
 const bookingCtaTo = computed(() => {
   const href = architecture.value?.meta?.bookingCtaHref || '/#book'
   const label = architecture.value?.meta?.bookingCtaLabel || ''
@@ -245,7 +250,6 @@ useHead(() => {
   }
 })
 </script>
-
 
 <style scoped>
 .content-width {

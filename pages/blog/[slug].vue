@@ -131,11 +131,10 @@ function stemToSlug(stem = '') {
   return parts[parts.length - 1] || ''
 }
 
-/* ✅ STABLE key: does not depend on route.path */
 const dataKey = computed(() => `blog:${locale.value}:${slug.value}`)
 
 /* Content */
-const { data: post } = await useAsyncData(
+const { data: post, error: postError } = await useAsyncData(
   dataKey.value,
   async () => {
     const doc = await queryCollection('content')
@@ -150,6 +149,10 @@ const { data: post } = await useAsyncData(
   },
   { watch: [locale, slug] }
 )
+
+if (postError.value) {
+  throw postError.value
+}
 
 /* CTA */
 const bookingCtaTo = computed(() => {
