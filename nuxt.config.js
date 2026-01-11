@@ -25,6 +25,7 @@ export default defineNuxtConfig({
       isDeployed,
       deploymentDomain,
       canonicalDomain,
+      testvar: process.env.NUXT_APP_BASE_URL
     }
   },
 

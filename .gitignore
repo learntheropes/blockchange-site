@@ -95,7 +95,6 @@ sw.*
 
 public/sitemap.xml
 public/robots.txt
-pages/test.vue
 
 .env.gh
 .env.nh
