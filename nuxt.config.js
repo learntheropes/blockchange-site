@@ -2,11 +2,8 @@ import { resolve } from 'node:path'
 
 const isSSG = process.env.NUXT_SSG === 'true'
 const isDeployed = process.env.NODE_ENV === 'production'
-
-const deploymentDomain = String(
-  process.env.NUXT_PUBLIC_SITE_URL || process.env.URL || 'http://localhost:3000'
-).trim().replace(/\/+$/, '')
-
+const deploymentDomain = process.env.NUXT_PUBLIC_DEPLOYMENT_DOMAIN || 'http://localhost:3000' // e.g. https://blockchange.com.py
+const canonicalDomain = process.env.NUXT_PUBLIC_CANONICAL_DOMAIN || 'http://localhost:3000'   // e.g. https://www.blockchange.com.py  
 import { locales, localeCodes, defaultLocale } from './assets/js/localization'
 
 const ABS_CALCOM_PLUGIN = resolve('./node_modules/nuxt-calcom/runtime/plugin')
@@ -24,7 +21,10 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
+      isSSG,
+      isDeployed,
       deploymentDomain,
+      canonicalDomain,
     }
   },
 

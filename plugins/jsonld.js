@@ -2,25 +2,17 @@ import find from 'lodash.find'
 import { locales } from '~/assets/js/localization'
 
 export default defineNuxtPlugin((nuxtApp) => {
-  const { public: { deploymentDomain } } = useRuntimeConfig()
+  const { public: { deploymentDomain, canonicalDomain } } = useRuntimeConfig()
   const { locale } = nuxtApp.$i18n
 
-  // --- Canonical domain (force www for blockchange.com.py) ---
+  // Base domains (no trailing slash)
   const rawDomain = String(deploymentDomain || '').replace(/\/$/, '')
+  const rawCanonical = String(canonicalDomain || '').replace(/\/$/, '')
 
-  function toCanonicalDomain(d) {
-    const s = String(d || '').replace(/\/$/, '')
-    if (!s) return s
-    if (s.includes('localhost')) return s
-    // force www only for your production domain
-    if (s.startsWith('https://blockchange.com.py')) return s.replace('https://blockchange.com.py', 'https://www.blockchange.com.py')
-    if (s.startsWith('http://blockchange.com.py')) return s.replace('http://blockchange.com.py', 'http://www.blockchange.com.py')
-    return s
-  }
+  // Use canonicalDomain if provided, otherwise fallback to deploymentDomain
+  const domain = rawCanonical || rawDomain
 
-  const domain = toCanonicalDomain(rawDomain)
-
-  // --- Language must be dynamic (don’t freeze at plugin init) ---
+  // Language must be dynamic (don’t freeze at plugin init)
   function lang() {
     const code = String(locale.value || 'en')
     return (
@@ -30,17 +22,21 @@ export default defineNuxtPlugin((nuxtApp) => {
     )
   }
 
-  // --- Minimal helper: absolute URL + canonical host ---
+  // Minimal helper: make absolute URL + rewrite host to canonical when possible
   function toAbsUrl(u = '') {
     const s = String(u || '').trim()
     if (!s) return s
 
-    // absolute URL => normalize to canonical host when it matches your domain
+    // absolute URL
     if (s.startsWith('http://') || s.startsWith('https://')) {
-      return toCanonicalDomain(s)
+      // if canonicalDomain is set and the URL starts with deploymentDomain, rewrite to canonicalDomain
+      if (rawCanonical && rawDomain && s.startsWith(rawDomain)) {
+        return rawCanonical + s.slice(rawDomain.length)
+      }
+      return s
     }
 
-    // relative => prefix with canonical domain
+    // relative URL
     return `${domain}${s.startsWith('/') ? s : `/${s}`}`
   }
 
