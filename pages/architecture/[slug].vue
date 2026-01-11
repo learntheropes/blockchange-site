@@ -82,8 +82,7 @@
               <p class="has-text-grey mb-0">{{ architecture.meta.bookingText }}</p>
             </div>
             <div class="column is-4 has-text-right">
-              <o-button variant="primary" size="large" tag="router-link" :to="bookingCtaTo"
-                v-umami="{ name: 'architecture-cta', slug: route.path }">
+              <o-button variant="primary" size="large" tag="router-link" :to="bookingCtaTo" @click="trackCta">
                 {{ architecture.meta.bookingCtaLabel }}
               </o-button>
             </div>
@@ -296,6 +295,22 @@ useJsonld(() => {
     }),
   ])
 })
+
+/* umami event for CTA click */
+function trackCta() {
+  // Nuxt Umami module usually injects one of these globals.
+  const umami = window.umami || window.__umami
+
+  if (typeof umami?.track === 'function') {
+    umami.track('architecture-cta', { path: route.path })
+    return
+  }
+
+  // Fallback: if module exposes a function (depends on module)
+  if (typeof window.umami === 'function') {
+    window.umami('track', 'architecture-cta', { path: route.path })
+  }
+}
 </script>
 
 <style scoped>
