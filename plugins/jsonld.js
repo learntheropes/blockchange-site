@@ -5,19 +5,54 @@ export default defineNuxtPlugin((nuxtApp) => {
   const { public: { deploymentDomain } } = useRuntimeConfig()
   const { locale } = nuxtApp.$i18n
 
-  const domain = String(deploymentDomain || '').replace(/\/$/, '')
+  // --- Canonical domain (force www for blockchange.com.py) ---
+  const rawDomain = String(deploymentDomain || '').replace(/\/$/, '')
 
-  const inLanguage =
-    find(locales, { code: locale.value })?.language ||
-    String(locale.value || '').replace('_', '-') ||
-    'en'
+  function toCanonicalDomain(d) {
+    const s = String(d || '').replace(/\/$/, '')
+    if (!s) return s
+    if (s.includes('localhost')) return s
+    // force www only for your production domain
+    if (s.startsWith('https://blockchange.com.py')) return s.replace('https://blockchange.com.py', 'https://www.blockchange.com.py')
+    if (s.startsWith('http://blockchange.com.py')) return s.replace('http://blockchange.com.py', 'http://www.blockchange.com.py')
+    return s
+  }
 
-  // minimal helper: make absolute URL using domain
+  const domain = toCanonicalDomain(rawDomain)
+
+  // --- Language must be dynamic (don’t freeze at plugin init) ---
+  function lang() {
+    const code = String(locale.value || 'en')
+    return (
+      find(locales, { code })?.language ||
+      code.replace('_', '-') ||
+      'en'
+    )
+  }
+
+  // --- Minimal helper: absolute URL + canonical host ---
   function toAbsUrl(u = '') {
     const s = String(u || '').trim()
     if (!s) return s
-    if (s.startsWith('http://') || s.startsWith('https://')) return s
+
+    // absolute URL => normalize to canonical host when it matches your domain
+    if (s.startsWith('http://') || s.startsWith('https://')) {
+      return toCanonicalDomain(s)
+    }
+
+    // relative => prefix with canonical domain
     return `${domain}${s.startsWith('/') ? s : `/${s}`}`
+  }
+
+  function withTrailingSlashIfNoHash(u = '') {
+    const s = String(u || '')
+    if (!s) return s
+    if (s.includes('#')) {
+      const [base, hash] = s.split('#')
+      const base2 = base.endsWith('/') ? base : `${base}/`
+      return `${base2}#${hash}`
+    }
+    return s.endsWith('/') ? s : `${s}/`
   }
 
   return {
@@ -52,7 +87,7 @@ export default defineNuxtPlugin((nuxtApp) => {
           name: 'Blockchange',
           description: heroSubheadline,
           publisher: { '@id': `${domain}/#organization` },
-          inLanguage
+          inLanguage: lang()
         }),
 
         indexWebPage: (heroHeadline, heroSubheadline) => ({
@@ -64,7 +99,7 @@ export default defineNuxtPlugin((nuxtApp) => {
           description: heroSubheadline,
           isPartOf: { '@id': `${domain}/#website` },
           publisher: { '@id': `${domain}/#organization` },
-          inLanguage,
+          inLanguage: lang(),
           mainEntity: [
             { '@id': `${domain}/${locale.value}/#explanation` },
             { '@id': `${domain}/${locale.value}/#blog` }
@@ -91,7 +126,7 @@ export default defineNuxtPlugin((nuxtApp) => {
               }
             })
           },
-          inLanguage
+          inLanguage: lang()
         }),
 
         indexBlogPostsItemList: (allPosts) => ({
@@ -114,7 +149,7 @@ export default defineNuxtPlugin((nuxtApp) => {
               }
             })
           },
-          inLanguage
+          inLanguage: lang()
         }),
 
         blogWebPage: ({ url, title, description }) => {
@@ -127,24 +162,13 @@ export default defineNuxtPlugin((nuxtApp) => {
             description,
             isPartOf: { '@id': `${domain}/#website` },
             publisher: { '@id': `${domain}/#organization` },
-            inLanguage
+            inLanguage: lang()
           }
         },
 
         blogBreadcrumbs: ({ webpageUrl, items = [] }) => {
           const pageUrl = toAbsUrl(webpageUrl)
           const list = Array.isArray(items) ? items : []
-
-          function withTrailingSlashIfNoHash(u = '') {
-            const s = String(u || '')
-            if (!s) return s
-            if (s.includes('#')) {
-              const [base, hash] = s.split('#')
-              const base2 = base.endsWith('/') ? base : `${base}/`
-              return `${base2}#${hash}`
-            }
-            return s.endsWith('/') ? s : `${s}/`
-          }
 
           return {
             '@type': 'BreadcrumbList',
@@ -160,7 +184,7 @@ export default defineNuxtPlugin((nuxtApp) => {
                   item: withTrailingSlashIfNoHash(abs)
                 }
               }),
-            inLanguage
+            inLanguage: lang()
           }
         },
 
@@ -178,7 +202,7 @@ export default defineNuxtPlugin((nuxtApp) => {
             author: { '@id': `${domain}/#organization` },
             publisher: { '@id': `${domain}/#organization` },
             isPartOf: { '@id': `${domain}/#website` },
-            inLanguage
+            inLanguage: lang()
           }
 
           Object.keys(out).forEach((k) => out[k] === undefined && delete out[k])
@@ -197,7 +221,7 @@ export default defineNuxtPlugin((nuxtApp) => {
             description,
             isPartOf: { '@id': `${domain}/#website` },
             publisher: { '@id': `${domain}/#organization` },
-            inLanguage,
+            inLanguage: lang(),
             dateModified: dateModified || undefined
           }
 
@@ -208,19 +232,6 @@ export default defineNuxtPlugin((nuxtApp) => {
         archBreadcrumbs: ({ webpageUrl, items = [] }) => {
           const pageUrl = toAbsUrl(webpageUrl)
           const list = Array.isArray(items) ? items : []
-
-          function withTrailingSlashIfNoHash(u = '') {
-            const s = String(u || '')
-            if (!s) return s
-            // if it has a hash, ensure the part before the hash ends with /
-            if (s.includes('#')) {
-              const [base, hash] = s.split('#')
-              const base2 = base.endsWith('/') ? base : `${base}/`
-              return `${base2}#${hash}`
-            }
-            // no hash => ensure trailing slash
-            return s.endsWith('/') ? s : `${s}/`
-          }
 
           return {
             '@type': 'BreadcrumbList',
@@ -236,7 +247,7 @@ export default defineNuxtPlugin((nuxtApp) => {
                   item: withTrailingSlashIfNoHash(abs)
                 }
               }),
-            inLanguage
+            inLanguage: lang()
           }
         },
       }
