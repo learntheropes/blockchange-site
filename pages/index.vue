@@ -235,6 +235,25 @@ const posts = computed(() => {
   return showAllPosts.value ? items : items.slice(0, 3)
 })
 
+/* JSON-LD structured data */
+const { $jsonld } = useNuxtApp()
+
+useJsonld(() => {
+  const pillars = home.value?.meta?.pillars
+  const posts = allPosts.value
+  if (!Array.isArray(pillars) || !Array.isArray(posts)) return null
+
+  return $jsonld.graph([
+    $jsonld.logo(),
+    $jsonld.organization(),
+    $jsonld.website(home.value?.meta?.heroHeadline, home.value?.meta?.heroSubheadline),
+    $jsonld.indexWebPage(home.value?.meta?.heroHeadline, home.value?.meta?.heroSubheadline),
+    $jsonld.indexArchitecturesItemList(pillars),
+    $jsonld.indexBlogPostsItemList(posts),
+  ])
+})
+
+
 /* Attribution context */
 const src = computed(() => String(route.query.src || ''))
 const cta = computed(() => String(route.query.cta || ''))

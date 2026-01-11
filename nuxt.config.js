@@ -5,9 +5,7 @@ const isDeployed = process.env.NODE_ENV === 'production'
 
 const deploymentDomain = String(
   process.env.NUXT_PUBLIC_SITE_URL || process.env.URL || 'http://localhost:3000'
-)
-  .trim()
-  .replace(/\/+$/, '') // no trailing slash
+).trim().replace(/\/+$/, '')
 
 import { locales, localeCodes, defaultLocale } from './assets/js/localization'
 
@@ -24,7 +22,12 @@ export default defineNuxtConfig({
 
   compatibilityDate: '2025-10-10',
 
-  // ✅ generate links with trailing slash (no redirects)
+  runtimeConfig: {
+    public: {
+      deploymentDomain,
+    }
+  },
+
   router: {
     options: {
       trailingSlash: true,
@@ -79,6 +82,7 @@ export default defineNuxtConfig({
     'nuxt-calcom',
     '@nuxt/content',
     ...(isSSG ? [] : ['@nuxthub/core']),
+    'nuxt-jsonld',
   ],
 
   ...(isSSG

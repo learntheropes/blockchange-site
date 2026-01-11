@@ -95,6 +95,8 @@ const route = useRoute()
 const { locale, t } = useI18n()
 const localePath = useLocalePath()
 
+const { $jsonld } = useNuxtApp()
+
 const slug = computed(() => String(route.params.slug || ''))
 
 function stripLocalePrefix(p = '') {
@@ -232,6 +234,7 @@ const { data: relatedPosts } = await useAsyncData(
   { watch: [locale, () => post.value?.path] }
 )
 
+/* Head */
 useHead(() => {
   const p = post.value
   return {
@@ -243,8 +246,60 @@ useHead(() => {
     ],
   }
 })
-</script>
 
+/* JSON-LD (BlogPosting + BreadcrumbList) */
+useJsonld(() => {
+  const p = post.value
+  if (!p) return null
+
+  const title = p.title || ''
+  const description = p.description || ''
+  const datePublished = p.meta?.date || p.meta?.datePublished || null
+  const dateModified = p.meta?.updated || p.meta?.dateModified || datePublished || null
+
+  // canonical absolute URL (IMPORTANT for Google)
+  const canonicalUrl = (() => {
+    const u = String(p.path || route.path || '')
+    const withSlash = u.endsWith('/') ? u : `${u}/`
+    return withSlash // plugin will make it absolute using deploymentDomain
+  })()
+
+  // breadcrumbs URLs (keep your existing meta hrefs, just ensure trailing slash for Home)
+  const homeHref = localizedHref(p.meta?.breadcrumbHomeHref || `/${locale.value}/`)
+  const blogHref = localizedHref(p.meta?.breadcrumbBlogHref || `/${locale.value}/#blog`)
+  const currentLabel = p.meta?.breadcrumbCurrentLabel || title
+
+  return $jsonld.graph([
+    $jsonld.logo(),
+    $jsonld.organization(),
+    $jsonld.website('Blockchange', description),
+
+    $jsonld.blogWebPage({
+      url: canonicalUrl,
+      title,
+      description,
+    }),
+
+    // IMPORTANT: pass webpageUrl (not webpageId) so breadcrumb @id becomes absolute
+    $jsonld.blogBreadcrumbs({
+      webpageUrl: canonicalUrl,
+      items: [
+        { name: p.meta?.breadcrumbHomeLabel || 'Home', url: homeHref },
+        { name: p.meta?.breadcrumbBlogLabel || 'Blog', url: blogHref },
+        { name: currentLabel, url: canonicalUrl },
+      ],
+    }),
+
+    $jsonld.blogPosting({
+      url: canonicalUrl,
+      title,
+      description,
+      datePublished,
+      dateModified,
+    }),
+  ])
+})
+</script>
 
 <style scoped>
 .container {

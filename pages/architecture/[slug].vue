@@ -101,6 +101,8 @@ const route = useRoute()
 const { locale, t } = useI18n()
 const localePath = useLocalePath()
 
+const { $jsonld } = useNuxtApp()
+
 const slug = computed(() => String(route.params.slug || ''))
 
 function stripLocalePrefix(p = '') {
@@ -135,6 +137,11 @@ function stemToSlug(stem = '') {
   const s = String(stem || '')
   const parts = s.split('/')
   return parts[parts.length - 1] || ''
+}
+
+function withTrailingSlash(u = '') {
+  const s = String(u || '')
+  return s.endsWith('/') ? s : `${s}/`
 }
 
 const dataKey = computed(() => `arch:${locale.value}:${slug.value}`)
@@ -248,6 +255,46 @@ useHead(() => {
       { id: 'og:description', name: 'og:description', content: a?.meta?.heroSubheadline || '' },
     ],
   }
+})
+
+/* JSON-LD (WebPage + BreadcrumbList) */
+useJsonld(() => {
+  const a = architecture.value
+  if (!a) return null
+
+  const title = a?.meta?.heroHeadline || a?.title || 'Architecture'
+  const description = a?.meta?.heroSubheadline || ''
+  const dateModified = a?.meta?.updated || a?.meta?.dateModified || null
+
+  // IMPORTANT: keep as path + trailing slash; plugin makes it absolute using deploymentDomain
+  const canonicalUrl = withTrailingSlash(String(a.path || route.path || ''))
+
+  const homeHref = localizedHref(a.meta?.breadcrumbHomeHref || `/${locale.value}/`)
+  const archIndexHref = localizedHref(a.meta?.breadcrumbArchitectureHref || `/${locale.value}/#architecture`)
+  const currentLabel = a.meta?.breadcrumbCurrentLabel || title
+
+  return $jsonld.graph([
+    $jsonld.logo(),
+    $jsonld.organization(),
+    $jsonld.website('Blockchange', description),
+
+    $jsonld.archWebPage({
+      url: canonicalUrl,
+      title,
+      description,
+      dateModified,
+    }),
+
+    // IMPORTANT: webpageUrl (not webpageId) => absolute @id in output
+    $jsonld.archBreadcrumbs({
+      webpageUrl: canonicalUrl,
+      items: [
+        { name: a.meta?.breadcrumbHomeLabel || 'Home', url: homeHref },
+        { name: a.meta?.breadcrumbArchitectureLabel || 'Architecture', url: archIndexHref },
+        { name: currentLabel, url: canonicalUrl },
+      ],
+    }),
+  ])
 })
 </script>
 
