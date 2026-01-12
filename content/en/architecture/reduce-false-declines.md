@@ -17,9 +17,13 @@ sections:
   - title: What are false declines
     text: >
       A false decline happens when a legitimate payment is rejected by a fraud
-      or risk system. This is not a rare edge case: industry data consistently
-      shows that a significant share of card declines are false positives
-      triggered by automated fraud controls.
+      or risk system. This page explains how to reduce false declines in
+      cross-border payments by designing multi-rail architectures that improve
+      acceptance without weakening fraud controls.
+
+      This is not a rare edge case: industry data consistently shows that a
+      significant share of card declines are false positives triggered by
+      automated fraud systems.
 
       For businesses operating across borders, the problem is amplified.
       Geography, issuing banks, card networks, and local regulations all
@@ -43,6 +47,17 @@ sections:
 
       Adding more rules or tuning fraud thresholds often trades fraud losses
       for higher decline rates — without solving the root problem.
+
+  - title: How to reduce false payment declines (without increasing fraud)
+    text: >
+      Reducing false declines requires architectural decisions, not looser
+      fraud rules. The goal is to route each transaction through the rail that
+      has the highest probability of approval for that specific context.
+
+      This typically includes using local acquiring where possible, routing
+      transactions based on geography and issuer behavior, introducing
+      alternative rails for high-friction markets, and adding fallback paths
+      instead of retrying the same declined card flow.
 
   - title: Multi-rail architecture as a solution
     text: >
@@ -97,6 +112,18 @@ sections:
       Traditional payment rails allow customers to reverse payments weeks or months later.
       By settling value finally in bitcoin or digital dollars, payments become economically final —
       removing chargeback exposure from your settlement layer.
+
+  - title: Frequently asked questions about reducing false declines
+    text: >
+      Businesses often ask whether reducing false declines means accepting more
+      fraud. In practice, properly designed payment architectures reduce both
+      fraud losses and unnecessary declines by matching transactions to the
+      right rails and risk models.
+
+      Another common question is how to measure false declines. While exact
+      rates vary by industry, persistent retries, customer complaints, and
+      regional drop-offs are strong indicators that legitimate payments are
+      being blocked.
 
 bookingTitle: Reduce false declines with a proper architecture
 bookingText: >

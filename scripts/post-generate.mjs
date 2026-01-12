@@ -25,14 +25,11 @@ function main() {
 
   if (fs.existsSync(html200)) {
     fs.copyFileSync(html200, indexHtml)
-    console.log(`✅ index.html overwritten from 200.html in ${outDir}`)
   } else if (!fs.existsSync(indexHtml)) {
-    console.warn('⚠ 200.html not found and index.html not present — nothing to overwrite')
   }
 
   // Disable Jekyll processing
   fs.writeFileSync(path.join(outDir, '.nojekyll'), '')
-  console.log(`✅ .nojekyll created in ${outDir}`)
 }
 
 main()
