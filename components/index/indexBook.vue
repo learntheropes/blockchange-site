@@ -25,7 +25,6 @@
 
 <script setup>
 const localePath = useLocalePath()
-
 const callHref = computed(() => `${localePath('/')}#call`)
 const mailHref = computed(() => `${localePath('/')}#mail`)
 const explanationHref = computed(() => `${localePath('/')}#explanation`)
