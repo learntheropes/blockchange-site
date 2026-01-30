@@ -51,7 +51,7 @@ sections:
       de aprobación para ese contexto específico.
 
       Estos principios forman parte de una
-      [arquitectura de pagos multi-rail](/es/blog/arquitectura-pagos-multi-rail/)
+      [arquitectura de pagos multi-rail](/es/blog/multi-rail-payment-architecture/)
       diseñada para reducir dependencia y mejorar aceptación.
 
   - title: La arquitectura multi-rail como solución
