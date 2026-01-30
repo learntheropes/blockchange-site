@@ -1,12 +1,11 @@
 ---
 heroHeadline: Multi-Rail In- & Off-Ramp Architecture
 heroSubheadline: >
-  We design complete value flows — from how money enters your system to how it exits —
-  across cards, banks, and local rails, with final settlement in bitcoin or digital dollars.
-  Chargeback-free settlement for local and global businesses.
+  We design complete value flows across cards, banks, and local rails, with final settlement in bitcoin or digital dollars. Chargeback-free by design.
 
 heroBullets:
   - Accept payments reliably across borders and risk profiles
+  - Support multiple entry rails, from cards to crypto
   - Design robust payout and settlement strategies
   - Avoid dependency on a single processor or bank
   - Reduce chargeback risk through final settlement in bitcoin or stablecoins

@@ -1,15 +1,15 @@
 ---
 heroHeadline: Arquitectura multi-rail de entrada y salida (in- & off-ramp)
 heroSubheadline: >
-  Diseñamos flujos de valor completos — desde cómo entra el dinero en tu sistema hasta cómo sale —
-  a través de tarjetas, bancos y rieles locales, con liquidación final en bitcoin o dólares digitales.
-  Liquidación sin contracargos para negocios locales y globales.
+  Diseñamos flujos de valor completos a través de tarjetas, bancos y rieles locales,
+  con liquidación final en bitcoin o dólares digitales. Liquidación sin contracargos por diseño.
 
 heroBullets:
   - Acepta pagos de forma fiable entre países y perfiles de riesgo
+  - Soporta múltiples rieles de entrada, desde tarjetas hasta cripto
   - Diseña estrategias sólidas de payout y liquidación
   - Evita la dependencia de un solo procesador o banco
-  - Reduce el riesgo de contracargos con liquidación final en bitcoin o stablecoins
+  - Reduce el riesgo de contracargos mediante liquidación final en bitcoin o stablecoins
 
 paymentsTitle: Pagos aceptados hoy
 paymentsItems:
