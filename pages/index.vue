@@ -254,11 +254,8 @@ useJsonld(() => {
     }),
     $jsonld.indexSection({ id: 'explanation', name: home.value?.meta?.explanationTitle || 'Explanation' }),
     $jsonld.indexSection({ id: 'blog', name: home.value?.meta?.latestInsightsTitle || 'Blog' }),
-    $jsonld.indexArchitecturesItemList(pillars),
-    $jsonld.indexBlogPostsItemList(posts),
   ])
 })
-
 
 /* Attribution context */
 const src = computed(() => String(route.query.src || ''))

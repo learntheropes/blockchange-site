@@ -150,52 +150,6 @@ export default defineNuxtPlugin((nuxtApp) => {
           }
         },
 
-        /**
-         * Homepage lists: return ItemList directly (no Collection wrapper).
-         * (Cleaner + more standard)
-         */
-        indexArchitecturesItemList: (pillars) => {
-          const pageUrl = `${site}/${locale.value}/`
-          return {
-            '@type': 'ItemList',
-            '@id': `${pageUrl}#architectures`,
-            name: 'Architectures',
-            numberOfItems: pillars.length,
-            itemListElement: pillars.map((item, index) => {
-              const href = String(item.href || '').replace(/^\/+/, '')
-              return {
-                '@type': 'ListItem',
-                position: index + 1,
-                name: item.title,
-                url: ensureTrailingSlash(`${site}/${locale.value}/${href}`)
-              }
-            }),
-            isPartOf: { '@id': `${pageUrl}#webpage` },
-            inLanguage: inLanguage()
-          }
-        },
-
-        indexBlogPostsItemList: (allPosts) => {
-          const pageUrl = `${site}/${locale.value}/`
-          return {
-            '@type': 'ItemList',
-            '@id': `${pageUrl}#posts`,
-            name: 'Blog posts',
-            numberOfItems: allPosts.length,
-            itemListElement: allPosts.map((item, index) => {
-              const path = String(item.path || '').replace(/^\/+/, '')
-              return {
-                '@type': 'ListItem',
-                position: index + 1,
-                name: item.title,
-                url: ensureTrailingSlash(`${site}/${path}`)
-              }
-            }),
-            isPartOf: { '@id': `${pageUrl}#webpage` },
-            inLanguage: inLanguage()
-          }
-        },
-
         blogWebPage: ({ url, title, description }) => {
           const pageUrl = ensureTrailingSlash(toAbsoluteUrl(url))
           return {
@@ -233,7 +187,6 @@ export default defineNuxtPlugin((nuxtApp) => {
          */
         blogPosting: ({ url, title, description, datePublished, dateModified }) => {
           const pageUrl = ensureTrailingSlash(toAbsoluteUrl(url))
-
           return cleanUndefined({
             '@type': 'BlogPosting',
             '@id': `${pageUrl}#blogposting`,
@@ -246,7 +199,10 @@ export default defineNuxtPlugin((nuxtApp) => {
             author: { '@id': `${site}/#organization` },
             publisher: { '@id': `${site}/#organization` },
             isPartOf: { '@id': `${site}/#website` },
-            inLanguage: inLanguage()
+            inLanguage: inLanguage(),
+            image: {
+              '@type': 'ImageObject', url: `${websiteUrl}/favicon/favicon.png`, width: 1024, height: 1024
+            },
           })
         },
 

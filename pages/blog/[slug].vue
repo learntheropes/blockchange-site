@@ -259,8 +259,36 @@ useJsonld(() => {
 
   const title = p.title || ''
   const description = p.description || ''
-  const datePublished = p.meta?.date || p.meta?.datePublished || null
-  const dateModified = p.meta?.updated || p.meta?.dateModified || datePublished || null
+
+  // Generate the dates with timezone and iso format
+  function toIsoDateTime(dateStr) {
+    if (!dateStr) return null
+
+    const s = String(dateStr).trim()
+
+    // If already ISO with timezone, keep as-is
+    if (/[T ]/.test(s) && /(Z|[+-]\d{2}:\d{2})$/.test(s)) {
+      return s.replace(' ', 'T')
+    }
+
+    // If "YYYY-MM-DD" -> add UTC midnight
+    if (/^\d{4}-\d{2}-\d{2}$/.test(s)) {
+      return `${s}T00:00:00Z`
+    }
+
+    // If has time but no timezone -> best effort: force UTC
+    if (/[T ]/.test(s) && !/(Z|[+-]\d{2}:\d{2})$/.test(s)) {
+      return `${s.replace(' ', 'T')}Z`
+    }
+
+    // Otherwise leave it (best effort)
+    return s
+  }
+  const rawPublished = p.meta?.date || p.meta?.datePublished || null
+  const rawModified = p.meta?.updated || p.meta?.dateModified || rawPublished || null
+
+  const datePublished = toIsoDateTime(rawPublished)
+  const dateModified = toIsoDateTime(rawModified)
 
   // Keep as path + trailing slash; plugin makes it absolute from websiteUrl
   const canonicalUrl = withTrailingSlash(String(p.path || route.path || ''))
