@@ -21,7 +21,7 @@ breadcrumbCurrentLabel: Por qué fallan los pagos internacionales
 Los pagos internacionales no fallan por malas APIs ni por tecnología poco confiable.  
 Fallan porque los sistemas de pago se diseñan con supuestos locales y luego se fuerzan a operar globalmente.
 
-Cuando una empresa se expande, suele mantener la misma configuración que funcionaba en su mercado doméstico: tarjetas, un solo procesador, un solo banco, un solo flujo de liquidación. Funciona… hasta que la geografía, la regulación y los modelos de riesgo intervienen.
+Cuando una empresa se expande, suele mantener la misma configuración que funcionaba en su mercado doméstico: tarjetas, un solo procesador, un solo flujo de liquidación. Funciona… hasta que la geografía, la regulación y los modelos de riesgo intervienen.
 
 Lo que parece técnico casi siempre es un problema de arquitectura.
 
@@ -49,6 +49,18 @@ Disparadores comunes:
 
 Ni reintentos ni mejoras de UX lo arreglan. El problema es el riel.
 
+## Las tarjetas no son un default universal
+
+Muchos equipos asumen que las tarjetas son el método online “normal”. No siempre lo son.
+
+Incluso donde hay tarjetas, el uso online puede estar:
+- deshabilitado por defecto en ciertos emisores
+- restringido para compras internacionales
+- bloqueado de forma agresiva por prevención de fraude
+
+En muchos mercados, los usuarios prefieren transferencias, pagos instantáneos o billeteras locales.  
+Forzar tarjetas en todos lados genera rechazos evitables y abandono.
+
 ## Un solo proveedor no puede entender el mundo
 
 La mayoría de los procesadores optimiza para pocos mercados. Sus modelos de riesgo, partners de liquidación y supuestos de compliance vienen de esas regiones.
@@ -61,6 +73,48 @@ Forzar un proveedor para todas las geografías crea fragilidad:
 - Dependencia de una sola decisión de aprobación de cuenta
 
 Por eso muchas empresas sufren fallos “inexplicables” después de meses de estabilidad.
+
+## El fallo internacional también es operativo
+
+Los pagos internacionales no fallan solo en la autorización. También fallan después.
+
+Problemas operativos frecuentes:
+
+- Ciclos de liquidación que pasan de días a semanas
+- Reservas retenidas sin aviso
+- Fondos congelados durante revisiones
+- Disputas con coste fijo por caso
+- Contracargos que se acumulan entre países y canales
+
+Para un negocio en crecimiento esto no es “back office”.  
+Es un problema de supervivencia, porque corta liquidez.
+
+## El círculo vicioso del onboarding
+
+La aceptación internacional también se limita por los requisitos de onboarding.
+
+Muchos proveedores exigen historial previo para activar una cuenta:
+- volumen procesado
+- transacciones anteriores
+- flujo de caja establecido
+
+Esto crea un círculo vicioso para negocios nuevos (y también al entrar en nuevos mercados):
+
+No te activan sin historial.  
+No puedes crear historial sin estar activado.
+
+La expansión termina dependiendo de la política del proveedor, no de la demanda real.
+
+## La conversión de divisas es un modo de fallo silencioso
+
+En pagos internacionales suele aparecer conversión forzada de moneda.
+
+Cuando un proveedor impone la moneda de liquidación:
+- la conversión ocurre dentro de la plataforma
+- no controlas la tasa ni el ruteo
+- spreads y comisiones se acumulan
+
+El crecimiento internacional se convierte en fuga de margen, incluso con buena aceptación.
 
 ## Los rieles locales resuelven problemas locales
 

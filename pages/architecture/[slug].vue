@@ -36,7 +36,7 @@
       <div class="container content-width">
         <div v-for="(s, i) in architecture.meta.sections" :key="i" class="box shadow-soft section-card">
           <h2 class="title has-text-primary is-4 mb-3">{{ s.title }}</h2>
-          <p class="content has-text-grey-dark mb-0">{{ s.text }}</p>
+          <div class="content has-text-grey-dark mb-0" v-html="renderMd(s.text)"></div>
         </div>
       </div>
     </section>
@@ -96,6 +96,7 @@
 <script setup>
 import { computed } from 'vue'
 import { ARCH_PILLARS, getArchRelatedBlogSlugs } from '~/utils/related'
+import MarkdownIt from 'markdown-it'
 
 const route = useRoute()
 const { locale, t } = useI18n()
@@ -302,6 +303,13 @@ function trackCta() {
     from: route.path,
   })
 }
+
+const md = new MarkdownIt({ linkify: true, breaks: true })
+
+function renderMd(s = '') {
+  return md.render(String(s || ''))
+}
+
 </script>
 
 <style scoped>

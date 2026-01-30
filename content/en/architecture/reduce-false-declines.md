@@ -5,8 +5,6 @@ heroSubheadline: >
   especially for cross-border, high-risk, and global businesses.
   We design architectures that reduce unnecessary declines by using the right
   rails, in the right markets, for the right transactions.
-
-# NEW: breadcrumb
 breadcrumbHomeLabel: Home
 breadcrumbHomeHref: /
 breadcrumbArchitectureLabel: Architecture
@@ -18,8 +16,8 @@ sections:
     text: >
       A false decline happens when a legitimate payment is rejected by a fraud
       or risk system. This page explains how to reduce false declines in
-      cross-border payments by designing multi-rail architectures that improve
-      acceptance without weakening fraud controls.
+      cross-border payments by designing architectures that improve acceptance
+      without weakening fraud controls.
 
       This is not a rare edge case: industry data consistently shows that a
       significant share of card declines are false positives triggered by
@@ -32,9 +30,9 @@ sections:
   - title: Why false declines increase in cross-border payments
     text: >
       Cross-border transactions carry less contextual data for issuers and
-      payment processors. A card issued in Europe, used online with a merchant
-      acquiring in Latin America or Southeast Asia, immediately scores higher
-      risk — regardless of the customer’s intent.
+      payment processors. A card issued in one country, used online with a
+      merchant acquiring elsewhere, immediately scores higher risk — regardless
+      of the customer’s intent.
 
       This is why many legitimate users experience repeated declines even
       though their cards are valid and funded.
@@ -54,10 +52,13 @@ sections:
       fraud rules. The goal is to route each transaction through the rail that
       has the highest probability of approval for that specific context.
 
-      This typically includes using local acquiring where possible, routing
-      transactions based on geography and issuer behavior, introducing
-      alternative rails for high-friction markets, and adding fallback paths
-      instead of retrying the same declined card flow.
+      This typically includes local acquiring, routing based on issuer behavior
+      and geography, alternative rails for high-friction markets, and active
+      fallback paths instead of retrying the same declined card flow.
+
+      These principles are part of a broader
+      [multi-rail payment architecture](/en/blog/multi-rail-payment-architecture/)
+      designed to reduce dependency on any single rail.
 
   - title: Multi-rail architecture as a solution
     text: >
@@ -70,14 +71,11 @@ sections:
 
   - title: Regional context matters
     text: >
-      In Latin America, domestic rails like Pix (Brazil) or local bank transfers
-      outperform cards for acceptance and cost.
-
-      In Southeast Asia, wallet-based and bank-driven systems are often more
-      reliable than international card networks.
-
-      In Europe, SEPA transfers and localized acquiring reduce issuer friction.
       Using the wrong rail in the wrong region guarantees unnecessary declines.
+
+      Domestic bank rails, localized acquiring, and region-specific payment
+      systems consistently outperform global card flows when aligned with
+      local expectations and issuer behavior.
 
   - title: P2P and alternative rails
     text: >
@@ -85,14 +83,12 @@ sections:
       bank-based P2P systems and Bitcoin-based flows — offer higher completion
       rates than traditional card payments.
 
-      These rails are particularly relevant where card penetration is low,
-      trust in local banks is higher, or sanctions and restrictions limit
-      traditional acquiring options.
+      These rails are especially relevant where card penetration is low or
+      traditional acquiring is unreliable.
 
   - title: Sanctioned and restricted markets
     text: >
-      In sanctioned or partially restricted markets, such as Russia and other
-      regions affected by international controls, card payments may be
+      In sanctioned or partially restricted markets, card payments may be
       technically possible but operationally unreliable.
 
       Designing payment flows that account for these constraints upfront
@@ -109,21 +105,12 @@ sections:
 
   - title: Why bitcoin / digital-dollar settlement eliminates chargebacks
     text: >
-      Traditional payment rails allow customers to reverse payments weeks or months later.
-      By settling value finally in bitcoin or digital dollars, payments become economically final —
-      removing chargeback exposure from your settlement layer.
+      Traditional payment rails allow customers to reverse payments weeks or
+      months later.
 
-  - title: Frequently asked questions about reducing false declines
-    text: >
-      Businesses often ask whether reducing false declines means accepting more
-      fraud. In practice, properly designed payment architectures reduce both
-      fraud losses and unnecessary declines by matching transactions to the
-      right rails and risk models.
-
-      Another common question is how to measure false declines. While exact
-      rates vary by industry, persistent retries, customer complaints, and
-      regional drop-offs are strong indicators that legitimate payments are
-      being blocked.
+      By settling value finally in bitcoin or digital dollars, payments become
+      economically final — removing chargeback exposure from the settlement
+      layer.
 
 bookingTitle: Reduce false declines with a proper architecture
 bookingText: >
