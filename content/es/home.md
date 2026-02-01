@@ -65,7 +65,7 @@ asyncText: >
 
 learnMore: Saber más →
 emailLabel: Email
-emailAddress: hello@blockchange.com.py
+emailAddress: hello@blockchange.expert
 emailUs: Enviar email →
 
 pgpLabel: PGP opcional

@@ -5,7 +5,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   const { public: { websiteUrl } } = useRuntimeConfig()
   const { locale } = nuxtApp.$i18n
 
-  // Must be like: https://www.blockchange.com.py (no trailing slash)
+  // Must be like: https://www.blockchange.expert (no trailing slash)
   const site = String(websiteUrl || '').replace(/\/+$/, '')
 
   function inLanguage() {
@@ -36,7 +36,7 @@ export default defineNuxtPlugin((nuxtApp) => {
    * Converts a relative path to an absolute URL
    * using the configured canonical websiteUrl.
    *
-   * /es/blog/foo -> https://www.blockchange.com.py/es/blog/foo
+   * /es/blog/foo -> https://www.blockchange.expert/es/blog/foo
    */
   function toAbsoluteUrl(path = '') {
     const p = String(path || '')

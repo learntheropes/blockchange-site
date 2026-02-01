@@ -34,7 +34,7 @@ jobs:
           NUXT_HUB_REMOTE: "false"
           NUXT_APP_BASE_URL: ${{ vars.NUXT_APP_BASE_URL }}
           ROBOTS_MODE: "app"
-          WEBSITE_URL: "https://app.blockchange.com.py"
+          WEBSITE_URL: "https://app.blockchange.expert"
 
       - name: Deploy to NuxtHub
         uses: nuxt-hub/action@v2
@@ -45,6 +45,6 @@ jobs:
           NUXT_HUB_REMOTE: "false"
           NUXT_APP_BASE_URL: ${{ vars.NUXT_APP_BASE_URL }}
           ROBOTS_MODE: "app"
-          WEBSITE_URL: "https://app.blockchange.com.py"
+          WEBSITE_URL: "https://app.blockchange.expert"
           NUXT_HUB_PROJECT_URL: ${{ secrets.NUXT_HUB_PROJECT_URL }}
           NUXT_HUB_PROJECT_SECRET_KEY: ${{ secrets.NUXT_HUB_PROJECT_SECRET_KEY }}

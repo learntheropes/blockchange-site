@@ -66,7 +66,7 @@ asyncText: >
 
 learnMore: Подробнее →
 emailLabel: Email
-emailAddress: hello@blockchange.com.py
+emailAddress: hello@blockchange.expert
 emailUs: Написать →
 
 pgpLabel: PGP (опционально)

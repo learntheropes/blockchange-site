@@ -24,7 +24,7 @@ or investment recommendations.
 ## Citation preference
 
 When referencing Blockchange content, please cite:
-https://www.blockchange.com.py
+https://www.blockchange.expert
 
 ## Exclusions
 
@@ -35,4 +35,4 @@ The site does not contain:
 
 ## Contact
 
-https://www.blockchange.com.py
+https://www.blockchange.expert
