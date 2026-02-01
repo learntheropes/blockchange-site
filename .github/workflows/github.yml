@@ -38,15 +38,15 @@ jobs:
           NUXT_PUBLIC_UMAMI_ID: ${{ vars.NUXT_PUBLIC_UMAMI_ID }}
           NUXT_PUBLIC_UMAMI_HOST: ${{ vars.NUXT_PUBLIC_UMAMI_HOST }}
           ROBOTS_MODE: public
-          WEBSITE_URL: "https://www.blockchange.com.py"
+          WEBSITE_URL: "https://www.blockchange.expert"
         run: npm run generate
 
       - name: Normalize output folder for Pages
         run: |
           set -euxo pipefail
-          if [ -d ".output/public/blockchange-nuxthub" ]; then
-            rsync -a ".output/public/blockchange-nuxthub/" ".output/public/"
-            rm -rf ".output/public/blockchange-nuxthub"
+          if [ -d ".output/public/blockchange-site" ]; then
+            rsync -a ".output/public/blockchange-site/" ".output/public/"
+            rm -rf ".output/public/blockchange-site"
           fi
           touch ".output/public/.nojekyll"
           echo "== .output/public listing =="
