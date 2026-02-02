@@ -9,10 +9,10 @@ const availableLocales = computed(() =>
 )
 
 const socials = [
-  { name: 'Youtube', href: 'https://www.youtube.com/@blockchange_com_py' },
-  { name: 'Linkedin', href: 'https://linkedin.com/company/blockchange-com-py' },
-  { name: 'Telegram', href: 'https://t.me/blockchange_com_py' },
-  { name: 'X', href: 'https://x.com/BlockchangePy' }
+  { name: 'Youtube', href: 'https://www.youtube.com/@blockchange_expert' },
+  { name: 'Linkedin', href: 'https://www.linkedin.com/company/blockchange-expert' },
+  { name: 'Telegram', href: 'https://t.me/blockchange_expert' },
+  { name: 'X', href: 'https://x.com/BlockchangeExp' }
 ]
 </script>
 
@@ -22,23 +22,12 @@ const socials = [
       <nav class="level">
         <div class="level-left">
           <div class="level-item">
-            <!-- socials kept commented as you had -->
-            <!--
             <div class="buttons">
-              <OButton
-                v-for="social in socials"
-                :key="social.name"
-                tag="a"
-                :href="social.href"
-                variant="primary"
-                inverted
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <OButton v-for="social in socials" :key="social.name" tag="a" :href="social.href" variant="primary"
+                inverted target="_blank" rel="noopener noreferrer">
                 {{ social.name }}
               </OButton>
             </div>
-            -->
           </div>
         </div>
 
