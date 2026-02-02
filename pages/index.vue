@@ -109,9 +109,9 @@
               {{ home.meta.bookMailCtaLabel }}
             </o-button>
 
-            <o-button v-if="contextText" variant="text" size="large" @click="copy(contextText)">
+            <!-- <o-button v-if="contextText" variant="text" size="large" @click="copy(contextText)">
               {{ home.meta.bookCopyContextLabel }}
-            </o-button>
+            </o-button> -->
           </div>
 
           <hr />
