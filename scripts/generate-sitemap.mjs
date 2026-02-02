@@ -120,9 +120,15 @@ function main() {
   for (const [rest, localesSet] of restMap.entries()) {
     if (!localesSet.has(DEFAULT_LOCALE)) continue
 
-    const loc = `${SITE}${unprefixedPath(rest)}`
+    // ✅ CHANGE:
+    // With strategy: 'prefix', the canonical <loc> should be the DEFAULT_LOCALE prefixed URL,
+    // not the unprefixed one.
+    const loc = `${SITE}${prefixedPath(DEFAULT_LOCALE, rest)}`
     const alternates = []
 
+    // ✅ CHANGE:
+    // x-default should point to the default-locale canonical URL (stable + SEO-safe),
+    // not the unprefixed URL.
     alternates.push({ hreflang: 'x-default', href: loc })
 
     for (const code of LOCALES) {
