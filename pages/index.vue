@@ -108,35 +108,13 @@
             <o-button variant="primary" size="large" tag="a" :href="mailtoHref">
               {{ home.meta.bookMailCtaLabel }}
             </o-button>
-
-            <!-- <o-button v-if="contextText" variant="text" size="large" @click="copy(contextText)">
-              {{ home.meta.bookCopyContextLabel }}
-            </o-button> -->
           </div>
 
-          <hr />
-
           <h4 class="title is-6 mb-2">{{ home.meta.bookPgpTitle }}</h4>
-          <pre class="p-3 has-background-light" style="white-space: pre-wrap;">
------BEGIN PGP PUBLIC KEY BLOCK-----
-
-xjMEaX/eOhYJKwYBBAHaRw8BAQdAGpOb9ZJ9/qo2HpVj6QgngFQCLRz8+NDX
-Sq/10vGkIqjNM2hlbGxvQGJsb2NrY2hhbmdlLmV4cGVydCA8aGVsbG9AYmxv
-Y2tjaGFuZ2UuZXhwZXJ0PsLAEQQTFgoAgwWCaX/eOgMLCQcJEFjW/KY9pqBX
-RRQAAAAAABwAIHNhbHRAbm90YXRpb25zLm9wZW5wZ3Bqcy5vcme8fmXVUk6C
-xn7omHwX2kEX/cGr5V6E3cLI/2U8+pcycAMVCggEFgACAQIZAQKbAwIeARYh
-BOwqPJ8ywEhiESOB8FjW/KY9pqBXAAATrAD8DOriSWt8u4PkpM5liNRPj2n0
-mziRur+Y/S7pzv6Hz+wBAJn2jSh6DzuAbR0g6iiQXf5qxjbc1Xb0PKiRUQdz
-v/YEzjgEaX/eOhIKKwYBBAGXVQEFAQEHQOvh4UewvWi+ZisyirjWoP2DyxQk
-Xw0lVSrvbsyyws0HAwEIB8K+BBgWCgBwBYJpf946CRBY1vymPaagV0UUAAAA
-AAAcACBzYWx0QG5vdGF0aW9ucy5vcGVucGdwanMub3Jn5w+2aNwFXPQlM9ux
-J/XE0AXEL2+UXXiPHHYySX5VlHUCmwwWIQTsKjyfMsBIYhEjgfBY1vymPaag
-VwAARSUA/23dm5X2pq0+vFbcfPs9RJaMRhfvfcl4NPERgAYq1LUVAQDWAX3Y
-At91UoYh2WJgCcePajqXNmM4NWEJ96AU7qHeDw==
-=5Rgn
-
------END PGP PUBLIC KEY BLOCK-----
-          </pre>
+          <a href="https://keys.openpgp.org/vks/v1/by-fingerprint/EC2A3C9F32C04862112381F058D6FCA63DA6A057"
+            target="_blank" rel="noopener noreferrer">
+            EC2A3C9F32C04862112381F058D6FCA63DA6A057
+          </a>
 
           <div class="mb-5">
             <o-button variant="text" size="small" tag="a" href="#book">
