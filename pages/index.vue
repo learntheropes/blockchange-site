@@ -165,8 +165,29 @@ import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
-const { locale, t } = useI18n()
+const { locale, t, locales, defaultLocale, setLocale } = useI18n()
 const localePath = useLocalePath()
+
+function pickLocale() {
+  const raw = String(navigator.language || '').toLowerCase()
+  const base = raw.split('-')[0]
+
+  const supported = locales.value.map(l =>
+    typeof l === 'string' ? l : l.code
+  )
+
+  return supported.includes(base)
+    ? base
+    : defaultLocale.value
+}
+
+// Redirect to brower's language or default locale
+onMounted(async () => {
+
+  const target = pickLocale()
+  await setLocale(target)
+  navigateTo(localePath('/', target), { replace: true })
+})
 
 /* Home content */
 const { data: home } = await useAsyncData(
@@ -274,12 +295,6 @@ const mailtoHref = computed(() => {
 
   return `mailto:${emailTo}?subject=${encode(subject)}&body=${encode(body)}`
 })
-
-async function copy(text) {
-  try {
-    await navigator.clipboard.writeText(text)
-  } catch { }
-}
 </script>
 
 <style scoped>
