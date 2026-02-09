@@ -106,11 +106,7 @@ export default defineNuxtConfig({
     bundle: {
       optimizeTranslationDirective: false,
     },
-    detectBrowserLanguage: {
-      useCookie: false,
-      redirectOnRoot: true,
-      redirectOn: 'root',
-    },
+    detectBrowserLanguage: false
   },
 
   content: {

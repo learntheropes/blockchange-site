@@ -111,9 +111,8 @@
           </div>
 
           <h4 class="title is-6 mb-2">{{ home.meta.bookPgpTitle }}</h4>
-          <a href="https://keys.openpgp.org/vks/v1/by-fingerprint/EC2A3C9F32C04862112381F058D6FCA63DA6A057"
-            target="_blank" rel="noopener noreferrer">
-            EC2A3C9F32C04862112381F058D6FCA63DA6A057
+          <a :href="home.meta.pgpLink" target="_blank" rel="noopener noreferrer">
+            {{ home.meta.pgpFingerprint }}
           </a>
 
           <div class="mb-5">
