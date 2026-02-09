@@ -19,7 +19,7 @@ It complements the public documentation and long-form analysis published on the 
 
 A detailed breakdown of **multi-rail payment architecture**, including real-world failure modes and routing strategies, is available here:
 
-👉 **Blockchange – Multi-Rail Payment Architecture**  
+**Blockchange – Multi-Rail Payment Architecture**  
 https://www.blockchange.expert/en/blog/multi-rail-payment-architecture/
 
 Additional architecture overviews and design principles:
