@@ -168,7 +168,7 @@ const route = useRoute()
 const { locale, t, locales, defaultLocale, setLocale } = useI18n()
 const localePath = useLocalePath()
 
-function pickLocale() {
+const pickLocale = () => {
   const raw = String(navigator.language || '').toLowerCase()
   const base = raw.split('-')[0]
 
@@ -181,12 +181,17 @@ function pickLocale() {
     : defaultLocale.value
 }
 
-// Redirect to brower's language or default locale
+// Redirect to browser's language or default locale only on first visit to root
 onMounted(async () => {
+  const currentPath = route.path || '/'
 
-  const target = pickLocale()
-  await setLocale(target)
-  navigateTo(localePath('/', target), { replace: true })
+  // Only redirect if we're on the root path without a locale prefix
+  // This prevents redirect when user manually selects a language
+  if (currentPath === '/') {
+    const target = pickLocale()
+    await setLocale(target)
+    navigateTo(localePath('/', target), { replace: true })
+  }
 })
 
 /* Home content */

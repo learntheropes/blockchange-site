@@ -125,7 +125,7 @@ export default defineNuxtConfig({
 
   nitro: {
     prerender: {
-      failOnError: false,
+      failOnError: true,
       crawlLinks: true,
     },
     preset: isSSG ? 'static' : 'cloudflare_module',
